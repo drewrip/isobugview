@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+.links line {
+  stroke: #999;
+  stroke-opacity: 0.6;
+}
+
+.nodes circle {
+  stroke: #fff;
+  stroke-width: 1.5px;
+}
+
+</style>
+<svg width="1000" height="500"></svg>
+<script src="https://d3js.org/d3.v6.min.js"></script>
+<script>
+  var json_graph = {
+	  "nodes": [
+		  {"name": "T1",
+		   "ops": [
+			   {"1": "R(id)"},
+			   {"2": "W(balance)"},
+		   ]
+		  },
+		  {"name": "T2",
+		   "ops": [
+			   {"1": "W(id)"},
+		   ]
+		  },
+		  {"name": "T3",
+		   "ops": [
+			   {"1": "R(id)"},
+			   {"2": "W(balance)"},
+		   ]
+		  }
+	  ],
+
+	  "edges": [
+		  {"src_txn": "T1", "src_id": "1", "dst_txn": "T2", "dst_id": "1", "type": "rw"},
+		  {"src_txn": "T2", "src_id": "1", "dst_txn": "T3", "dst_id": "1", "type": "wr"},
+		  {"src_txn": "T2", "src_id": "1", "dst_txn": "T3", "dst_id": "1", "type": "wr"},
+		  {"src_txn": "T3", "src_id": "1", "dst_txn": "T3", "dst_id": "2", "type": ""},
+		  {"src_txn": "T3", "src_id": "2", "dst_txn": "T1", "dst_id": "2", "type": "ww"},
+		  
+	  ]
+  }
+  
+  //create somewhere to put the force directed graph
+  var svg = d3.select("svg"),
+    width = +svg.attr("width"),
+    height = +svg.attr("height");
+
+  var text = svg.selectAll(".txn_labels")
+      .data(json_graph.nodes)
+      .enter()
+      .append("text")
+	  .attr("class", "txn_labels")
+      .attr("x", 25)
+      .attr("y", function(d) {
+		  if(d.name == "T1"){
+			  return 100;
+		  } else if (d.name == "T2") {
+			  return 200;
+		  } else {
+			  return 300;
+		  }
+	  })
+      .text(function(d){ return d.name})
+      .attr("font-size", "20px")
+
+  //draw circles for the nodes 
+/*
+  var node = svg.append("g")
+      .attr("class", "nodes")
+      .selectAll("circle")
+      .data(json_graph.nodes)
+      .enter()
+      .append("circle")
+      .attr("r", 5)
+      .attr("fill", "red")
+      .attr("cx", function(d){
+		  if(d.name == "T1"){
+			  return 200;
+		  } else if (d.name == "T2") {
+			  return 300;
+		  } else {
+			  return 400;
+		  }	
+	  })
+	  .attr("cy", function(d){
+		  if(d.name == "T1"){
+			  return 100;
+		  } else if (d.name == "T2") {
+			  return 200;
+		  } else {
+			  return 300;
+		  }
+	  });
+  */
+  
+  var node = svg.append("g")
+      .attr("class", "nodes")
+      .selectAll("rect")
+      .data(json_graph.nodes)
+	  .enter()
+	  .append("rect")
+	  .attr("width", 100)
+	  .attr("height", 30)
+	  .attr("rx", 5)
+      .attr("transform", function(d){
+		  if(d.name == "T1"){
+			  return "translate("+ 150 + " " + 85 + ")";
+		  } else if (d.name == "T2") {
+			  return "translate("+ 250 + " " + 185 + ")";
+		  } else {
+			  return "translate("+ 350 + " " + 285 + ")";
+		  }	
+	  })
+	  .style("stroke", "black")
+	  .style("fill-opacity", 0.0);
+
+  console.log(json_graph.nodes)
+  var ops_text = svg.selectAll(".op_labels")
+	  .data(json_graph.nodes)
+	  .enter()
+	  .append("text")
+	  .attr("class", "op_labels")
+      .attr("x", function(d){
+		  if(d.name == "T1"){
+			  return 200;
+		  } else if (d.name == "T2") {
+			  return 300;
+		  } else {
+			  return 400;
+		  }
+	  })
+      .attr("y", function(d) {
+		  console.log(d.name)
+		  if(d.name == "T1"){
+			  return 100;
+		  } else if (d.name == "T2") {
+			  return 200;
+		  } else {
+			  return 300;
+		  }
+	  })
+      .text(function(d){ return d.name})
+      .attr("font-size", "1em")
+</script>
