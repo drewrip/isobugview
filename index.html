@@ -1,151 +1,209 @@
 <!DOCTYPE html>
-<meta charset="utf-8">
-<style>
+<html>
+<textarea id="log_input">
+  BEGIN Transaction Dependency Graph:
+  8 -> 4: vRW 
+  4 -> 8: vRW WR WW vRW 
+  END Transaction Dependency Graph
+  Operation Dependency Graph:
+  247<4>[R(district-d_next_o_id)]: 411<8>[W(district-d_next_o_id)]
+    469<8>[R(stock-s_quantity)]: 282<4>[W(stock-s_quantity)]
+      279<4>[R(stock-s_quantity)]: 472<8>[W(stock-s_quantity)]
+        251<4>[W(district-d_next_o_id)]: 407<8>[R(district-d_next_o_id)] 411<8>[W(district-d_next_o_id)]
+          END Operation Dependency Graph
+          SQL <---> Operation Map:
+          [3,1,20]: 247
+          [3,1,26]: 282
+          [5,1,43]: 472
+          [5,1,42]: 469
+          [3,1,25]: 279
+          [3,1,21]: 251
+          [5,1,33]: 407
+          [5,1,34]: 411
+          End SQL-Op Map.
+      </textarea>
 
-.links line {
-  stroke: #999;
-  stroke-opacity: 0.6;
-}
+      <button onclick="visualize();">Visualize Log</button>
+      </html>
+      <meta charset="utf-8">
+      <style>
 
-.nodes circle {
-  stroke: #fff;
-  stroke-width: 1.5px;
-}
+        .link {
+            stroke: #454BA9;
+            stroke-width: 1.5px;
+        }
 
-</style>
-<svg width="1000" height="500"></svg>
-<script src="https://d3js.org/d3.v6.min.js"></script>
-<script>
-  var json_graph = {
-	  "nodes": [
-		  {"name": "T1",
-		   "ops": [
-			   {"1": "R(id)"},
-			   {"2": "W(balance)"},
-		   ]
-		  },
-		  {"name": "T2",
-		   "ops": [
-			   {"1": "W(id)"},
-		   ]
-		  },
-		  {"name": "T3",
-		   "ops": [
-			   {"1": "R(id)"},
-			   {"2": "W(balance)"},
-		   ]
-		  }
-	  ],
+        .node {
+            cursor: move;
+            fill: #ccc;
+            stroke: #000;
+            stroke-width: 1.5px;
+        }
 
-	  "edges": [
-		  {"src_txn": "T1", "src_id": "1", "dst_txn": "T2", "dst_id": "1", "type": "rw"},
-		  {"src_txn": "T2", "src_id": "1", "dst_txn": "T3", "dst_id": "1", "type": "wr"},
-		  {"src_txn": "T2", "src_id": "1", "dst_txn": "T3", "dst_id": "1", "type": "wr"},
-		  {"src_txn": "T3", "src_id": "1", "dst_txn": "T3", "dst_id": "2", "type": ""},
-		  {"src_txn": "T3", "src_id": "2", "dst_txn": "T1", "dst_id": "2", "type": "ww"},
-		  
-	  ]
-  }
-  
-  //create somewhere to put the force directed graph
-  var svg = d3.select("svg"),
-    width = +svg.attr("width"),
-    height = +svg.attr("height");
+        .node.fixed {
+            fill: #f00;
+        }
 
-  var text = svg.selectAll(".txn_labels")
-      .data(json_graph.nodes)
-      .enter()
-      .append("text")
-	  .attr("class", "txn_labels")
-      .attr("x", 25)
-      .attr("y", function(d) {
-		  if(d.name == "T1"){
-			  return 100;
-		  } else if (d.name == "T2") {
-			  return 200;
-		  } else {
-			  return 300;
-		  }
-	  })
-      .text(function(d){ return d.name})
-      .attr("font-size", "20px")
+        textarea {
+            height: 500px;
+            width: 500px;
+        }
 
-  //draw circles for the nodes 
-/*
-  var node = svg.append("g")
-      .attr("class", "nodes")
-      .selectAll("circle")
-      .data(json_graph.nodes)
-      .enter()
-      .append("circle")
-      .attr("r", 5)
-      .attr("fill", "red")
-      .attr("cx", function(d){
-		  if(d.name == "T1"){
-			  return 200;
-		  } else if (d.name == "T2") {
-			  return 300;
-		  } else {
-			  return 400;
-		  }	
-	  })
-	  .attr("cy", function(d){
-		  if(d.name == "T1"){
-			  return 100;
-		  } else if (d.name == "T2") {
-			  return 200;
-		  } else {
-			  return 300;
-		  }
-	  });
-  */
-  
-  var node = svg.append("g")
-      .attr("class", "nodes")
-      .selectAll("rect")
-      .data(json_graph.nodes)
-	  .enter()
-	  .append("rect")
-	  .attr("width", 100)
-	  .attr("height", 30)
-	  .attr("rx", 5)
-      .attr("transform", function(d){
-		  if(d.name == "T1"){
-			  return "translate("+ 150 + " " + 85 + ")";
-		  } else if (d.name == "T2") {
-			  return "translate("+ 250 + " " + 185 + ")";
-		  } else {
-			  return "translate("+ 350 + " " + 285 + ")";
-		  }	
-	  })
-	  .style("stroke", "black")
-	  .style("fill-opacity", 0.0);
+    </style>
+    <script src="https://d3js.org/d3.v4.js"></script>
+    <script src="parser.js"></script>
+    <script>
 
-  console.log(json_graph.nodes)
-  var ops_text = svg.selectAll(".op_labels")
-	  .data(json_graph.nodes)
-	  .enter()
-	  .append("text")
-	  .attr("class", "op_labels")
-      .attr("x", function(d){
-		  if(d.name == "T1"){
-			  return 200;
-		  } else if (d.name == "T2") {
-			  return 300;
-		  } else {
-			  return 400;
-		  }
-	  })
-      .attr("y", function(d) {
-		  console.log(d.name)
-		  if(d.name == "T1"){
-			  return 100;
-		  } else if (d.name == "T2") {
-			  return 200;
-		  } else {
-			  return 300;
-		  }
-	  })
-      .text(function(d){ return d.name})
-      .attr("font-size", "1em")
+    function visualize(){
+        let log = document.getElementById("log_input").value;
+
+        // Remove any existing graph
+
+        let curr_graphs = document.getElementsByTagName("svg");
+        for(let i = 0; i < curr_graphs.length; i++){
+            curr_graphs[i].remove();
+        }
+        
+
+        render_graph(log);
+    }
+
+    function render_graph(log){
+
+        let adj_list = genGraph(log);
+        let g = getGraphLayout(adj_list);
+
+        var svg = d3.select("body")
+        .append("svg")
+        .attr("width", (node_width * g.nodes.length) + 150)
+        .attr("height", 400)
+        .lower();
+
+        width = +svg.attr("width"),
+        height = +svg.attr("height");
+
+        svg.append("defs").append("marker")
+        .attr("id", "arrow")
+        .attr("viewBox", "0 -5 10 10")
+        .attr("refX", 30)
+        .attr("refY", 0)
+        .attr("markerWidth", 10)
+        .attr("markerHeight", 10)
+        .attr("orient", "auto")
+        .append("svg:path")
+        .attr("color", "grey")
+        .attr("d", "M0,-5L10,0L0,5");
+
+        let transactions = svg.selectAll(".txn_label")
+        .data(g.txns)
+        .enter()
+        .append("text")
+        .text(function(d){
+            return d.txn;
+        })
+        .attr("class", "txn_label")
+        .attr("x", function(d){
+            return d.x;
+        })
+        .attr("y", function(d){
+            return d.y;
+        });
+
+        var link = svg.selectAll("line")
+        .data(g.links)
+        .enter()
+        .append("line")
+        .attr("class", "links")
+        .attr("x1", function(d){
+            return d.source.x + (node_width/2);
+        })
+        .attr("y1", function(d){
+            return d.source.y + (node_heigth/2);
+        })
+        .attr("x2", function(d){
+            return d.target.x + (node_width/2);
+        })
+        .attr("y2", function(d){
+            return d.target.y + (node_heigth/2);
+        })
+        .attr("stroke-width", 2)
+        .attr("stroke", "grey")
+        .attr("marker-end", "url(#arrow)")
+        .on("mouseover", function(d, i){
+            d3.select("#el"+i).attr("visibility", "visible");
+            d3.select(this).attr("stroke", "orange");
+        })
+        .on("mouseout", function(d, i){
+            d3.select("#el"+i).attr("visibility", "hidden");
+            d3.select(this).attr("stroke", "grey");
+        });
+
+        var edge_labels = svg.selectAll(".labels")
+        .data(g.links)
+        .enter()
+        .append("text")
+        .text(function(d) {
+            return d.source.type + d.target.type;
+        })
+        .attr('x', function(d) {
+          return (d.source.x + d.target.x)/2;
+        })
+        .attr('y', function(d) {
+          return (d.source.y + d.target.y)/2;
+        })
+        .attr("id", function(d, i){
+            return "el" + i
+        })
+        .attr("visibility", "hidden");
+
+
+        // Adding the nodes
+        var node = svg.append("g")
+        .attr("class", "nodes")
+        .selectAll("g")
+        .data(g.nodes)
+        .enter().append("g");
+
+        var rect = node.append("rect")
+        .attr("x", function(d){
+            return d.x;
+        })
+        .attr("y", function(d){
+            return d.y;
+        })
+        .attr("width", node_width)
+        .attr("height", node_heigth)
+        .attr("rx", 5)
+        .attr("ry", 5)
+        .attr("stroke", "black")
+        .attr("fill", "#FFFFFF")
+        .attr("fill-width", 5);
+
+        var node_labels = node.append("text")
+        .text(function(d) {
+          return d.type + "(" + d.op_num + ")";
+        })
+        .attr('x', function(d){
+            return d.x + 10;
+        })
+        .attr('y', function(d){
+            return d.y + 30;
+        });
+
+        node.append("title")
+        .text(function(d) { return d.id; });
+
+        svg.append("type").attr("class", "labels");
+
+
+        var node = svg.append("g")
+        .attr("class", "nodes")
+        .selectAll("g")
+        .data(g.nodes)
+        .enter().append("g");
+
+    }
+
+
+
 </script>
