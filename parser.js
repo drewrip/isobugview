@@ -70,6 +70,36 @@ SQL-Op Map:
 End SQL-Op Map.
 -----------------------------
 `
+
+let default_test = `
+-----------------------------
+BEGIN Transaction Dependency Graph:
+7 -> 10: vRW 
+7 -> 4: vRW 
+10 -> 4: vRW vRW vRW vRW vRW 
+4 -> 7: WR WR WR WR 
+END Transaction Dependency Graph
+Operation Dependency Graph:
+581<10>[R(orders-o_w_id)]: 258<4>[W(orders-o_w_id)]
+578<10>[R(orders-o_c_id)]: 253<4>[W(orders-o_c_id)]
+255<4>[W(orders-o_entry_d)]: 388<7>[R(orders-o_entry_d)]
+387<7>[R(orders-o_carrier_id)]: 582<10>[W(orders-o_carrier_id)]
+576<10>[R(orders-o_id)]: 256<4>[W(orders-o_id)]
+575<10>[R(orders-o_d_id)]: 254<4>[W(orders-o_d_id)]
+256<4>[W(orders-o_id)]: 389<7>[R(orders-o_id)] 386<7>[R(orders-o_id)]
+577<10>[R(orders-o_w_id)]: 258<4>[W(orders-o_w_id)]
+258<4>[W(orders-o_w_id)]: 385<7>[R(orders-o_w_id)]
+384<7>[R(orders-o_d_id)]: 254<4>[W(orders-o_d_id)]
+END Operation Dependency Graph
+SQL <---> Operation Map:
+[6,1,48]: 581 582
+[4,2,30]: 388 389 384 385 387 386
+[6,1,47]: 578 575 577 576
+[3,1,22]: 255 254 253 258 256
+End SQL-Op Map.
+-----------------------------
+`
+
 /* Regex not currently in use
 
 let edge_label_regex = /([0-9]+) -> ([0-9])+: ([A-Za-z ]+)+/gm;
@@ -96,26 +126,23 @@ function addImplicitEdges(adj_list){
 	let ordered_ops = new Map();
 
 	adj_list.forEach((value, key) => {
-
+		let parsed_key = JSON.parse(key);
 		// Ensure that the txn -> [...]
-		if(!ordered_ops.has(key.node.txn_id)){
-			ordered_ops.set(key.node.txn_id, []);
+		if(!ordered_ops.has(parsed_key.node.txn_id)){
+			ordered_ops.set(parsed_key.node.txn_id, []);
 		}
 
 		// Pushing the operation onto the list of operations for each transaction
-		ordered_ops.get(key.node.txn_id).push(key);
+		ordered_ops.get(parsed_key.node.txn_id).push(parsed_key);
 
 	});
 	ordered_ops.forEach((value, key) => {
-
 		if(value.length > 0){
 			// Sorting the list based on the operation's number
 			let txn_ordered = value.sort((a, b) => a.node.op_num - b.node.op_num);
-
-			
 			for(let i = 0; i < txn_ordered.length - 1; i++){
 				// Adding the adjacent edges
-				adj_list.get(txn_ordered[i]).push(txn_ordered[i+1]);
+				adj_list.get(JSON.stringify(txn_ordered[i])).push(txn_ordered[i+1]);
 			}
 		}
 
@@ -168,16 +195,16 @@ function genGraph(log){
 			};
 
 			// If the source node doesn't exist in the adjacency list, set it equal to a list first
-			if(!adj_list.has(src)){
-				adj_list.set(src, []);
+			if(!adj_list.has(JSON.stringify(src))){
+				adj_list.set(JSON.stringify(src), []);
 			}
 
 			// Push the destination node to the list of the source node
-			adj_list.get(src).push(dst);
+			adj_list.get(JSON.stringify(src)).push(dst);
 
 			// Adding the dst node to the list of key nodes if it doesn't exist
-			if(!adj_list.has(dst)){
-				adj_list.set(dst, []);
+			if(!adj_list.has(JSON.stringify(dst))){
+				adj_list.set(JSON.stringify(dst), []);
 			}
 
 		}
@@ -206,7 +233,7 @@ function hasInEdges(adj_list, node){
 	let res = false;
 	adj_list.forEach(value => {
 		value.forEach(n => {
-			if(n == node){
+			if(JSON.stringify(n) == node){
 				res = true;
 			}
 		});
@@ -216,30 +243,33 @@ function hasInEdges(adj_list, node){
 
 // Initializes the node in the map, returns the new map
 function addNode(adj_list, node){
-	adj_list.set(node, []);
+	adj_list.set(JSON.stringify(node), []);
 	return adj_list;
 }
 
 // Adds the dest node the src nodes list of destination nodes, returns the new map
 function addEdge(adj_list, src, dst){
-	adj_list.get(src).push(dst);
+	adj_list.get(JSON.stringify(src)).push(dst);
 	return adj_list;
 }
 
 // Removes the node from the adjacency list and returns new list
 function removeNode(adj_list, node){
 
+	console.log("Has: " + adj_list.has(node));
 	// Deletes the node from the map
-	adj_list.delete(node);
+	console.log("Deleted: " + adj_list.delete(node));
 
 	// Iterates over each element in that map looking for edges that
 	// go to the node and removes the destination from the list
-	adj_list.forEach((key, value) => {
+	adj_list.forEach((value, key) => {
 		for(let i = 0; i < value.length; i++){
 
 			// If the element in the list is equal to the node we want to remove
 			// then remove the node
-			if(value[i] == node){
+
+			console.log(JSON.stringify(value[i]) == node);
+			if(JSON.stringify(value[i]) == node){
 				adj_list.set(key, value.splice(i, 1));
 			}
 		}
@@ -264,11 +294,11 @@ function topoSort(adj_list){
 
 	while(adj_list.size > 0){
 		let no_incoming = findNoIncomingNode(adj_list);
+		console.log(no_incoming);
 		ordered_edges.push(no_incoming);
 		adj_list = removeNode(adj_list, no_incoming);
 	}
 
-	console.log(ordered_edges);
 	return ordered_edges;
 }
 
@@ -279,6 +309,9 @@ function getGraphLayout(adj_list){
 
 	let node_order = topoSort(adj_list_copy);
 	
+
+	console.log("Finished parsing and ordering");
+
 	let g = {
 		nodes: [],
 		links: []
@@ -287,10 +320,11 @@ function getGraphLayout(adj_list){
 	let txn_set = new Set();
 
 	adj_list.forEach((value, key) => {
-		txn_set.add(key.node.txn_id);
+		let parsed_key = JSON.parse(key);
+		txn_set.add(parsed_key.node.txn_id);
 	});
 
-	let sorted_list = [...txn_set]
+	let sorted_list = [...txn_set];
 
 	// Sorting the nodes based on their txn id
 	sorted_list.sort((a, b) => {
@@ -307,7 +341,9 @@ function getGraphLayout(adj_list){
 
 	// List of the nodes in graphable form
 	for(let i = 0; i < node_order.length; i++){
-		let curr = node_order[i];
+
+		let curr_raw_order = node_order[i];
+		let curr = JSON.parse(curr_raw_order);
 
 		let gnode = {
 			"name": curr.node.type + "(" + curr.node.op_num + ")",
@@ -324,9 +360,11 @@ function getGraphLayout(adj_list){
 	}
 
 	for(let i = 0; i < node_order.length; i++){
-		let curr = node_order[i];
 
-		let curr_edges = adj_list.get(curr);
+		let curr_raw_order = node_order[i];
+		let curr = JSON.parse(curr_raw_order);
+
+		let curr_edges = adj_list.get(JSON.stringify(curr));
 
 		let name = curr.node.type + "(" + curr.node.op_num + ")";
 
