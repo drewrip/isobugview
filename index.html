@@ -1,27 +1,7 @@
 <!DOCTYPE html>
 <html>
 <textarea id="log_input">
-  BEGIN Transaction Dependency Graph:
-  8 -> 4: vRW 
-  4 -> 8: vRW WR WW vRW 
-  END Transaction Dependency Graph
-  Operation Dependency Graph:
-  247<4>[R(district-d_next_o_id)]: 411<8>[W(district-d_next_o_id)]
-    469<8>[R(stock-s_quantity)]: 282<4>[W(stock-s_quantity)]
-      279<4>[R(stock-s_quantity)]: 472<8>[W(stock-s_quantity)]
-        251<4>[W(district-d_next_o_id)]: 407<8>[R(district-d_next_o_id)] 411<8>[W(district-d_next_o_id)]
-          END Operation Dependency Graph
-          SQL <---> Operation Map:
-          [3,1,20]: 247
-          [3,1,26]: 282
-          [5,1,43]: 472
-          [5,1,42]: 469
-          [3,1,25]: 279
-          [3,1,21]: 251
-          [5,1,33]: 407
-          [5,1,34]: 411
-          End SQL-Op Map.
-      </textarea>
+</textarea>
 
       <button onclick="visualize();">Visualize Log</button>
       </html>
@@ -204,6 +184,6 @@
 
     }
 
-
+    document.getElementById("log_input").value = default_test;
 
 </script>
