@@ -1,32 +1,90 @@
 <!DOCTYPE html>
 <html>
-<textarea id="log_input">
-</textarea>
-
-      <button onclick="visualize();">Visualize Log</button>
-      </html>
+<div style="width:100%" id="wrapper">
+    <div id="graph_area"></div>
+    <div class="log_input"><textarea id="log_input"></textarea></div>
+    <div id="sql_area">
+        <p class="key">Type: </p><p id="op_type"></p>
+        <p class="key">Tables Involved: </p><p id="sql_pair"></p>
+    </div>
+    <div class="button"><button onclick="visualize();" text-align="center">Visualize Log</button></div>
+</div>
+</html>
       <meta charset="utf-8">
       <style>
 
+        .key {
+            font-weight: bold;
+        }
+
+        #wrapper {
+            display: grid;
+            grid-template-columns: 50% 50%;
+            grid-gap: 30px;
+            align-items: center;
+        }
+
+        #graph_area {
+            grid-row: 1;
+        }
+
+        .log_input {
+            grid-row: 2;
+            grid-column: 1;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #sql_area {
+            visibility: hidden;
+            grid-row: 2;
+            grid-column: 2;
+        }
+
+        .button {
+            grid-row: 3;
+            grid-column: 1;
+            text-align: center;
+        }
         .link {
             stroke: #454BA9;
-            stroke-width: 1.5px;
+            stroke-width: 1px;
         }
 
         .node {
             cursor: move;
             fill: #ccc;
             stroke: #000;
-            stroke-width: 1.5px;
+            stroke-width: 1px;
         }
 
         .node.fixed {
             fill: #f00;
         }
 
-        textarea {
+        button {
+            height: 30px;
+            width: 100px;
+            border: solid;
+            border-width: 1px;
+            border-radius: 3px;
+            text-decoration: none;
+        }
+
+        #log_input {
             height: 500px;
-            width: 500px;
+            width: 75%;
+        }
+
+        #sql_div {
+            height: 500px;
+            width: 75%;
+        }
+
+        td {
+            padding: 20px;
         }
 
     </style>
@@ -53,7 +111,7 @@
         let adj_list = genGraph(log);
         let g = getGraphLayout(adj_list);
 
-        var svg = d3.select("body")
+        var svg = d3.select("#graph_area")
         .append("svg")
         .attr("width", (node_width * g.nodes.length) + 150)
         .attr("height", 400)
@@ -65,13 +123,13 @@
         svg.append("defs").append("marker")
         .attr("id", "arrow")
         .attr("viewBox", "0 -5 10 10")
-        .attr("refX", 30)
+        .attr("refX", 10)
         .attr("refY", 0)
-        .attr("markerWidth", 10)
+        .attr("markerWidth", 5)
         .attr("markerHeight", 10)
         .attr("orient", "auto")
         .append("svg:path")
-        .attr("color", "grey")
+        .attr("color", "black")
         .attr("d", "M0,-5L10,0L0,5");
 
         let transactions = svg.selectAll(".txn_label")
@@ -98,26 +156,37 @@
             return d.source.x + (node_width/2);
         })
         .attr("y1", function(d){
-            return d.source.y + (node_heigth/2);
+            return d.source.y + (node_height/2);
         })
         .attr("x2", function(d){
             return d.target.x + (node_width/2);
         })
         .attr("y2", function(d){
-            return d.target.y + (node_heigth/2);
+            return d.target.y + (node_height/2);
         })
-        .attr("stroke-width", 2)
-        .attr("stroke", "grey")
+        .attr("stroke-width", 3)
+        .attr("stroke", "black")
         .attr("marker-end", "url(#arrow)")
         .on("mouseover", function(d, i){
             d3.select("#el"+i).attr("visibility", "visible");
             d3.select(this).attr("stroke", "orange");
+
+            d3.select("p").attr("visibility", "visible");
+
+            document.getElementById("sql_area").style.visibility = "visible";
+            document.getElementById("op_type").innerHTML = d.source.type + d.target.type;
+            document.getElementById("sql_pair").innerHTML = d.source.sql + "🠖" + d.target.sql;
         })
         .on("mouseout", function(d, i){
             d3.select("#el"+i).attr("visibility", "hidden");
-            d3.select(this).attr("stroke", "grey");
+            d3.select(this).attr("stroke", "black");
+
+            document.getElementById("sql_area").style.visibility = "hidden";
+            document.getElementById("op_type").innerHTML = "";
+            document.getElementById("sql_pair").innerHTML = "";
         });
 
+        /*
         var edge_labels = svg.selectAll(".labels")
         .data(g.links)
         .enter()
@@ -136,7 +205,8 @@
         })
         .attr("visibility", "hidden");
 
-
+        */
+        
         // Adding the nodes
         var node = svg.append("g")
         .attr("class", "nodes")
@@ -152,10 +222,11 @@
             return d.y;
         })
         .attr("width", node_width)
-        .attr("height", node_heigth)
+        .attr("height", node_height)
         .attr("rx", 5)
         .attr("ry", 5)
-        .attr("stroke", "black")
+        .attr("stroke", "#000000")
+        .attr("stroke-width", 2)
         .attr("fill", "#FFFFFF")
         .attr("fill-width", 5);
 
