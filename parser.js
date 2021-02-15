@@ -114,8 +114,8 @@ let op_regex = /([0-9]+)<([0-9]+)>\[([A-Za-z]{1})\(([A-Za-z-_]+)\)\]: (([0-9]+)<
 const hOffset = 75;
 const vOffset = 150;
 
-const node_width = 75;
-const node_heigth = 50;
+let node_width = 75;
+let node_height = 50;
 
 
 // Returns the new adj_list with the implicit edges connection operations of the same transaction in order
@@ -390,11 +390,22 @@ function getGraphLayout(adj_list){
 				continue;
 			}
 
-			g.links.push({
-				"source": gnode,
-				"target": g.nodes.filter(function(n){
+			let link_src = Object.assign({}, gnode);
+			let link_dst = Object.assign({}, g.nodes.filter(function(n){
 					return e.node.txn_id == n.txn_id && e.node.op_num == n.op_num;
-				})[0]
+				})[0]);
+
+			// Draw the arrow between nodes from the edge to the edge rather than to the center
+			if(link_src.y > link_dst.y){
+				link_src.y -= node_height/2;
+				link_dst.y += node_height/2;
+			} else {
+				link_src.y += node_height/2;
+				link_dst.y -= node_height/2;
+			}
+			g.links.push({
+				"source": link_src,
+				"target": link_dst
 			});
 		}
 
@@ -406,7 +417,7 @@ function getGraphLayout(adj_list){
 		g.txns.push({
 			txn: txn_list[i],
 			x: 10,
-			y: 50 + (i*vOffset) + node_heigth/2
+			y: 50 + (i*vOffset) + node_height/2
 		});
 	}
 
