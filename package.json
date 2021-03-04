@@ -1,0 +1,22 @@
+{
+  "name": "isodiffgui",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "console.log(\"Test Command\");"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/drewrip/isodiffgui.git"
+  },
+  "author": "Drew Ripberger",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/drewrip/isodiffgui/issues"
+  },
+  "homepage": "https://github.com/drewrip/isodiffgui#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
