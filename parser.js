@@ -71,7 +71,7 @@ End SQL-Op Map.
 -----------------------------
 `
 
-let default_test = `
+exports.default_test = `
 -----------------------------
 BEGIN Transaction Dependency Graph:
 7 -> 10: vRW 
@@ -151,13 +151,13 @@ function addImplicitEdges(adj_list){
 	return adj_list;
 }
 
-function genGraph(log){
-
+exports.genGraph = function(log){
 	// Identifies all lines in the log that declare the edges
 	let edge_regex = /[0-9]+<[0-9]+>\[[A-Za-z]{1}\([A-Za-z-_]+\)\]: (?:[0-9]+<[0-9]+>\[[A-Za-z]{1}\([A-Za-z-_]+\)\][ ]?)+/gm;
 
 	// Identifies the nodes that are used in the declaration of an edge
 	let node_regex = /([0-9]+)<([0-9]+)>\[([A-Za-z]{1})\(([A-Za-z-_]+)\)\]/gm;
+
 
 	// Matching all of the edges in the file
 	const edges = log.match(edge_regex);
@@ -303,7 +303,7 @@ function topoSort(adj_list){
 }
 
 // Returns the object to pass to D3 to represent the vertices and edges
-function getGraphLayout(adj_list){
+exports.getGraphLayout = function(adj_list){
 
 	let adj_list_copy = new Map(adj_list);
 
