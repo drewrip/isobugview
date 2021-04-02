@@ -1,0 +1,10 @@
+<h1>Jobs</h1>
+
+<div>
+  {% for job in jobs %}
+
+  <h3>{{job.key}}</h3>
+  <p>    log: {{job.log}}</p>
+  <p>    file_path: {{job.finished_file}}</p>
+  {% endfor %}
+</div>

@@ -1,0 +1,8 @@
+<h1>Submit Log</h1>
+
+<form action="/createJob" name="createJobForm" method="post" id="createJobForm">
+  {% csrf_token %}
+
+  <textarea id="logInput" placeholder="SQL log to process" name="sql_log"></textarea>
+  <input type="submit" value="Process">
+</form>
