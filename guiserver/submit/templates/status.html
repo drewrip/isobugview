@@ -1,7 +1,11 @@
 <h1>{{job.key}}</h1>
 
-<h3>Running...</h3>
-
-<p>{{job.log}}</p>
-
+{% if job.status == "DONE" %}
+<h3>Finished</h3>
 <p>Finished output: {{job.finished_file}}</p>
+<p>{{job.log}}</p>
+{% else %}
+<h3>Running...</h3>
+{% endif %}
+
+
