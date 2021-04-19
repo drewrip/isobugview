@@ -29,6 +29,7 @@ def get_all_jobs(request):
 def get_job(request, key):
     job = Job.objects.get(key=key)
 
+    # Don't just check for existence
     if path.exists(job.finished_file):
         job.status = "DONE"
     else:
