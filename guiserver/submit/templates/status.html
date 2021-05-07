@@ -1,11 +1,248 @@
-<h1>{{job.key}}</h1>
+<html>
+  {% load static %}
+  <h1>{{job.key}}</h1>
 
-{% if job.status == "DONE" %}
-<h3>Finished</h3>
-<p>Finished output: {{job.finished_file}}</p>
-<p>{{job.log}}</p>
-{% else %}
-<h3>Running...</h3>
+
+  {% if job.status != "DONE" %}
+  <h3>Running...</h3>
+  {% else %}
+
+  <div style="width:100%" id="wrapper">
+    <div id="graph_area"></div>
+    <div class="log_input"><textarea id="log_input">{{job.result}}</textarea></div>
+    <div id="sql_area">
+      <p class="key">Type: </p><p id="op_type"></p>
+      <p class="key">Tables Involved: </p><p id="sql_pair"></p>
+    </div>
+    <div class="button"><button onclick="visualize();" text-align="center">Visualize Log</button></div>
+  </div>
+</html>
+
 {% endif %}
+<meta charset="utf-8">
+<style>
+
+  .key {
+      font-weight: bold;
+  }
+
+  #wrapper {
+      display: grid;
+      grid-template-columns: 50% 50%;
+      grid-gap: 30px;
+      align-items: center;
+  }
+
+  #graph_area {
+      grid-row: 1;
+  }
+
+  .log_input {
+      grid-row: 2;
+      grid-column: 1;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+  }
+
+  #sql_area {
+      visibility: hidden;
+      grid-row: 2;
+      grid-column: 2;
+  }
+
+  .button {
+      grid-row: 3;
+      grid-column: 1;
+      text-align: center;
+  }
+  .link {
+      stroke: #454BA9;
+      stroke-width: 1px;
+  }
+
+  .node {
+      cursor: move;
+      fill: #ccc;
+      stroke: #000;
+      stroke-width: 1px;
+  }
+
+  .node.fixed {
+      fill: #f00;
+  }
+
+  button {
+      height: 30px;
+      width: 100px;
+      border: solid;
+      border-width: 1px;
+      border-radius: 3px;
+      text-decoration: none;
+  }
+
+  #log_input {
+      height: 500px;
+      width: 75%;
+  }
+
+  #sql_div {
+      height: 500px;
+      width: 75%;
+  }
+
+  td {
+      padding: 20px;
+  }
+
+</style>
+<script src="https://d3js.org/d3.v4.js"></script>
+<script src="{% static '/parser.js'%}"></script>
+<script>
+
+  function visualize(){
+      let log = document.getElementById("log_input").value;
+
+      // Remove any existing graph
+
+      let curr_graphs = document.getElementsByTagName("svg");
+      for(let i = 0; i < curr_graphs.length; i++){
+          curr_graphs[i].remove();
+      }
+      
+
+      render_graph(log);
+  }
+
+  function render_graph(log){
+
+      let adj_list = genGraph(log);
+      let g = getGraphLayout(adj_list);
+
+      var svg = d3.select("#graph_area")
+          .append("svg")
+          .attr("width", (node_width * g.nodes.length) + 150)
+          .attr("height", 400)
+          .lower();
+
+      width = +svg.attr("width"),
+      height = +svg.attr("height");
+
+      svg.append("defs").append("marker")
+          .attr("id", "arrow")
+          .attr("viewBox", "0 -5 10 10")
+          .attr("refX", 10)
+          .attr("refY", 0)
+          .attr("markerWidth", 5)
+          .attr("markerHeight", 10)
+          .attr("orient", "auto")
+          .append("svg:path")
+          .attr("color", "black")
+          .attr("d", "M0,-5L10,0L0,5");
+
+      let transactions = svg.selectAll(".txn_label")
+          .data(g.txns)
+          .enter()
+          .append("text")
+          .text(function(d){
+              return d.txn;
+          })
+          .attr("class", "txn_label")
+          .attr("x", function(d){
+              return d.x;
+          })
+          .attr("y", function(d){
+              return d.y;
+          });
+
+      var link = svg.selectAll("line")
+          .data(g.links)
+          .enter()
+          .append("line")
+          .attr("class", "links")
+          .attr("x1", function(d){
+              return d.source.x + (node_width/2);
+          })
+          .attr("y1", function(d){
+              return d.source.y + (node_height/2);
+          })
+          .attr("x2", function(d){
+              return d.target.x + (node_width/2);
+          })
+          .attr("y2", function(d){
+              return d.target.y + (node_height/2);
+          })
+          .attr("stroke-width", 3)
+          .attr("stroke", "black")
+          .attr("marker-end", "url(#arrow)")
+          .on("mouseover", function(d, i){
+              d3.select("#el"+i).attr("visibility", "visible");
+              d3.select(this).attr("stroke", "orange");
+
+              d3.select("p").attr("visibility", "visible");
+
+              document.getElementById("sql_area").style.visibility = "visible";
+              document.getElementById("op_type").innerHTML = d.source.type + d.target.type;
+              document.getElementById("sql_pair").innerHTML = d.source.sql + "🠖" + d.target.sql;
+          })
+          .on("mouseout", function(d, i){
+              d3.select("#el"+i).attr("visibility", "hidden");
+              d3.select(this).attr("stroke", "black");
+
+              document.getElementById("sql_area").style.visibility = "hidden";
+              document.getElementById("op_type").innerHTML = "";
+              document.getElementById("sql_pair").innerHTML = "";
+          });
+
+      // Adding the nodes
+      var node = svg.append("g")
+          .attr("class", "nodes")
+          .selectAll("g")
+          .data(g.nodes)
+          .enter().append("g");
+
+      var rect = node.append("rect")
+          .attr("x", function(d){
+              return d.x;
+          })
+          .attr("y", function(d){
+              return d.y;
+          })
+          .attr("width", node_width)
+          .attr("height", node_height)
+          .attr("rx", 5)
+          .attr("ry", 5)
+          .attr("stroke", "#000000")
+          .attr("stroke-width", 2)
+          .attr("fill", "#FFFFFF")
+          .attr("fill-width", 5);
+
+      var node_labels = node.append("text")
+          .text(function(d) {
+			  return d.type + "(" + d.op_num + ")";
+          })
+          .attr('x', function(d){
+              return d.x + 10;
+          })
+          .attr('y', function(d){
+              return d.y + 30;
+          });
+
+      node.append("title")
+          .text(function(d) { return d.id; });
+
+      svg.append("type").attr("class", "labels");
 
 
+      var node = svg.append("g")
+          .attr("class", "nodes")
+          .selectAll("g")
+          .data(g.nodes)
+          .enter().append("g");
+
+  }
+
+  document.getElementById("log_input").value = default_test;
+
+</script>

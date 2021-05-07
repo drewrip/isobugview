@@ -7,7 +7,6 @@ let rand_dur=$((5+ $RANDOM % 60))
 echo "sleeping for $((rand_dur))"
 sleep $rand_dur
 
-
-echo "RESULTS FROM ISODIFF FOR ${1}" >> jobs/${1}.txt
+cp sample_iso.log jobs/${1}-running.txt
 
 mv jobs/${1}-running.txt jobs/${1}.txt

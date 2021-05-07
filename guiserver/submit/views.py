@@ -32,6 +32,9 @@ def get_job(request, key):
     # Don't just check for existence
     if path.exists(job.finished_file):
         job.status = "DONE"
+        f = open(job.finished_file, "r")
+        job.result = f.read()
+        f.close()
     else:
         job.status = "WORKING"
             
