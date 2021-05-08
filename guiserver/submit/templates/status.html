@@ -9,16 +9,13 @@
 
   <div style="width:100%" id="wrapper">
     <div id="graph_area"></div>
-    <div class="log_input"><textarea id="log_input">{{job.result}}</textarea></div>
     <div id="sql_area">
       <p class="key">Type: </p><p id="op_type"></p>
       <p class="key">Tables Involved: </p><p id="sql_pair"></p>
     </div>
-    <div class="button"><button onclick="visualize();" text-align="center">Visualize Log</button></div>
   </div>
 </html>
 
-{% endif %}
 <meta charset="utf-8">
 <style>
 
@@ -101,22 +98,20 @@
 <script src="{% static '/parser.js'%}"></script>
 <script>
 
-  function visualize(){
-      let log = document.getElementById("log_input").value;
+  function visualize(log){
 
       // Remove any existing graph
-
       let curr_graphs = document.getElementsByTagName("svg");
       for(let i = 0; i < curr_graphs.length; i++){
           curr_graphs[i].remove();
       }
-      
 
       render_graph(log);
   }
 
   function render_graph(log){
 
+	  console.log(log);
       let adj_list = genGraph(log);
       let g = getGraphLayout(adj_list);
 
@@ -243,6 +238,9 @@
 
   }
 
-  document.getElementById("log_input").value = default_test;
+  let incoming_log = `{% autoescape off %}{{job.result}}{% endautoescape %}`;
 
+  visualize(incoming_log);
 </script>
+
+{% endif %}

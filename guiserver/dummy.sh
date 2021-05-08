@@ -3,7 +3,7 @@
 
 touch jobs/${1}-running.txt
 
-let rand_dur=$((5+ $RANDOM % 60))
+let rand_dur=$((5+ $RANDOM % 10))
 echo "sleeping for $((rand_dur))"
 sleep $rand_dur
 
