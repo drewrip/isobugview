@@ -9,6 +9,10 @@
 
   <div style="width:100%" id="wrapper">
     <div id="graph_area"></div>
+	<div id="table_area">
+	  <table style="width:50%" id="log_table">
+	  </table>
+	</div>
     <div id="sql_area">
       <p class="key">Type: </p><p id="op_type"></p>
       <p class="key">Tables Involved: </p><p id="sql_pair"></p>
@@ -27,20 +31,11 @@
       display: grid;
       grid-template-columns: 50% 50%;
       grid-gap: 30px;
-      align-items: center;
+      align-items: flex-start;
   }
 
   #graph_area {
       grid-row: 1;
-  }
-
-  .log_input {
-      grid-row: 2;
-      grid-column: 1;
-
-      display: flex;
-      justify-content: center;
-      align-items: center;
   }
 
   #sql_area {
@@ -79,9 +74,13 @@
       text-decoration: none;
   }
 
-  #log_input {
-      height: 500px;
-      width: 75%;
+  #table_area {
+      grid-row: 2;
+      grid-column: 1;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
   }
 
   #sql_div {
@@ -89,10 +88,21 @@
       width: 75%;
   }
 
-  td {
-      padding: 20px;
+  table {
+	  border-collapse: collapse;
   }
 
+  td {
+	  border: 2px solid black;
+      padding: 20px;
+	  text-align: center;
+  }
+
+  tr:nth-child(even) {
+	  background-color: #f2f2f2;
+  }
+
+  
 </style>
 <script src="https://d3js.org/d3.v4.js"></script>
 <script src="{% static '/parser.js'%}"></script>
@@ -240,7 +250,33 @@
 
   let incoming_log = `{% autoescape off %}{{job.result}}{% endautoescape %}`;
 
-  visualize(incoming_log);
+  let log_list = splitLog(incoming_log);
+
+  // Get a reference to the table
+  let tableRef = document.getElementById("log_table");
+
+
+  for(let i = 0; i < log_list.length; i++){
+
+	  let newRow = tableRef.insertRow(-1);
+
+	  let numCell = newRow.insertCell(0);
+	  let drawCell = newRow.insertCell(1);
+	  
+	  // Append a text node to the cell
+	  let numText = document.createTextNode((i+1) + "");
+	  numCell.appendChild(numText);
+
+	  let drawElement = document.createElement("a");
+	  let drawText = document.createTextNode("Draw");
+	  drawElement.setAttribute("href", "javascript:visualize(log_list["+i+"])");
+	  drawElement.appendChild(drawText);
+	  drawCell.appendChild(drawElement);
+	  
+  }
+  
+
+  
 </script>
 
 {% endif %}

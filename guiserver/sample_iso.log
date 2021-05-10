@@ -1,3 +1,13 @@
+Program starts.
+Init checker finished.
+op size: 906.
+op_pred_map: 606.
+sql_op_map size: 146
+Init isodiff finished.
+>>>Start run_checker.
+start DP search.
+total: 168
+start KSP.
 -----------------------------
 BEGIN Transaction Dependency Graph:
 9 -> 13: WR WR WR WR WR WR WR WR WR WR WR 
@@ -25,3 +35,1832 @@ SQL <---> Operation Map:
 [5,2,44]: 558 560 565 562
 End SQL-Op Map.
 -----------------------------
+
+-----------------------------
+BEGIN Transaction Dependency Graph:
+4 -> 9: vRW 
+4 -> 13: WR 
+9 -> 4: vRW WW 
+9 -> 13: WR 
+13 -> 9: vRW vRW vRW vRW 
+END Transaction Dependency Graph
+Operation Dependency Graph:
+247<4>[R(district-d_next_o_id)]: 495<9>[W(district-d_next_o_id)]
+646<13>[R(order_line-ol_w_id)]: 535<9>[W(order_line-ol_w_id)]
+645<13>[R(order_line-ol_o_id)]: 532<9>[W(order_line-ol_o_id)]
+491<9>[R(district-d_next_o_id)]: 251<4>[W(district-d_next_o_id)]
+647<13>[R(order_line-ol_i_id)]: 530<9>[W(order_line-ol_i_id)]
+251<4>[W(district-d_next_o_id)]: 643<13>[R(district-d_next_o_id)]
+495<9>[W(district-d_next_o_id)]: 643<13>[R(district-d_next_o_id)] 251<4>[W(district-d_next_o_id)]
+644<13>[R(order_line-ol_d_id)]: 528<9>[W(order_line-ol_d_id)]
+END Operation Dependency Graph
+SQL <---> Operation Map:
+[3,1,20]: 247
+[3,1,21]: 251
+[7,2,52]: 643
+[5,2,34]: 495
+[5,2,40]: 532 530 535 528
+[7,2,53]: 647 645 646 644
+[5,2,33]: 491
+End SQL-Op Map.
+-----------------------------
+
+-----------------------------
+BEGIN Transaction Dependency Graph:
+7 -> 9: vRW vRW vRW vRW vRW vRW 
+4 -> 9: vRW 
+4 -> 7: WR WR WR WR WR WR 
+9 -> 4: vRW WW 
+END Transaction Dependency Graph
+Operation Dependency Graph:
+254<4>[W(orders-o_d_id)]: 384<7>[R(orders-o_d_id)]
+258<4>[W(orders-o_w_id)]: 385<7>[R(orders-o_w_id)]
+383<7>[R(orders-o_c_id)]: 497<9>[W(orders-o_c_id)]
+495<9>[W(district-d_next_o_id)]: 251<4>[W(district-d_next_o_id)]
+253<4>[W(orders-o_c_id)]: 383<7>[R(orders-o_c_id)]
+388<7>[R(orders-o_entry_d)]: 499<9>[W(orders-o_entry_d)]
+256<4>[W(orders-o_id)]: 386<7>[R(orders-o_id)] 389<7>[R(orders-o_id)]
+491<9>[R(district-d_next_o_id)]: 251<4>[W(district-d_next_o_id)]
+386<7>[R(orders-o_id)]: 500<9>[W(orders-o_id)]
+384<7>[R(orders-o_d_id)]: 498<9>[W(orders-o_d_id)]
+389<7>[R(orders-o_id)]: 500<9>[W(orders-o_id)]
+255<4>[W(orders-o_entry_d)]: 388<7>[R(orders-o_entry_d)]
+385<7>[R(orders-o_w_id)]: 502<9>[W(orders-o_w_id)]
+247<4>[R(district-d_next_o_id)]: 495<9>[W(district-d_next_o_id)]
+END Operation Dependency Graph
+SQL <---> Operation Map:
+[3,1,20]: 247
+[3,1,22]: 254 256 258 253 255
+[5,2,35]: 497 502 499 500 498
+[5,2,33]: 491
+[3,1,21]: 251
+[4,2,30]: 383 384 389 386 388 385
+[5,2,34]: 495
+End SQL-Op Map.
+-----------------------------
+
+-----------------------------
+BEGIN Transaction Dependency Graph:
+4 -> 9: vRW 
+4 -> 7: WR WR WR 
+9 -> 4: WW vRW 
+9 -> 7: WR WR WR WR WR 
+7 -> 9: vRW vRW 
+7 -> 4: vRW vRW vRW 
+END Transaction Dependency Graph
+Operation Dependency Graph:
+533<9>[W(order_line-ol_quantity)]: 396<7>[R(order_line-ol_quantity)]
+253<4>[W(orders-o_c_id)]: 383<7>[R(orders-o_c_id)]
+528<9>[W(order_line-ol_d_id)]: 390<7>[R(order_line-ol_d_id)]
+397<7>[R(order_line-ol_supply_w_id)]: 534<9>[W(order_line-ol_supply_w_id)]
+386<7>[R(orders-o_id)]: 256<4>[W(orders-o_id)]
+279<4>[R(stock-s_quantity)]: 526<9>[W(stock-s_quantity)]
+532<9>[W(order_line-ol_o_id)]: 391<7>[R(order_line-ol_o_id)]
+254<4>[W(orders-o_d_id)]: 384<7>[R(orders-o_d_id)]
+392<7>[R(order_line-ol_w_id)]: 535<9>[W(order_line-ol_w_id)]
+530<9>[W(order_line-ol_i_id)]: 395<7>[R(order_line-ol_i_id)]
+255<4>[W(orders-o_entry_d)]: 388<7>[R(orders-o_entry_d)]
+526<9>[W(stock-s_quantity)]: 282<4>[W(stock-s_quantity)]
+385<7>[R(orders-o_w_id)]: 258<4>[W(orders-o_w_id)]
+523<9>[R(stock-s_quantity)]: 282<4>[W(stock-s_quantity)]
+389<7>[R(orders-o_id)]: 256<4>[W(orders-o_id)]
+527<9>[W(order_line-ol_amount)]: 393<7>[R(order_line-ol_amount)]
+END Operation Dependency Graph
+SQL <---> Operation Map:
+[3,1,25]: 279
+[5,2,38]: 523
+[3,1,22]: 254 255 256 258 253
+[4,2,31]: 392 396 391 395 390 397 393
+[5,2,40]: 535 533 532 527 530 534 528
+[3,1,26]: 282
+[4,2,30]: 385 383 388 386 389 384
+[5,2,39]: 526
+End SQL-Op Map.
+-----------------------------
+
+-----------------------------
+BEGIN Transaction Dependency Graph:
+7 -> 9: vRW vRW vRW vRW vRW vRW 
+9 -> 4: WW WR vRW 
+4 -> 7: WR WR WR WR WR WR 
+END Transaction Dependency Graph
+Operation Dependency Graph:
+258<4>[W(orders-o_w_id)]: 385<7>[R(orders-o_w_id)]
+255<4>[W(orders-o_entry_d)]: 388<7>[R(orders-o_entry_d)]
+253<4>[W(orders-o_c_id)]: 383<7>[R(orders-o_c_id)]
+385<7>[R(orders-o_w_id)]: 502<9>[W(orders-o_w_id)]
+256<4>[W(orders-o_id)]: 386<7>[R(orders-o_id)] 389<7>[R(orders-o_id)]
+388<7>[R(orders-o_entry_d)]: 499<9>[W(orders-o_entry_d)]
+386<7>[R(orders-o_id)]: 500<9>[W(orders-o_id)]
+553<9>[R(stock-s_quantity)]: 282<4>[W(stock-s_quantity)]
+254<4>[W(orders-o_d_id)]: 384<7>[R(orders-o_d_id)]
+389<7>[R(orders-o_id)]: 500<9>[W(orders-o_id)]
+556<9>[W(stock-s_quantity)]: 282<4>[W(stock-s_quantity)] 279<4>[R(stock-s_quantity)]
+383<7>[R(orders-o_c_id)]: 497<9>[W(orders-o_c_id)]
+384<7>[R(orders-o_d_id)]: 498<9>[W(orders-o_d_id)]
+END Operation Dependency Graph
+SQL <---> Operation Map:
+[3,1,25]: 279
+[5,2,42]: 553
+[5,2,35]: 499 498 500 502 497
+[4,2,30]: 384 389 386 383 388 385
+[3,1,26]: 282
+[3,1,22]: 254 255 258 253 256
+[5,2,43]: 556
+End SQL-Op Map.
+-----------------------------
+
+start set_cover.
+start update_graph.
+Round time record: dp_search: 1 ms, ksp: 6240 ms, set_cover: 10 ms.
+start DP search.
+total: 167
+start KSP.
+-----------------------------
+BEGIN Transaction Dependency Graph:
+5 -> 9: vRW 
+9 -> 5: vRW WW 
+9 -> 4: WW vRW 
+4 -> 5: vRW WW 
+END Transaction Dependency Graph
+Operation Dependency Graph:
+553<9>[R(stock-s_quantity)]: 282<4>[W(stock-s_quantity)]
+495<9>[W(district-d_next_o_id)]: 305<5>[W(district-d_next_o_id)]
+556<9>[W(stock-s_quantity)]: 282<4>[W(stock-s_quantity)]
+279<4>[R(stock-s_quantity)]: 336<5>[W(stock-s_quantity)]
+301<5>[R(district-d_next_o_id)]: 495<9>[W(district-d_next_o_id)]
+491<9>[R(district-d_next_o_id)]: 305<5>[W(district-d_next_o_id)]
+282<4>[W(stock-s_quantity)]: 336<5>[W(stock-s_quantity)]
+END Operation Dependency Graph
+SQL <---> Operation Map:
+[5,2,42]: 553
+[5,2,34]: 495
+[3,1,26]: 282
+[5,2,33]: 491
+[3,2,26]: 336
+[5,2,43]: 556
+[3,1,25]: 279
+[3,2,21]: 305
+[3,2,20]: 301
+End SQL-Op Map.
+-----------------------------
+
+-----------------------------
+BEGIN Transaction Dependency Graph:
+7 -> 9: vRW vRW vRW vRW vRW 
+4 -> 9: vRW 
+4 -> 7: WR WR WR WR WR WR WR 
+9 -> 4: vRW WW 
+END Transaction Dependency Graph
+Operation Dependency Graph:
+286<4>[W(order_line-ol_i_id)]: 395<7>[R(order_line-ol_i_id)]
+290<4>[W(order_line-ol_supply_w_id)]: 397<7>[R(order_line-ol_supply_w_id)]
+289<4>[W(order_line-ol_quantity)]: 396<7>[R(order_line-ol_quantity)]
+384<7>[R(orders-o_d_id)]: 498<9>[W(orders-o_d_id)]
+284<4>[W(order_line-ol_d_id)]: 390<7>[R(order_line-ol_d_id)]
+491<9>[R(district-d_next_o_id)]: 251<4>[W(district-d_next_o_id)]
+388<7>[R(orders-o_entry_d)]: 499<9>[W(orders-o_entry_d)]
+288<4>[W(order_line-ol_o_id)]: 391<7>[R(order_line-ol_o_id)]
+495<9>[W(district-d_next_o_id)]: 251<4>[W(district-d_next_o_id)]
+283<4>[W(order_line-ol_amount)]: 393<7>[R(order_line-ol_amount)]
+385<7>[R(orders-o_w_id)]: 502<9>[W(orders-o_w_id)]
+247<4>[R(district-d_next_o_id)]: 495<9>[W(district-d_next_o_id)]
+291<4>[W(order_line-ol_w_id)]: 392<7>[R(order_line-ol_w_id)]
+389<7>[R(orders-o_id)]: 500<9>[W(orders-o_id)]
+386<7>[R(orders-o_id)]: 500<9>[W(orders-o_id)]
+END Operation Dependency Graph
+SQL <---> Operation Map:
+[5,2,35]: 500 498 499 502
+[3,1,20]: 247
+[3,1,27]: 286 290 283 288 291 289 284
+[5,2,34]: 495
+[4,2,30]: 386 389 384 388 385
+[4,2,31]: 395 397 393 391 396 392 390
+[5,2,33]: 491
+[3,1,21]: 251
+End SQL-Op Map.
+-----------------------------
+
+-----------------------------
+BEGIN Transaction Dependency Graph:
+8 -> 7: WR 
+7 -> 8: vRW vRW vRW vRW vRW vRW vRW vRW vRW vRW vRW vRW 
+END Transaction Dependency Graph
+Operation Dependency Graph:
+396<7>[R(order_line-ol_quantity)]: 479<8>[W(order_line-ol_quantity)]
+391<7>[R(order_line-ol_o_id)]: 478<8>[W(order_line-ol_o_id)]
+383<7>[R(orders-o_c_id)]: 413<8>[W(orders-o_c_id)]
+392<7>[R(order_line-ol_w_id)]: 481<8>[W(order_line-ol_w_id)]
+390<7>[R(order_line-ol_d_id)]: 474<8>[W(order_line-ol_d_id)]
+385<7>[R(orders-o_w_id)]: 418<8>[W(orders-o_w_id)]
+389<7>[R(orders-o_id)]: 416<8>[W(orders-o_id)]
+393<7>[R(order_line-ol_amount)]: 473<8>[W(order_line-ol_amount)]
+397<7>[R(order_line-ol_supply_w_id)]: 480<8>[W(order_line-ol_supply_w_id)]
+386<7>[R(orders-o_id)]: 416<8>[W(orders-o_id)]
+384<7>[R(orders-o_d_id)]: 414<8>[W(orders-o_d_id)]
+476<8>[W(order_line-ol_i_id)]: 395<7>[R(order_line-ol_i_id)]
+388<7>[R(orders-o_entry_d)]: 415<8>[W(orders-o_entry_d)]
+END Operation Dependency Graph
+SQL <---> Operation Map:
+[5,1,35]: 415 416 413 418 414
+[4,2,30]: 386 384 389 385 383 388
+[4,2,31]: 396 391 390 395 392 397 393
+[5,1,44]: 479 478 474 481 476 473 480
+End SQL-Op Map.
+-----------------------------
+
+-----------------------------
+BEGIN Transaction Dependency Graph:
+8 -> 4: WR WW vRW 
+7 -> 8: vRW vRW vRW vRW vRW vRW 
+4 -> 7: WR WR WR WR WR WR WR 
+END Transaction Dependency Graph
+Operation Dependency Graph:
+439<8>[R(stock-s_quantity)]: 282<4>[W(stock-s_quantity)]
+286<4>[W(order_line-ol_i_id)]: 395<7>[R(order_line-ol_i_id)]
+290<4>[W(order_line-ol_supply_w_id)]: 397<7>[R(order_line-ol_supply_w_id)]
+284<4>[W(order_line-ol_d_id)]: 390<7>[R(order_line-ol_d_id)]
+388<7>[R(orders-o_entry_d)]: 415<8>[W(orders-o_entry_d)]
+289<4>[W(order_line-ol_quantity)]: 396<7>[R(order_line-ol_quantity)]
+283<4>[W(order_line-ol_amount)]: 393<7>[R(order_line-ol_amount)]
+288<4>[W(order_line-ol_o_id)]: 391<7>[R(order_line-ol_o_id)]
+442<8>[W(stock-s_quantity)]: 279<4>[R(stock-s_quantity)] 282<4>[W(stock-s_quantity)]
+389<7>[R(orders-o_id)]: 416<8>[W(orders-o_id)]
+384<7>[R(orders-o_d_id)]: 414<8>[W(orders-o_d_id)]
+383<7>[R(orders-o_c_id)]: 413<8>[W(orders-o_c_id)]
+291<4>[W(order_line-ol_w_id)]: 392<7>[R(order_line-ol_w_id)]
+386<7>[R(orders-o_id)]: 416<8>[W(orders-o_id)]
+385<7>[R(orders-o_w_id)]: 418<8>[W(orders-o_w_id)]
+END Operation Dependency Graph
+SQL <---> Operation Map:
+[5,1,38]: 439
+[3,1,25]: 279
+[3,1,26]: 282
+[4,2,30]: 385 384 389 388 383 386
+[5,1,35]: 418 413 415 416 414
+[3,1,27]: 286 290 283 288 289 284 291
+[5,1,39]: 442
+[4,2,31]: 395 397 393 391 396 392 390
+End SQL-Op Map.
+-----------------------------
+
+-----------------------------
+BEGIN Transaction Dependency Graph:
+7 -> 4: vRW 
+7 -> 9: vRW vRW vRW vRW vRW 
+9 -> 4: vRW WW 
+4 -> 9: vRW 
+4 -> 7: WR WR WR WR WR 
+END Transaction Dependency Graph
+Operation Dependency Graph:
+254<4>[W(orders-o_d_id)]: 384<7>[R(orders-o_d_id)]
+383<7>[R(orders-o_c_id)]: 253<4>[W(orders-o_c_id)]
+495<9>[W(district-d_next_o_id)]: 251<4>[W(district-d_next_o_id)]
+258<4>[W(orders-o_w_id)]: 385<7>[R(orders-o_w_id)]
+385<7>[R(orders-o_w_id)]: 502<9>[W(orders-o_w_id)]
+247<4>[R(district-d_next_o_id)]: 495<9>[W(district-d_next_o_id)]
+491<9>[R(district-d_next_o_id)]: 251<4>[W(district-d_next_o_id)]
+386<7>[R(orders-o_id)]: 500<9>[W(orders-o_id)]
+384<7>[R(orders-o_d_id)]: 498<9>[W(orders-o_d_id)]
+256<4>[W(orders-o_id)]: 389<7>[R(orders-o_id)] 386<7>[R(orders-o_id)]
+388<7>[R(orders-o_entry_d)]: 499<9>[W(orders-o_entry_d)]
+255<4>[W(orders-o_entry_d)]: 388<7>[R(orders-o_entry_d)]
+389<7>[R(orders-o_id)]: 500<9>[W(orders-o_id)]
+END Operation Dependency Graph
+SQL <---> Operation Map:
+[3,1,20]: 247
+[5,2,35]: 499 502 500 498
+[5,2,34]: 495
+[4,2,30]: 383 384 389 386 385 388
+[5,2,33]: 491
+[3,1,21]: 251
+[3,1,22]: 254 255 253 258 256
+End SQL-Op Map.
+-----------------------------
+
+start set_cover.
+start update_graph.
+Round time record: dp_search: 1 ms, ksp: 3693 ms, set_cover: 5 ms.
+start DP search.
+total: 166
+start KSP.
+-----------------------------
+BEGIN Transaction Dependency Graph:
+9 -> 4: vRW 
+4 -> 9: vRW WW 
+4 -> 13: WR WR WR WR WR 
+13 -> 9: vRW vRW vRW 
+END Transaction Dependency Graph
+Operation Dependency Graph:
+646<13>[R(order_line-ol_w_id)]: 535<9>[W(order_line-ol_w_id)]
+291<4>[W(order_line-ol_w_id)]: 650<13>[R(order_line-ol_w_id)]
+247<4>[R(district-d_next_o_id)]: 495<9>[W(district-d_next_o_id)]
+284<4>[W(order_line-ol_d_id)]: 648<13>[R(order_line-ol_d_id)]
+251<4>[W(district-d_next_o_id)]: 495<9>[W(district-d_next_o_id)]
+647<13>[R(order_line-ol_i_id)]: 530<9>[W(order_line-ol_i_id)]
+286<4>[W(order_line-ol_i_id)]: 654<13>[R(order_line-ol_i_id)]
+491<9>[R(district-d_next_o_id)]: 251<4>[W(district-d_next_o_id)]
+282<4>[W(stock-s_quantity)]: 651<13>[R(stock-s_quantity)]
+645<13>[R(order_line-ol_o_id)]: 532<9>[W(order_line-ol_o_id)]
+288<4>[W(order_line-ol_o_id)]: 649<13>[R(order_line-ol_o_id)]
+END Operation Dependency Graph
+SQL <---> Operation Map:
+[3,1,21]: 251
+[7,2,54]: 650 648 651 654 649
+[3,1,26]: 282
+[5,2,34]: 495
+[3,1,27]: 284 291 286 288
+[3,1,20]: 247
+[5,2,33]: 491
+[5,2,40]: 532 535 530
+[7,2,53]: 646 645 647
+End SQL-Op Map.
+-----------------------------
+
+-----------------------------
+BEGIN Transaction Dependency Graph:
+10 -> 5: vRW vRW vRW 
+5 -> 10: WR WR WR WR WR WW WW WW WR WR 
+END Transaction Dependency Graph
+Operation Dependency Graph:
+313<5>[W(new_orders-no_d_id)]: 572<10>[W(new_orders-no_d_id)]
+314<5>[W(new_orders-no_o_id)]: 573<10>[W(new_orders-no_o_id)]
+570<10>[R(new_orders-no_o_id)]: 314<5>[W(new_orders-no_o_id)]
+569<10>[R(new_orders-no_d_id)]: 313<5>[W(new_orders-no_d_id)]
+338<5>[W(order_line-ol_d_id)]: 587<10>[R(order_line-ol_d_id)] 583<10>[R(order_line-ol_d_id)]
+342<5>[W(order_line-ol_o_id)]: 584<10>[R(order_line-ol_o_id)] 588<10>[R(order_line-ol_o_id)]
+315<5>[W(new_orders-no_w_id)]: 574<10>[W(new_orders-no_w_id)]
+337<5>[W(order_line-ol_amount)]: 590<10>[R(order_line-ol_amount)]
+571<10>[R(new_orders-no_w_id)]: 315<5>[W(new_orders-no_w_id)]
+345<5>[W(order_line-ol_w_id)]: 589<10>[R(order_line-ol_w_id)] 585<10>[R(order_line-ol_w_id)]
+END Operation Dependency Graph
+SQL <---> Operation Map:
+[3,2,23]: 313 315 314
+[6,1,46]: 569 570 571 574 573 572
+[6,1,50]: 588 589 587 590
+[3,2,27]: 345 337 342 338
+[6,1,49]: 585 584 583
+End SQL-Op Map.
+-----------------------------
+
+-----------------------------
+BEGIN Transaction Dependency Graph:
+13 -> 9: vRW vRW vRW 
+13 -> 4: vRW vRW 
+9 -> 4: vRW 
+4 -> 13: WR WR 
+4 -> 9: vRW WW 
+END Transaction Dependency Graph
+Operation Dependency Graph:
+286<4>[W(order_line-ol_i_id)]: 647<13>[R(order_line-ol_i_id)]
+646<13>[R(order_line-ol_w_id)]: 535<9>[W(order_line-ol_w_id)]
+251<4>[W(district-d_next_o_id)]: 495<9>[W(district-d_next_o_id)]
+647<13>[R(order_line-ol_i_id)]: 530<9>[W(order_line-ol_i_id)]
+291<4>[W(order_line-ol_w_id)]: 646<13>[R(order_line-ol_w_id)]
+247<4>[R(district-d_next_o_id)]: 495<9>[W(district-d_next_o_id)]
+644<13>[R(order_line-ol_d_id)]: 284<4>[W(order_line-ol_d_id)]
+645<13>[R(order_line-ol_o_id)]: 532<9>[W(order_line-ol_o_id)] 288<4>[W(order_line-ol_o_id)]
+491<9>[R(district-d_next_o_id)]: 251<4>[W(district-d_next_o_id)]
+END Operation Dependency Graph
+SQL <---> Operation Map:
+[3,1,21]: 251
+[3,1,27]: 288 284 286 291
+[3,1,20]: 247
+[5,2,33]: 491
+[7,2,53]: 646 645 644 647
+[5,2,40]: 535 530 532
+[5,2,34]: 495
+End SQL-Op Map.
+-----------------------------
+
+-----------------------------
+BEGIN Transaction Dependency Graph:
+8 -> 7: WR WR WR WR WR WR WR WR WR WR 
+7 -> 8: vRW vRW vRW vRW 
+END Transaction Dependency Graph
+Operation Dependency Graph:
+479<8>[W(order_line-ol_quantity)]: 396<7>[R(order_line-ol_quantity)]
+476<8>[W(order_line-ol_i_id)]: 395<7>[R(order_line-ol_i_id)]
+443<8>[W(order_line-ol_amount)]: 393<7>[R(order_line-ol_amount)]
+446<8>[W(order_line-ol_i_id)]: 395<7>[R(order_line-ol_i_id)]
+391<7>[R(order_line-ol_o_id)]: 478<8>[W(order_line-ol_o_id)] 448<8>[W(order_line-ol_o_id)]
+390<7>[R(order_line-ol_d_id)]: 444<8>[W(order_line-ol_d_id)] 474<8>[W(order_line-ol_d_id)]
+449<8>[W(order_line-ol_quantity)]: 396<7>[R(order_line-ol_quantity)]
+450<8>[W(order_line-ol_supply_w_id)]: 397<7>[R(order_line-ol_supply_w_id)]
+473<8>[W(order_line-ol_amount)]: 393<7>[R(order_line-ol_amount)]
+451<8>[W(order_line-ol_w_id)]: 392<7>[R(order_line-ol_w_id)]
+481<8>[W(order_line-ol_w_id)]: 392<7>[R(order_line-ol_w_id)]
+480<8>[W(order_line-ol_supply_w_id)]: 397<7>[R(order_line-ol_supply_w_id)]
+END Operation Dependency Graph
+SQL <---> Operation Map:
+[5,1,44]: 474 479 473 478 476 481 480
+[4,2,31]: 391 392 396 390 395 397 393
+[5,1,40]: 448 451 449 444 446 450 443
+End SQL-Op Map.
+-----------------------------
+
+-----------------------------
+BEGIN Transaction Dependency Graph:
+8 -> 4: WW vRW 
+7 -> 8: vRW vRW vRW vRW vRW vRW vRW 
+7 -> 4: vRW 
+4 -> 8: vRW 
+4 -> 7: WR WR WR WR WR 
+END Transaction Dependency Graph
+Operation Dependency Graph:
+391<7>[R(order_line-ol_o_id)]: 448<8>[W(order_line-ol_o_id)]
+383<7>[R(orders-o_c_id)]: 253<4>[W(orders-o_c_id)]
+396<7>[R(order_line-ol_quantity)]: 449<8>[W(order_line-ol_quantity)]
+442<8>[W(stock-s_quantity)]: 282<4>[W(stock-s_quantity)]
+258<4>[W(orders-o_w_id)]: 385<7>[R(orders-o_w_id)]
+390<7>[R(order_line-ol_d_id)]: 444<8>[W(order_line-ol_d_id)]
+397<7>[R(order_line-ol_supply_w_id)]: 450<8>[W(order_line-ol_supply_w_id)]
+393<7>[R(order_line-ol_amount)]: 443<8>[W(order_line-ol_amount)]
+255<4>[W(orders-o_entry_d)]: 388<7>[R(orders-o_entry_d)]
+439<8>[R(stock-s_quantity)]: 282<4>[W(stock-s_quantity)]
+395<7>[R(order_line-ol_i_id)]: 446<8>[W(order_line-ol_i_id)]
+279<4>[R(stock-s_quantity)]: 442<8>[W(stock-s_quantity)]
+256<4>[W(orders-o_id)]: 386<7>[R(orders-o_id)] 389<7>[R(orders-o_id)]
+254<4>[W(orders-o_d_id)]: 384<7>[R(orders-o_d_id)]
+392<7>[R(order_line-ol_w_id)]: 451<8>[W(order_line-ol_w_id)]
+END Operation Dependency Graph
+SQL <---> Operation Map:
+[3,1,25]: 279
+[5,1,38]: 439
+[5,1,40]: 449 443 450 448 444 451 446
+[4,2,31]: 396 393 397 392 391 390 395
+[4,2,30]: 384 385 383 388 386 389
+[3,1,26]: 282
+[3,1,22]: 254 256 255 253 258
+[5,1,39]: 442
+End SQL-Op Map.
+-----------------------------
+
+start set_cover.
+start update_graph.
+Round time record: dp_search: 1 ms, ksp: 5278 ms, set_cover: 7 ms.
+start DP search.
+total: 166
+start KSP.
+-----------------------------
+BEGIN Transaction Dependency Graph:
+4 -> 13: WR WR 
+13 -> 8: vRW 
+13 -> 4: vRW vRW vRW 
+8 -> 4: WR vRW 
+END Transaction Dependency Graph
+Operation Dependency Graph:
+649<13>[R(order_line-ol_o_id)]: 288<4>[W(order_line-ol_o_id)]
+654<13>[R(order_line-ol_i_id)]: 286<4>[W(order_line-ol_i_id)]
+643<13>[R(district-d_next_o_id)]: 411<8>[W(district-d_next_o_id)]
+472<8>[W(stock-s_quantity)]: 279<4>[R(stock-s_quantity)]
+650<13>[R(order_line-ol_w_id)]: 291<4>[W(order_line-ol_w_id)]
+282<4>[W(stock-s_quantity)]: 651<13>[R(stock-s_quantity)]
+469<8>[R(stock-s_quantity)]: 282<4>[W(stock-s_quantity)]
+284<4>[W(order_line-ol_d_id)]: 648<13>[R(order_line-ol_d_id)]
+END Operation Dependency Graph
+SQL <---> Operation Map:
+[5,1,34]: 411
+[7,2,54]: 649 654 648 651 650
+[5,1,42]: 469
+[3,1,25]: 279
+[7,2,52]: 643
+[3,1,26]: 282
+[5,1,43]: 472
+[3,1,27]: 288 286 291 284
+End SQL-Op Map.
+-----------------------------
+
+-----------------------------
+BEGIN Transaction Dependency Graph:
+8 -> 4: vRW 
+4 -> 8: vRW WR WW vRW 
+END Transaction Dependency Graph
+Operation Dependency Graph:
+247<4>[R(district-d_next_o_id)]: 411<8>[W(district-d_next_o_id)]
+469<8>[R(stock-s_quantity)]: 282<4>[W(stock-s_quantity)]
+279<4>[R(stock-s_quantity)]: 472<8>[W(stock-s_quantity)]
+251<4>[W(district-d_next_o_id)]: 407<8>[R(district-d_next_o_id)] 411<8>[W(district-d_next_o_id)]
+END Operation Dependency Graph
+SQL <---> Operation Map:
+[3,1,20]: 247
+[3,1,26]: 282
+[5,1,43]: 472
+[5,1,42]: 469
+[3,1,25]: 279
+[3,1,21]: 251
+[5,1,33]: 407
+[5,1,34]: 411
+End SQL-Op Map.
+-----------------------------
+
+-----------------------------
+BEGIN Transaction Dependency Graph:
+13 -> 9: vRW 
+13 -> 4: vRW vRW vRW 
+4 -> 13: WR 
+9 -> 13: WR WR 
+9 -> 4: vRW 
+END Transaction Dependency Graph
+Operation Dependency Graph:
+530<9>[W(order_line-ol_i_id)]: 647<13>[R(order_line-ol_i_id)]
+644<13>[R(order_line-ol_d_id)]: 284<4>[W(order_line-ol_d_id)]
+645<13>[R(order_line-ol_o_id)]: 288<4>[W(order_line-ol_o_id)]
+646<13>[R(order_line-ol_w_id)]: 291<4>[W(order_line-ol_w_id)] 535<9>[W(order_line-ol_w_id)]
+286<4>[W(order_line-ol_i_id)]: 647<13>[R(order_line-ol_i_id)]
+553<9>[R(stock-s_quantity)]: 282<4>[W(stock-s_quantity)]
+532<9>[W(order_line-ol_o_id)]: 645<13>[R(order_line-ol_o_id)]
+END Operation Dependency Graph
+SQL <---> Operation Map:
+[3,1,26]: 282
+[5,2,42]: 553
+[5,2,40]: 530 535 532
+[7,2,53]: 644 647 646 645
+[3,1,27]: 284 286 291 288
+End SQL-Op Map.
+-----------------------------
+
+-----------------------------
+BEGIN Transaction Dependency Graph:
+4 -> 7: WR WR WR WR WR WR WR 
+7 -> 8: vRW vRW vRW vRW vRW 
+8 -> 7: WR 
+8 -> 4: WR vRW 
+END Transaction Dependency Graph
+Operation Dependency Graph:
+414<8>[W(orders-o_d_id)]: 384<7>[R(orders-o_d_id)]
+284<4>[W(order_line-ol_d_id)]: 390<7>[R(order_line-ol_d_id)]
+290<4>[W(order_line-ol_supply_w_id)]: 397<7>[R(order_line-ol_supply_w_id)]
+288<4>[W(order_line-ol_o_id)]: 391<7>[R(order_line-ol_o_id)]
+472<8>[W(stock-s_quantity)]: 279<4>[R(stock-s_quantity)]
+469<8>[R(stock-s_quantity)]: 282<4>[W(stock-s_quantity)]
+389<7>[R(orders-o_id)]: 416<8>[W(orders-o_id)]
+385<7>[R(orders-o_w_id)]: 418<8>[W(orders-o_w_id)]
+286<4>[W(order_line-ol_i_id)]: 395<7>[R(order_line-ol_i_id)]
+388<7>[R(orders-o_entry_d)]: 415<8>[W(orders-o_entry_d)]
+289<4>[W(order_line-ol_quantity)]: 396<7>[R(order_line-ol_quantity)]
+283<4>[W(order_line-ol_amount)]: 393<7>[R(order_line-ol_amount)]
+383<7>[R(orders-o_c_id)]: 413<8>[W(orders-o_c_id)]
+291<4>[W(order_line-ol_w_id)]: 392<7>[R(order_line-ol_w_id)]
+386<7>[R(orders-o_id)]: 416<8>[W(orders-o_id)]
+END Operation Dependency Graph
+SQL <---> Operation Map:
+[4,2,31]: 391 390 396 393 392 397 395
+[3,1,27]: 288 284 289 283 291 286 290
+[5,1,35]: 414 416 413 418 415
+[3,1,25]: 279
+[5,1,42]: 469
+[3,1,26]: 282
+[4,2,30]: 384 388 383 385 389 386
+[5,1,43]: 472
+End SQL-Op Map.
+-----------------------------
+
+-----------------------------
+BEGIN Transaction Dependency Graph:
+3 -> 7: WR 
+17 -> 3: WW 
+7 -> 17: vRW 
+END Transaction Dependency Graph
+Operation Dependency Graph:
+819<17>[W(district-d_ytd)]: 192<3>[W(district-d_ytd)]
+229<3>[W(customer-c_balance)]: 379<7>[R(customer-c_balance)]
+379<7>[R(customer-c_balance)]: 852<17>[W(customer-c_balance)]
+END Operation Dependency Graph
+SQL <---> Operation Map:
+[9,2,64]: 819
+[9,2,68]: 852
+[2,2,17]: 229
+[2,2,12]: 192
+[4,2,29]: 379
+End SQL-Op Map.
+-----------------------------
+
+start set_cover.
+start update_graph.
+Round time record: dp_search: 1 ms, ksp: 2733 ms, set_cover: 2 ms.
+start DP search.
+total: 166
+start KSP.
+-----------------------------
+BEGIN Transaction Dependency Graph:
+8 -> 12: WR WR WR 
+12 -> 8: vRW vRW vRW vRW vRW vRW vRW 
+END Transaction Dependency Graph
+Operation Dependency Graph:
+442<8>[W(stock-s_quantity)]: 636<12>[R(stock-s_quantity)]
+636<12>[R(stock-s_quantity)]: 472<8>[W(stock-s_quantity)]
+446<8>[W(order_line-ol_i_id)]: 639<12>[R(order_line-ol_i_id)]
+633<12>[R(order_line-ol_d_id)]: 474<8>[W(order_line-ol_d_id)] 444<8>[W(order_line-ol_d_id)]
+448<8>[W(order_line-ol_o_id)]: 634<12>[R(order_line-ol_o_id)]
+635<12>[R(order_line-ol_w_id)]: 481<8>[W(order_line-ol_w_id)] 451<8>[W(order_line-ol_w_id)]
+639<12>[R(order_line-ol_i_id)]: 476<8>[W(order_line-ol_i_id)]
+634<12>[R(order_line-ol_o_id)]: 478<8>[W(order_line-ol_o_id)]
+END Operation Dependency Graph
+SQL <---> Operation Map:
+[5,1,40]: 451 446 444 448
+[5,1,43]: 472
+[7,1,54]: 636 634 639 635 633
+[5,1,39]: 442
+[5,1,44]: 478 476 481 474
+End SQL-Op Map.
+-----------------------------
+
+-----------------------------
+BEGIN Transaction Dependency Graph:
+8 -> 4: WW 
+4 -> 12: WR 
+12 -> 8: vRW 
+END Transaction Dependency Graph
+Operation Dependency Graph:
+442<8>[W(stock-s_quantity)]: 282<4>[W(stock-s_quantity)]
+288<4>[W(order_line-ol_o_id)]: 634<12>[R(order_line-ol_o_id)]
+636<12>[R(stock-s_quantity)]: 472<8>[W(stock-s_quantity)]
+END Operation Dependency Graph
+SQL <---> Operation Map:
+[3,1,26]: 282
+[5,1,39]: 442
+[3,1,27]: 288
+[5,1,43]: 472
+[7,1,54]: 636 634
+End SQL-Op Map.
+-----------------------------
+
+-----------------------------
+BEGIN Transaction Dependency Graph:
+7 -> 4: vRW vRW 
+7 -> 10: vRW 
+10 -> 4: vRW vRW vRW vRW vRW vRW vRW 
+4 -> 7: WR WR WR WR WR 
+END Transaction Dependency Graph
+Operation Dependency Graph:
+283<4>[W(order_line-ol_amount)]: 393<7>[R(order_line-ol_amount)]
+577<10>[R(orders-o_w_id)]: 258<4>[W(orders-o_w_id)]
+392<7>[R(order_line-ol_w_id)]: 291<4>[W(order_line-ol_w_id)]
+576<10>[R(orders-o_id)]: 256<4>[W(orders-o_id)]
+387<7>[R(orders-o_carrier_id)]: 582<10>[W(orders-o_carrier_id)]
+288<4>[W(order_line-ol_o_id)]: 391<7>[R(order_line-ol_o_id)]
+286<4>[W(order_line-ol_i_id)]: 395<7>[R(order_line-ol_i_id)]
+579<10>[R(orders-o_d_id)]: 254<4>[W(orders-o_d_id)]
+290<4>[W(order_line-ol_supply_w_id)]: 397<7>[R(order_line-ol_supply_w_id)]
+396<7>[R(order_line-ol_quantity)]: 289<4>[W(order_line-ol_quantity)]
+580<10>[R(orders-o_id)]: 256<4>[W(orders-o_id)]
+578<10>[R(orders-o_c_id)]: 253<4>[W(orders-o_c_id)]
+581<10>[R(orders-o_w_id)]: 258<4>[W(orders-o_w_id)]
+284<4>[W(order_line-ol_d_id)]: 390<7>[R(order_line-ol_d_id)]
+575<10>[R(orders-o_d_id)]: 254<4>[W(orders-o_d_id)]
+END Operation Dependency Graph
+SQL <---> Operation Map:
+[3,1,22]: 258 253 254 256
+[4,2,31]: 392 393 395 390 397 391 396
+[6,1,48]: 581 582 579 580
+[4,2,30]: 387
+[6,1,47]: 577 576 578 575
+[3,1,27]: 291 283 286 290 284 289 288
+End SQL-Op Map.
+-----------------------------
+
+-----------------------------
+BEGIN Transaction Dependency Graph:
+5 -> 10: WR 
+10 -> 5: vRW vRW 
+END Transaction Dependency Graph
+Operation Dependency Graph:
+567<10>[R(new_orders-no_w_id)]: 315<5>[W(new_orders-no_w_id)]
+568<10>[R(new_orders-no_o_id)]: 314<5>[W(new_orders-no_o_id)]
+313<5>[W(new_orders-no_d_id)]: 566<10>[R(new_orders-no_d_id)]
+END Operation Dependency Graph
+SQL <---> Operation Map:
+[3,2,23]: 315 314 313
+[6,1,45]: 567 568 566
+End SQL-Op Map.
+-----------------------------
+
+-----------------------------
+BEGIN Transaction Dependency Graph:
+17 -> 6: WR 
+1 -> 17: WW 
+6 -> 1: vRW 
+END Transaction Dependency Graph
+Operation Dependency Graph:
+852<17>[W(customer-c_balance)]: 353<6>[R(customer-c_balance)]
+73<1>[W(district-d_ytd)]: 819<17>[W(district-d_ytd)]
+353<6>[R(customer-c_balance)]: 114<1>[W(customer-c_balance)]
+END Operation Dependency Graph
+SQL <---> Operation Map:
+[1,2,2]: 73
+[1,2,8]: 114
+[9,2,64]: 819
+[9,2,68]: 852
+[4,1,29]: 353
+End SQL-Op Map.
+-----------------------------
+
+start set_cover.
+start update_graph.
+Round time record: dp_search: 1 ms, ksp: 2861 ms, set_cover: 1 ms.
+start DP search.
+total: 166
+start KSP.
+-----------------------------
+BEGIN Transaction Dependency Graph:
+9 -> 12: WR WR WR WR WR WR WR 
+12 -> 9: vRW vRW vRW vRW vRW vRW vRW vRW vRW 
+END Transaction Dependency Graph
+Operation Dependency Graph:
+532<9>[W(order_line-ol_o_id)]: 634<12>[R(order_line-ol_o_id)]
+528<9>[W(order_line-ol_d_id)]: 633<12>[R(order_line-ol_d_id)]
+633<12>[R(order_line-ol_d_id)]: 558<9>[W(order_line-ol_d_id)]
+535<9>[W(order_line-ol_w_id)]: 631<12>[R(order_line-ol_w_id)] 635<12>[R(order_line-ol_w_id)]
+634<12>[R(order_line-ol_o_id)]: 562<9>[W(order_line-ol_o_id)]
+630<12>[R(order_line-ol_o_id)]: 562<9>[W(order_line-ol_o_id)] 532<9>[W(order_line-ol_o_id)]
+530<9>[W(order_line-ol_i_id)]: 639<12>[R(order_line-ol_i_id)] 632<12>[R(order_line-ol_i_id)]
+635<12>[R(order_line-ol_w_id)]: 565<9>[W(order_line-ol_w_id)]
+629<12>[R(order_line-ol_d_id)]: 558<9>[W(order_line-ol_d_id)] 528<9>[W(order_line-ol_d_id)]
+560<9>[W(order_line-ol_i_id)]: 639<12>[R(order_line-ol_i_id)]
+631<12>[R(order_line-ol_w_id)]: 565<9>[W(order_line-ol_w_id)]
+636<12>[R(stock-s_quantity)]: 556<9>[W(stock-s_quantity)]
+END Operation Dependency Graph
+SQL <---> Operation Map:
+[7,1,53]: 632 629 630 631
+[5,2,43]: 556
+[5,2,40]: 532 535 530 528
+[7,1,54]: 636 635 633 634 639
+[5,2,44]: 560 565 558 562
+End SQL-Op Map.
+-----------------------------
+
+-----------------------------
+BEGIN Transaction Dependency Graph:
+4 -> 12: WR WR 
+9 -> 4: vRW 
+9 -> 12: WR WR WR WR WR 
+12 -> 4: vRW vRW 
+12 -> 9: vRW vRW vRW vRW 
+END Transaction Dependency Graph
+Operation Dependency Graph:
+532<9>[W(order_line-ol_o_id)]: 634<12>[R(order_line-ol_o_id)]
+560<9>[W(order_line-ol_i_id)]: 639<12>[R(order_line-ol_i_id)]
+629<12>[R(order_line-ol_d_id)]: 284<4>[W(order_line-ol_d_id)]
+634<12>[R(order_line-ol_o_id)]: 562<9>[W(order_line-ol_o_id)]
+535<9>[W(order_line-ol_w_id)]: 635<12>[R(order_line-ol_w_id)]
+528<9>[W(order_line-ol_d_id)]: 633<12>[R(order_line-ol_d_id)]
+286<4>[W(order_line-ol_i_id)]: 632<12>[R(order_line-ol_i_id)]
+633<12>[R(order_line-ol_d_id)]: 558<9>[W(order_line-ol_d_id)]
+635<12>[R(order_line-ol_w_id)]: 565<9>[W(order_line-ol_w_id)]
+530<9>[W(order_line-ol_i_id)]: 639<12>[R(order_line-ol_i_id)]
+553<9>[R(stock-s_quantity)]: 282<4>[W(stock-s_quantity)]
+630<12>[R(order_line-ol_o_id)]: 288<4>[W(order_line-ol_o_id)]
+636<12>[R(stock-s_quantity)]: 556<9>[W(stock-s_quantity)]
+291<4>[W(order_line-ol_w_id)]: 631<12>[R(order_line-ol_w_id)]
+END Operation Dependency Graph
+SQL <---> Operation Map:
+[7,1,53]: 629 630 632 631
+[3,1,27]: 284 288 286 291
+[3,1,26]: 282
+[7,1,54]: 635 636 633 634 639
+[5,2,42]: 553
+[5,2,40]: 532 528 535 530
+[5,2,43]: 556
+[5,2,44]: 560 565 558 562
+End SQL-Op Map.
+-----------------------------
+
+-----------------------------
+BEGIN Transaction Dependency Graph:
+7 -> 4: vRW 
+15 -> 7: WR 
+4 -> 6: WR WR 
+4 -> 7: WR WR WR WR WR WR 
+6 -> 1: vRW 
+6 -> 4: vRW vRW vRW vRW vRW 
+1 -> 15: WW 
+END Transaction Dependency Graph
+Operation Dependency Graph:
+286<4>[W(order_line-ol_i_id)]: 395<7>[R(order_line-ol_i_id)]
+371<6>[R(order_line-ol_supply_w_id)]: 290<4>[W(order_line-ol_supply_w_id)]
+290<4>[W(order_line-ol_supply_w_id)]: 397<7>[R(order_line-ol_supply_w_id)]
+370<6>[R(order_line-ol_quantity)]: 289<4>[W(order_line-ol_quantity)]
+73<1>[W(district-d_ytd)]: 716<15>[W(district-d_ytd)]
+392<7>[R(order_line-ol_w_id)]: 291<4>[W(order_line-ol_w_id)]
+369<6>[R(order_line-ol_i_id)]: 286<4>[W(order_line-ol_i_id)]
+289<4>[W(order_line-ol_quantity)]: 396<7>[R(order_line-ol_quantity)]
+366<6>[R(order_line-ol_w_id)]: 291<4>[W(order_line-ol_w_id)]
+288<4>[W(order_line-ol_o_id)]: 391<7>[R(order_line-ol_o_id)]
+365<6>[R(order_line-ol_o_id)]: 288<4>[W(order_line-ol_o_id)]
+745<15>[W(customer-c_balance)]: 379<7>[R(customer-c_balance)]
+283<4>[W(order_line-ol_amount)]: 393<7>[R(order_line-ol_amount)] 367<6>[R(order_line-ol_amount)]
+353<6>[R(customer-c_balance)]: 114<1>[W(customer-c_balance)]
+284<4>[W(order_line-ol_d_id)]: 364<6>[R(order_line-ol_d_id)] 390<7>[R(order_line-ol_d_id)]
+END Operation Dependency Graph
+SQL <---> Operation Map:
+[4,2,29]: 379
+[8,2,60]: 745
+[1,2,8]: 114
+[4,1,29]: 353
+[4,2,31]: 395 397 391 396 390 393 392
+[4,1,31]: 371 367 369 364 370 365 366
+[3,1,27]: 290 291 288 283 289 284 286
+[1,2,2]: 73
+[8,2,57]: 716
+End SQL-Op Map.
+-----------------------------
+
+-----------------------------
+BEGIN Transaction Dependency Graph:
+6 -> 4: vRW 
+6 -> 1: vRW 
+16 -> 7: WR 
+1 -> 16: WW 
+4 -> 7: WR WR 
+4 -> 6: WR WR WR WR WR 
+7 -> 4: vRW vRW vRW vRW 
+END Transaction Dependency Graph
+Operation Dependency Graph:
+358<6>[R(orders-o_d_id)]: 254<4>[W(orders-o_d_id)]
+385<7>[R(orders-o_w_id)]: 258<4>[W(orders-o_w_id)]
+798<16>[W(customer-c_balance)]: 379<7>[R(customer-c_balance)]
+73<1>[W(district-d_ytd)]: 765<16>[W(district-d_ytd)]
+383<7>[R(orders-o_c_id)]: 253<4>[W(orders-o_c_id)]
+258<4>[W(orders-o_w_id)]: 359<6>[R(orders-o_w_id)]
+255<4>[W(orders-o_entry_d)]: 362<6>[R(orders-o_entry_d)]
+253<4>[W(orders-o_c_id)]: 357<6>[R(orders-o_c_id)]
+353<6>[R(customer-c_balance)]: 114<1>[W(customer-c_balance)]
+386<7>[R(orders-o_id)]: 256<4>[W(orders-o_id)]
+254<4>[W(orders-o_d_id)]: 384<7>[R(orders-o_d_id)]
+388<7>[R(orders-o_entry_d)]: 255<4>[W(orders-o_entry_d)]
+256<4>[W(orders-o_id)]: 363<6>[R(orders-o_id)] 389<7>[R(orders-o_id)] 360<6>[R(orders-o_id)]
+END Operation Dependency Graph
+SQL <---> Operation Map:
+[1,2,8]: 114
+[4,1,29]: 353
+[9,1,68]: 798
+[4,1,30]: 358 362 357 359 363 360
+[3,1,22]: 254 256 253 258 255
+[4,2,30]: 385 388 383 386 389 384
+[1,2,2]: 73
+[4,2,29]: 379
+[9,1,64]: 765
+End SQL-Op Map.
+-----------------------------
+
+-----------------------------
+BEGIN Transaction Dependency Graph:
+15 -> 7: WR 
+17 -> 15: WW 
+7 -> 17: vRW 
+END Transaction Dependency Graph
+Operation Dependency Graph:
+745<15>[W(customer-c_balance)]: 379<7>[R(customer-c_balance)]
+819<17>[W(district-d_ytd)]: 716<15>[W(district-d_ytd)]
+379<7>[R(customer-c_balance)]: 852<17>[W(customer-c_balance)]
+END Operation Dependency Graph
+SQL <---> Operation Map:
+[8,2,57]: 716
+[9,2,64]: 819
+[9,2,68]: 852
+[8,2,60]: 745
+[4,2,29]: 379
+End SQL-Op Map.
+-----------------------------
+
+start set_cover.
+start update_graph.
+Round time record: dp_search: 1 ms, ksp: 6550 ms, set_cover: 1 ms.
+start DP search.
+total: 166
+start KSP.
+-----------------------------
+BEGIN Transaction Dependency Graph:
+16 -> 15: WW 
+15 -> 7: WR 
+7 -> 16: vRW 
+END Transaction Dependency Graph
+Operation Dependency Graph:
+755<16>[W(warehouse-w_ytd)]: 706<15>[W(warehouse-w_ytd)]
+745<15>[W(customer-c_balance)]: 379<7>[R(customer-c_balance)]
+379<7>[R(customer-c_balance)]: 798<16>[W(customer-c_balance)]
+END Operation Dependency Graph
+SQL <---> Operation Map:
+[8,2,55]: 706
+[9,1,62]: 755
+[8,2,60]: 745
+[9,1,68]: 798
+[4,2,29]: 379
+End SQL-Op Map.
+-----------------------------
+
+-----------------------------
+BEGIN Transaction Dependency Graph:
+16 -> 17: WW 
+17 -> 7: WR 
+7 -> 16: vRW 
+END Transaction Dependency Graph
+Operation Dependency Graph:
+765<16>[W(district-d_ytd)]: 819<17>[W(district-d_ytd)]
+852<17>[W(customer-c_balance)]: 379<7>[R(customer-c_balance)]
+379<7>[R(customer-c_balance)]: 798<16>[W(customer-c_balance)]
+END Operation Dependency Graph
+SQL <---> Operation Map:
+[9,2,64]: 819
+[9,2,68]: 852
+[9,1,64]: 765
+[9,1,68]: 798
+[4,2,29]: 379
+End SQL-Op Map.
+-----------------------------
+
+-----------------------------
+BEGIN Transaction Dependency Graph:
+10 -> 4: WW WW WW 
+4 -> 7: WR WR WR WR WR 
+7 -> 10: vRW 
+END Transaction Dependency Graph
+Operation Dependency Graph:
+572<10>[W(new_orders-no_d_id)]: 259<4>[W(new_orders-no_d_id)]
+256<4>[W(orders-o_id)]: 386<7>[R(orders-o_id)] 389<7>[R(orders-o_id)]
+573<10>[W(new_orders-no_o_id)]: 260<4>[W(new_orders-no_o_id)]
+254<4>[W(orders-o_d_id)]: 384<7>[R(orders-o_d_id)]
+574<10>[W(new_orders-no_w_id)]: 261<4>[W(new_orders-no_w_id)]
+255<4>[W(orders-o_entry_d)]: 388<7>[R(orders-o_entry_d)]
+387<7>[R(orders-o_carrier_id)]: 582<10>[W(orders-o_carrier_id)]
+258<4>[W(orders-o_w_id)]: 385<7>[R(orders-o_w_id)]
+END Operation Dependency Graph
+SQL <---> Operation Map:
+[3,1,23]: 261 260 259
+[6,1,46]: 574 573 572
+[3,1,22]: 258 255 254 256
+[6,1,48]: 582
+[4,2,30]: 385 386 384 389 388 387
+End SQL-Op Map.
+-----------------------------
+
+-----------------------------
+BEGIN Transaction Dependency Graph:
+4 -> 6: WR WR 
+4 -> 7: WR WR WR 
+7 -> 4: vRW vRW vRW vRW 
+15 -> 7: WR 
+1 -> 15: WW 
+6 -> 1: vRW 
+6 -> 4: vRW vRW vRW vRW vRW 
+END Transaction Dependency Graph
+Operation Dependency Graph:
+286<4>[W(order_line-ol_i_id)]: 395<7>[R(order_line-ol_i_id)]
+371<6>[R(order_line-ol_supply_w_id)]: 290<4>[W(order_line-ol_supply_w_id)]
+290<4>[W(order_line-ol_supply_w_id)]: 397<7>[R(order_line-ol_supply_w_id)]
+283<4>[W(order_line-ol_amount)]: 367<6>[R(order_line-ol_amount)]
+366<6>[R(order_line-ol_w_id)]: 291<4>[W(order_line-ol_w_id)]
+390<7>[R(order_line-ol_d_id)]: 284<4>[W(order_line-ol_d_id)]
+745<15>[W(customer-c_balance)]: 379<7>[R(customer-c_balance)]
+63<1>[W(warehouse-w_ytd)]: 706<15>[W(warehouse-w_ytd)]
+289<4>[W(order_line-ol_quantity)]: 396<7>[R(order_line-ol_quantity)]
+392<7>[R(order_line-ol_w_id)]: 291<4>[W(order_line-ol_w_id)]
+369<6>[R(order_line-ol_i_id)]: 286<4>[W(order_line-ol_i_id)]
+391<7>[R(order_line-ol_o_id)]: 288<4>[W(order_line-ol_o_id)]
+393<7>[R(order_line-ol_amount)]: 283<4>[W(order_line-ol_amount)]
+370<6>[R(order_line-ol_quantity)]: 289<4>[W(order_line-ol_quantity)]
+365<6>[R(order_line-ol_o_id)]: 288<4>[W(order_line-ol_o_id)]
+353<6>[R(customer-c_balance)]: 114<1>[W(customer-c_balance)]
+284<4>[W(order_line-ol_d_id)]: 364<6>[R(order_line-ol_d_id)]
+END Operation Dependency Graph
+SQL <---> Operation Map:
+[4,2,31]: 395 397 396 391 390 393 392
+[1,2,8]: 114
+[4,2,29]: 379
+[4,1,29]: 353
+[8,2,55]: 706
+[8,2,60]: 745
+[1,2,0]: 63
+[4,1,31]: 371 367 370 365 369 364 366
+[3,1,27]: 290 291 284 289 286 283 288
+End SQL-Op Map.
+-----------------------------
+
+-----------------------------
+BEGIN Transaction Dependency Graph:
+1 -> 17: WW 
+6 -> 1: vRW 
+4 -> 7: WR WR WR WR WR 
+4 -> 6: WR WR WR WR WR WR 
+17 -> 7: WR 
+7 -> 4: vRW vRW 
+END Transaction Dependency Graph
+Operation Dependency Graph:
+290<4>[W(order_line-ol_supply_w_id)]: 397<7>[R(order_line-ol_supply_w_id)]
+286<4>[W(order_line-ol_i_id)]: 395<7>[R(order_line-ol_i_id)]
+289<4>[W(order_line-ol_quantity)]: 396<7>[R(order_line-ol_quantity)]
+256<4>[W(orders-o_id)]: 363<6>[R(orders-o_id)] 360<6>[R(orders-o_id)]
+255<4>[W(orders-o_entry_d)]: 362<6>[R(orders-o_entry_d)]
+258<4>[W(orders-o_w_id)]: 359<6>[R(orders-o_w_id)]
+390<7>[R(order_line-ol_d_id)]: 284<4>[W(order_line-ol_d_id)]
+291<4>[W(order_line-ol_w_id)]: 392<7>[R(order_line-ol_w_id)]
+852<17>[W(customer-c_balance)]: 379<7>[R(customer-c_balance)]
+254<4>[W(orders-o_d_id)]: 358<6>[R(orders-o_d_id)]
+353<6>[R(customer-c_balance)]: 114<1>[W(customer-c_balance)]
+253<4>[W(orders-o_c_id)]: 357<6>[R(orders-o_c_id)]
+391<7>[R(order_line-ol_o_id)]: 288<4>[W(order_line-ol_o_id)]
+63<1>[W(warehouse-w_ytd)]: 809<17>[W(warehouse-w_ytd)]
+283<4>[W(order_line-ol_amount)]: 393<7>[R(order_line-ol_amount)]
+END Operation Dependency Graph
+SQL <---> Operation Map:
+[1,2,0]: 63
+[4,2,29]: 379
+[9,2,62]: 809
+[9,2,68]: 852
+[1,2,8]: 114
+[3,1,22]: 256 255 254 253 258
+[4,2,31]: 397 395 390 391 396 392 393
+[4,1,30]: 360 359 358 363 362 357
+[3,1,27]: 290 286 284 289 288 283 291
+[4,1,29]: 353
+End SQL-Op Map.
+-----------------------------
+
+start set_cover.
+start update_graph.
+Round time record: dp_search: 2 ms, ksp: 6963 ms, set_cover: 0 ms.
+start DP search.
+total: 166
+start KSP.
+-----------------------------
+BEGIN Transaction Dependency Graph:
+15 -> 7: WR 
+6 -> 4: vRW 
+6 -> 16: vRW 
+16 -> 15: WW 
+4 -> 7: WR WR WR 
+4 -> 6: WR WR WR WR WR 
+7 -> 4: vRW vRW vRW vRW 
+END Transaction Dependency Graph
+Operation Dependency Graph:
+396<7>[R(order_line-ol_quantity)]: 289<4>[W(order_line-ol_quantity)]
+286<4>[W(order_line-ol_i_id)]: 395<7>[R(order_line-ol_i_id)]
+256<4>[W(orders-o_id)]: 360<6>[R(orders-o_id)] 363<6>[R(orders-o_id)]
+283<4>[W(order_line-ol_amount)]: 393<7>[R(order_line-ol_amount)]
+745<15>[W(customer-c_balance)]: 379<7>[R(customer-c_balance)]
+765<16>[W(district-d_ytd)]: 716<15>[W(district-d_ytd)]
+253<4>[W(orders-o_c_id)]: 357<6>[R(orders-o_c_id)]
+391<7>[R(order_line-ol_o_id)]: 288<4>[W(order_line-ol_o_id)]
+255<4>[W(orders-o_entry_d)]: 362<6>[R(orders-o_entry_d)]
+290<4>[W(order_line-ol_supply_w_id)]: 397<7>[R(order_line-ol_supply_w_id)]
+359<6>[R(orders-o_w_id)]: 258<4>[W(orders-o_w_id)]
+390<7>[R(order_line-ol_d_id)]: 284<4>[W(order_line-ol_d_id)]
+353<6>[R(customer-c_balance)]: 798<16>[W(customer-c_balance)]
+392<7>[R(order_line-ol_w_id)]: 291<4>[W(order_line-ol_w_id)]
+254<4>[W(orders-o_d_id)]: 358<6>[R(orders-o_d_id)]
+END Operation Dependency Graph
+SQL <---> Operation Map:
+[4,1,29]: 353
+[8,2,57]: 716
+[8,2,60]: 745
+[3,1,22]: 256 254 255 258 253
+[9,1,68]: 798
+[4,2,31]: 396 395 393 392 397 390 391
+[4,1,30]: 363 357 362 359 358 360
+[3,1,27]: 289 286 283 288 291 284 290
+[4,2,29]: 379
+[9,1,64]: 765
+End SQL-Op Map.
+-----------------------------
+
+-----------------------------
+BEGIN Transaction Dependency Graph:
+7 -> 10: vRW 
+7 -> 4: vRW 
+10 -> 4: vRW vRW vRW vRW vRW 
+4 -> 7: WR WR WR WR 
+END Transaction Dependency Graph
+Operation Dependency Graph:
+581<10>[R(orders-o_w_id)]: 258<4>[W(orders-o_w_id)]
+578<10>[R(orders-o_c_id)]: 253<4>[W(orders-o_c_id)]
+255<4>[W(orders-o_entry_d)]: 388<7>[R(orders-o_entry_d)]
+387<7>[R(orders-o_carrier_id)]: 582<10>[W(orders-o_carrier_id)]
+576<10>[R(orders-o_id)]: 256<4>[W(orders-o_id)]
+575<10>[R(orders-o_d_id)]: 254<4>[W(orders-o_d_id)]
+256<4>[W(orders-o_id)]: 389<7>[R(orders-o_id)] 386<7>[R(orders-o_id)]
+577<10>[R(orders-o_w_id)]: 258<4>[W(orders-o_w_id)]
+258<4>[W(orders-o_w_id)]: 385<7>[R(orders-o_w_id)]
+384<7>[R(orders-o_d_id)]: 254<4>[W(orders-o_d_id)]
+END Operation Dependency Graph
+SQL <---> Operation Map:
+[6,1,48]: 581 582
+[4,2,30]: 388 389 384 385 387 386
+[6,1,47]: 578 575 577 576
+[3,1,22]: 255 254 253 258 256
+End SQL-Op Map.
+-----------------------------
+
+-----------------------------
+BEGIN Transaction Dependency Graph:
+7 -> 4: vRW vRW vRW 
+15 -> 7: WR 
+4 -> 6: WR WR 
+4 -> 7: WR WR 
+6 -> 1: vRW 
+6 -> 4: vRW vRW vRW vRW vRW 
+1 -> 15: WW 
+END Transaction Dependency Graph
+Operation Dependency Graph:
+384<7>[R(orders-o_d_id)]: 254<4>[W(orders-o_d_id)]
+385<7>[R(orders-o_w_id)]: 258<4>[W(orders-o_w_id)]
+369<6>[R(order_line-ol_i_id)]: 286<4>[W(order_line-ol_i_id)]
+255<4>[W(orders-o_entry_d)]: 388<7>[R(orders-o_entry_d)]
+370<6>[R(order_line-ol_quantity)]: 289<4>[W(order_line-ol_quantity)]
+73<1>[W(district-d_ytd)]: 716<15>[W(district-d_ytd)]
+371<6>[R(order_line-ol_supply_w_id)]: 290<4>[W(order_line-ol_supply_w_id)]
+256<4>[W(orders-o_id)]: 389<7>[R(orders-o_id)]
+366<6>[R(order_line-ol_w_id)]: 291<4>[W(order_line-ol_w_id)]
+386<7>[R(orders-o_id)]: 256<4>[W(orders-o_id)]
+745<15>[W(customer-c_balance)]: 379<7>[R(customer-c_balance)]
+283<4>[W(order_line-ol_amount)]: 367<6>[R(order_line-ol_amount)]
+353<6>[R(customer-c_balance)]: 114<1>[W(customer-c_balance)]
+284<4>[W(order_line-ol_d_id)]: 364<6>[R(order_line-ol_d_id)]
+365<6>[R(order_line-ol_o_id)]: 288<4>[W(order_line-ol_o_id)]
+END Operation Dependency Graph
+SQL <---> Operation Map:
+[4,2,29]: 379
+[1,2,8]: 114
+[4,1,29]: 353
+[3,1,27]: 290 288 286 291 289 284 283
+[8,2,60]: 745
+[3,1,22]: 254 258 256 255
+[4,2,30]: 385 388 384 389 386
+[4,1,31]: 371 365 369 364 370 367 366
+[1,2,2]: 73
+[8,2,57]: 716
+End SQL-Op Map.
+-----------------------------
+
+-----------------------------
+BEGIN Transaction Dependency Graph:
+8 -> 19: WR WR 
+19 -> 8: vRW vRW vRW vRW vRW vRW vRW vRW vRW 
+END Transaction Dependency Graph
+Operation Dependency Graph:
+894<19>[R(orders-o_id)]: 416<8>[W(orders-o_id)]
+891<19>[R(orders-o_c_id)]: 413<8>[W(orders-o_c_id)]
+897<19>[R(orders-o_id)]: 416<8>[W(orders-o_id)]
+899<19>[R(order_line-ol_o_id)]: 448<8>[W(order_line-ol_o_id)]
+903<19>[R(order_line-ol_i_id)]: 446<8>[W(order_line-ol_i_id)]
+900<19>[R(order_line-ol_w_id)]: 451<8>[W(order_line-ol_w_id)]
+896<19>[R(orders-o_entry_d)]: 415<8>[W(orders-o_entry_d)]
+893<19>[R(orders-o_w_id)]: 418<8>[W(orders-o_w_id)]
+898<19>[R(order_line-ol_d_id)]: 444<8>[W(order_line-ol_d_id)]
+414<8>[W(orders-o_d_id)]: 892<19>[R(orders-o_d_id)]
+450<8>[W(order_line-ol_supply_w_id)]: 905<19>[R(order_line-ol_supply_w_id)]
+END Operation Dependency Graph
+SQL <---> Operation Map:
+[5,1,40]: 448 446 451 444 450
+[10,2,72]: 899 903 898 900 905
+[10,2,71]: 894 896 891 893 892 897
+[5,1,35]: 416 414 413 418 415
+End SQL-Op Map.
+-----------------------------
+
+-----------------------------
+BEGIN Transaction Dependency Graph:
+6 -> 4: vRW 
+6 -> 2: vRW 
+15 -> 7: WR 
+4 -> 7: WR 
+4 -> 6: WR WR WR WR WR 
+2 -> 15: WW 
+7 -> 4: vRW vRW vRW vRW 
+END Transaction Dependency Graph
+Operation Dependency Graph:
+357<6>[R(orders-o_c_id)]: 253<4>[W(orders-o_c_id)]
+745<15>[W(customer-c_balance)]: 379<7>[R(customer-c_balance)]
+125<2>[W(warehouse-w_ytd)]: 706<15>[W(warehouse-w_ytd)]
+389<7>[R(orders-o_id)]: 256<4>[W(orders-o_id)]
+256<4>[W(orders-o_id)]: 360<6>[R(orders-o_id)] 363<6>[R(orders-o_id)]
+386<7>[R(orders-o_id)]: 256<4>[W(orders-o_id)]
+353<6>[R(customer-c_balance)]: 172<2>[W(customer-c_balance)]
+254<4>[W(orders-o_d_id)]: 358<6>[R(orders-o_d_id)]
+258<4>[W(orders-o_w_id)]: 359<6>[R(orders-o_w_id)]
+385<7>[R(orders-o_w_id)]: 258<4>[W(orders-o_w_id)]
+384<7>[R(orders-o_d_id)]: 254<4>[W(orders-o_d_id)]
+255<4>[W(orders-o_entry_d)]: 362<6>[R(orders-o_entry_d)] 388<7>[R(orders-o_entry_d)]
+END Operation Dependency Graph
+SQL <---> Operation Map:
+[2,1,17]: 172
+[4,2,29]: 379
+[4,1,30]: 357 363 358 360 359 362
+[4,2,30]: 388 385 386 384 389
+[8,2,60]: 745
+[3,1,22]: 255 254 256 253 258
+[8,2,55]: 706
+[4,1,29]: 353
+[2,1,10]: 125
+End SQL-Op Map.
+-----------------------------
+
+start set_cover.
+start update_graph.
+Round time record: dp_search: 1 ms, ksp: 1803 ms, set_cover: 0 ms.
+start DP search.
+total: 166
+start KSP.
+-----------------------------
+BEGIN Transaction Dependency Graph:
+10 -> 4: vRW 
+7 -> 10: vRW 
+7 -> 4: vRW vRW vRW 
+4 -> 10: WR WR 
+4 -> 7: WR WR WR WR 
+END Transaction Dependency Graph
+Operation Dependency Graph:
+391<7>[R(order_line-ol_o_id)]: 288<4>[W(order_line-ol_o_id)]
+284<4>[W(order_line-ol_d_id)]: 390<7>[R(order_line-ol_d_id)]
+387<7>[R(orders-o_carrier_id)]: 582<10>[W(orders-o_carrier_id)]
+290<4>[W(order_line-ol_supply_w_id)]: 397<7>[R(order_line-ol_supply_w_id)]
+286<4>[W(order_line-ol_i_id)]: 395<7>[R(order_line-ol_i_id)]
+396<7>[R(order_line-ol_quantity)]: 289<4>[W(order_line-ol_quantity)]
+283<4>[W(order_line-ol_amount)]: 393<7>[R(order_line-ol_amount)]
+261<4>[W(new_orders-no_w_id)]: 567<10>[R(new_orders-no_w_id)]
+566<10>[R(new_orders-no_d_id)]: 259<4>[W(new_orders-no_d_id)]
+260<4>[W(new_orders-no_o_id)]: 568<10>[R(new_orders-no_o_id)]
+392<7>[R(order_line-ol_w_id)]: 291<4>[W(order_line-ol_w_id)]
+END Operation Dependency Graph
+SQL <---> Operation Map:
+[6,1,48]: 582
+[3,1,27]: 283 288 286 291 289 284 290
+[4,2,31]: 393 391 395 390 396 392 397
+[3,1,23]: 260 261 259
+[6,1,45]: 568 567 566
+[4,2,30]: 387
+End SQL-Op Map.
+-----------------------------
+
+-----------------------------
+BEGIN Transaction Dependency Graph:
+8 -> 19: WR 
+19 -> 8: vRW vRW vRW vRW 
+END Transaction Dependency Graph
+Operation Dependency Graph:
+900<19>[R(order_line-ol_w_id)]: 451<8>[W(order_line-ol_w_id)]
+450<8>[W(order_line-ol_supply_w_id)]: 905<19>[R(order_line-ol_supply_w_id)]
+903<19>[R(order_line-ol_i_id)]: 446<8>[W(order_line-ol_i_id)]
+898<19>[R(order_line-ol_d_id)]: 444<8>[W(order_line-ol_d_id)]
+899<19>[R(order_line-ol_o_id)]: 448<8>[W(order_line-ol_o_id)]
+END Operation Dependency Graph
+SQL <---> Operation Map:
+[5,1,40]: 451 446 450 444 448
+[10,2,72]: 900 905 903 898 899
+End SQL-Op Map.
+-----------------------------
+
+-----------------------------
+BEGIN Transaction Dependency Graph:
+10 -> 4: vRW 
+4 -> 10: WR WR 
+4 -> 7: WR WR WR WR 
+7 -> 10: vRW 
+7 -> 4: vRW vRW vRW 
+END Transaction Dependency Graph
+Operation Dependency Graph:
+391<7>[R(order_line-ol_o_id)]: 288<4>[W(order_line-ol_o_id)]
+284<4>[W(order_line-ol_d_id)]: 390<7>[R(order_line-ol_d_id)]
+286<4>[W(order_line-ol_i_id)]: 395<7>[R(order_line-ol_i_id)]
+396<7>[R(order_line-ol_quantity)]: 289<4>[W(order_line-ol_quantity)]
+379<7>[R(customer-c_balance)]: 594<10>[W(customer-c_balance)]
+566<10>[R(new_orders-no_d_id)]: 259<4>[W(new_orders-no_d_id)]
+261<4>[W(new_orders-no_w_id)]: 567<10>[R(new_orders-no_w_id)]
+283<4>[W(order_line-ol_amount)]: 393<7>[R(order_line-ol_amount)]
+290<4>[W(order_line-ol_supply_w_id)]: 397<7>[R(order_line-ol_supply_w_id)]
+392<7>[R(order_line-ol_w_id)]: 291<4>[W(order_line-ol_w_id)]
+260<4>[W(new_orders-no_o_id)]: 568<10>[R(new_orders-no_o_id)]
+END Operation Dependency Graph
+SQL <---> Operation Map:
+[4,2,31]: 391 390 396 393 397 392 395
+[3,1,27]: 288 284 289 283 290 291 286
+[6,1,51]: 594
+[3,1,23]: 261 260 259
+[6,1,45]: 567 568 566
+[4,2,29]: 379
+End SQL-Op Map.
+-----------------------------
+
+-----------------------------
+BEGIN Transaction Dependency Graph:
+5 -> 11: WR WR WR WR WR WR WR WR 
+11 -> 5: vRW vRW vRW vRW vRW vRW 
+END Transaction Dependency Graph
+Operation Dependency Graph:
+615<11>[R(order_line-ol_w_id)]: 345<5>[W(order_line-ol_w_id)]
+614<11>[R(order_line-ol_o_id)]: 342<5>[W(order_line-ol_o_id)]
+617<11>[R(order_line-ol_d_id)]: 338<5>[W(order_line-ol_d_id)]
+342<5>[W(order_line-ol_o_id)]: 618<11>[R(order_line-ol_o_id)]
+308<5>[W(orders-o_d_id)]: 609<11>[R(orders-o_d_id)] 605<11>[R(orders-o_d_id)]
+607<11>[R(orders-o_w_id)]: 312<5>[W(orders-o_w_id)]
+310<5>[W(orders-o_id)]: 606<11>[R(orders-o_id)] 610<11>[R(orders-o_id)]
+312<5>[W(orders-o_w_id)]: 611<11>[R(orders-o_w_id)]
+307<5>[W(orders-o_c_id)]: 608<11>[R(orders-o_c_id)]
+619<11>[R(order_line-ol_w_id)]: 345<5>[W(order_line-ol_w_id)]
+613<11>[R(order_line-ol_d_id)]: 338<5>[W(order_line-ol_d_id)]
+337<5>[W(order_line-ol_amount)]: 620<11>[R(order_line-ol_amount)]
+END Operation Dependency Graph
+SQL <---> Operation Map:
+[6,2,49]: 615 614 613
+[6,2,50]: 620 619 617 618
+[3,2,22]: 310 307 312 308
+[6,2,48]: 610 611 609
+[3,2,27]: 345 337 342 338
+[6,2,47]: 605 608 607 606
+End SQL-Op Map.
+-----------------------------
+
+-----------------------------
+BEGIN Transaction Dependency Graph:
+4 -> 12: WR 
+12 -> 4: vRW vRW vRW vRW 
+END Transaction Dependency Graph
+Operation Dependency Graph:
+628<12>[R(district-d_next_o_id)]: 251<4>[W(district-d_next_o_id)]
+631<12>[R(order_line-ol_w_id)]: 291<4>[W(order_line-ol_w_id)]
+284<4>[W(order_line-ol_d_id)]: 629<12>[R(order_line-ol_d_id)]
+632<12>[R(order_line-ol_i_id)]: 286<4>[W(order_line-ol_i_id)]
+630<12>[R(order_line-ol_o_id)]: 288<4>[W(order_line-ol_o_id)]
+END Operation Dependency Graph
+SQL <---> Operation Map:
+[3,1,21]: 251
+[7,1,52]: 628
+[7,1,53]: 631 629 632 630
+[3,1,27]: 284 291 286 288
+End SQL-Op Map.
+-----------------------------
+
+start set_cover.
+start update_graph.
+Round time record: dp_search: 1 ms, ksp: 2133 ms, set_cover: 0 ms.
+start DP search.
+total: 166
+start KSP.
+-----------------------------
+BEGIN Transaction Dependency Graph:
+7 -> 4: vRW 
+7 -> 10: vRW 
+4 -> 7: WR WR WR WR WR 
+10 -> 4: WW WW WW 
+END Transaction Dependency Graph
+Operation Dependency Graph:
+284<4>[W(order_line-ol_d_id)]: 390<7>[R(order_line-ol_d_id)]
+391<7>[R(order_line-ol_o_id)]: 288<4>[W(order_line-ol_o_id)]
+283<4>[W(order_line-ol_amount)]: 393<7>[R(order_line-ol_amount)]
+290<4>[W(order_line-ol_supply_w_id)]: 397<7>[R(order_line-ol_supply_w_id)]
+291<4>[W(order_line-ol_w_id)]: 392<7>[R(order_line-ol_w_id)]
+387<7>[R(orders-o_carrier_id)]: 582<10>[W(orders-o_carrier_id)]
+574<10>[W(new_orders-no_w_id)]: 261<4>[W(new_orders-no_w_id)]
+573<10>[W(new_orders-no_o_id)]: 260<4>[W(new_orders-no_o_id)]
+286<4>[W(order_line-ol_i_id)]: 395<7>[R(order_line-ol_i_id)]
+572<10>[W(new_orders-no_d_id)]: 259<4>[W(new_orders-no_d_id)]
+END Operation Dependency Graph
+SQL <---> Operation Map:
+[6,1,48]: 582
+[4,2,31]: 390 395 392 397 393 391
+[3,1,27]: 284 286 291 290 283 288
+[6,1,46]: 572 574 573
+[3,1,23]: 259 261 260
+[4,2,30]: 387
+End SQL-Op Map.
+-----------------------------
+
+-----------------------------
+BEGIN Transaction Dependency Graph:
+4 -> 12: WR 
+12 -> 4: vRW vRW vRW vRW 
+END Transaction Dependency Graph
+Operation Dependency Graph:
+636<12>[R(stock-s_quantity)]: 282<4>[W(stock-s_quantity)]
+286<4>[W(order_line-ol_i_id)]: 639<12>[R(order_line-ol_i_id)]
+635<12>[R(order_line-ol_w_id)]: 291<4>[W(order_line-ol_w_id)]
+633<12>[R(order_line-ol_d_id)]: 284<4>[W(order_line-ol_d_id)]
+634<12>[R(order_line-ol_o_id)]: 288<4>[W(order_line-ol_o_id)]
+END Operation Dependency Graph
+SQL <---> Operation Map:
+[3,1,26]: 282
+[7,1,54]: 636 635 633 639 634
+[3,1,27]: 286 291 284 288
+End SQL-Op Map.
+-----------------------------
+
+-----------------------------
+BEGIN Transaction Dependency Graph:
+7 -> 9: vRW 
+7 -> 4: vRW vRW vRW 
+4 -> 7: WR WR WR 
+9 -> 4: vRW 
+9 -> 7: WR WR WR WR WR WR 
+END Transaction Dependency Graph
+Operation Dependency Graph:
+533<9>[W(order_line-ol_quantity)]: 396<7>[R(order_line-ol_quantity)]
+283<4>[W(order_line-ol_amount)]: 393<7>[R(order_line-ol_amount)]
+391<7>[R(order_line-ol_o_id)]: 288<4>[W(order_line-ol_o_id)]
+534<9>[W(order_line-ol_supply_w_id)]: 397<7>[R(order_line-ol_supply_w_id)]
+392<7>[R(order_line-ol_w_id)]: 291<4>[W(order_line-ol_w_id)] 535<9>[W(order_line-ol_w_id)]
+530<9>[W(order_line-ol_i_id)]: 395<7>[R(order_line-ol_i_id)]
+553<9>[R(stock-s_quantity)]: 282<4>[W(stock-s_quantity)]
+532<9>[W(order_line-ol_o_id)]: 391<7>[R(order_line-ol_o_id)]
+290<4>[W(order_line-ol_supply_w_id)]: 397<7>[R(order_line-ol_supply_w_id)]
+527<9>[W(order_line-ol_amount)]: 393<7>[R(order_line-ol_amount)]
+286<4>[W(order_line-ol_i_id)]: 395<7>[R(order_line-ol_i_id)]
+390<7>[R(order_line-ol_d_id)]: 284<4>[W(order_line-ol_d_id)]
+528<9>[W(order_line-ol_d_id)]: 390<7>[R(order_line-ol_d_id)]
+END Operation Dependency Graph
+SQL <---> Operation Map:
+[3,1,26]: 282
+[5,2,40]: 533 535 530 534 532 527 528
+[5,2,42]: 553
+[4,2,31]: 396 390 397 392 391 395 393
+[3,1,27]: 284 291 286 288 283 290
+End SQL-Op Map.
+-----------------------------
+
+-----------------------------
+BEGIN Transaction Dependency Graph:
+7 -> 10: vRW 
+7 -> 4: vRW 
+4 -> 7: WR WR WR WR WR 
+10 -> 4: WW WW WW 
+END Transaction Dependency Graph
+Operation Dependency Graph:
+284<4>[W(order_line-ol_d_id)]: 390<7>[R(order_line-ol_d_id)]
+291<4>[W(order_line-ol_w_id)]: 392<7>[R(order_line-ol_w_id)]
+379<7>[R(customer-c_balance)]: 594<10>[W(customer-c_balance)]
+391<7>[R(order_line-ol_o_id)]: 288<4>[W(order_line-ol_o_id)]
+290<4>[W(order_line-ol_supply_w_id)]: 397<7>[R(order_line-ol_supply_w_id)]
+283<4>[W(order_line-ol_amount)]: 393<7>[R(order_line-ol_amount)]
+573<10>[W(new_orders-no_o_id)]: 260<4>[W(new_orders-no_o_id)]
+572<10>[W(new_orders-no_d_id)]: 259<4>[W(new_orders-no_d_id)]
+286<4>[W(order_line-ol_i_id)]: 395<7>[R(order_line-ol_i_id)]
+574<10>[W(new_orders-no_w_id)]: 261<4>[W(new_orders-no_w_id)]
+END Operation Dependency Graph
+SQL <---> Operation Map:
+[4,2,31]: 392 397 393 395 390 391
+[3,1,27]: 291 290 283 288 286 284
+[6,1,46]: 572 574 573
+[6,1,51]: 594
+[3,1,23]: 259 261 260
+[4,2,29]: 379
+End SQL-Op Map.
+-----------------------------
+
+-----------------------------
+BEGIN Transaction Dependency Graph:
+12 -> 4: vRW vRW 
+4 -> 12: WR WR 
+END Transaction Dependency Graph
+Operation Dependency Graph:
+629<12>[R(order_line-ol_d_id)]: 284<4>[W(order_line-ol_d_id)]
+288<4>[W(order_line-ol_o_id)]: 630<12>[R(order_line-ol_o_id)]
+286<4>[W(order_line-ol_i_id)]: 632<12>[R(order_line-ol_i_id)]
+631<12>[R(order_line-ol_w_id)]: 291<4>[W(order_line-ol_w_id)]
+END Operation Dependency Graph
+SQL <---> Operation Map:
+[7,1,53]: 629 630 632 631
+[3,1,27]: 284 288 286 291
+End SQL-Op Map.
+-----------------------------
+
+start set_cover.
+start update_graph.
+Round time record: dp_search: 2 ms, ksp: 1929 ms, set_cover: 0 ms.
+start DP search.
+total: 166
+start KSP.
+-----------------------------
+BEGIN Transaction Dependency Graph:
+10 -> 4: vRW 
+4 -> 10: WR WR 
+4 -> 7: WR WR WR 
+7 -> 10: vRW 
+7 -> 4: vRW vRW 
+END Transaction Dependency Graph
+Operation Dependency Graph:
+260<4>[W(new_orders-no_o_id)]: 568<10>[R(new_orders-no_o_id)]
+261<4>[W(new_orders-no_w_id)]: 567<10>[R(new_orders-no_w_id)]
+385<7>[R(orders-o_w_id)]: 258<4>[W(orders-o_w_id)]
+256<4>[W(orders-o_id)]: 389<7>[R(orders-o_id)] 386<7>[R(orders-o_id)]
+566<10>[R(new_orders-no_d_id)]: 259<4>[W(new_orders-no_d_id)]
+384<7>[R(orders-o_d_id)]: 254<4>[W(orders-o_d_id)]
+255<4>[W(orders-o_entry_d)]: 388<7>[R(orders-o_entry_d)]
+387<7>[R(orders-o_carrier_id)]: 582<10>[W(orders-o_carrier_id)]
+END Operation Dependency Graph
+SQL <---> Operation Map:
+[3,1,23]: 260 259 261
+[3,1,22]: 255 254 256 258
+[6,1,45]: 568 566 567
+[6,1,48]: 582
+[4,2,30]: 386 385 389 384 387 388
+End SQL-Op Map.
+-----------------------------
+
+-----------------------------
+BEGIN Transaction Dependency Graph:
+12 -> 5: vRW vRW vRW 
+5 -> 12: WR WR 
+END Transaction Dependency Graph
+Operation Dependency Graph:
+632<12>[R(order_line-ol_i_id)]: 340<5>[W(order_line-ol_i_id)]
+631<12>[R(order_line-ol_w_id)]: 345<5>[W(order_line-ol_w_id)]
+338<5>[W(order_line-ol_d_id)]: 629<12>[R(order_line-ol_d_id)]
+305<5>[W(district-d_next_o_id)]: 628<12>[R(district-d_next_o_id)]
+630<12>[R(order_line-ol_o_id)]: 342<5>[W(order_line-ol_o_id)]
+END Operation Dependency Graph
+SQL <---> Operation Map:
+[7,1,52]: 628
+[3,2,27]: 340 345 338 342
+[3,2,21]: 305
+[7,1,53]: 632 631 629 630
+End SQL-Op Map.
+-----------------------------
+
+-----------------------------
+BEGIN Transaction Dependency Graph:
+7 -> 10: vRW 
+7 -> 4: vRW vRW vRW 
+4 -> 10: WR WR 
+4 -> 7: WR WR WR 
+10 -> 4: vRW 
+END Transaction Dependency Graph
+Operation Dependency Graph:
+391<7>[R(order_line-ol_o_id)]: 288<4>[W(order_line-ol_o_id)]
+284<4>[W(order_line-ol_d_id)]: 390<7>[R(order_line-ol_d_id)]
+395<7>[R(order_line-ol_i_id)]: 286<4>[W(order_line-ol_i_id)]
+379<7>[R(customer-c_balance)]: 594<10>[W(customer-c_balance)]
+566<10>[R(new_orders-no_d_id)]: 259<4>[W(new_orders-no_d_id)]
+261<4>[W(new_orders-no_w_id)]: 567<10>[R(new_orders-no_w_id)]
+283<4>[W(order_line-ol_amount)]: 393<7>[R(order_line-ol_amount)]
+290<4>[W(order_line-ol_supply_w_id)]: 397<7>[R(order_line-ol_supply_w_id)]
+392<7>[R(order_line-ol_w_id)]: 291<4>[W(order_line-ol_w_id)]
+260<4>[W(new_orders-no_o_id)]: 568<10>[R(new_orders-no_o_id)]
+END Operation Dependency Graph
+SQL <---> Operation Map:
+[4,2,31]: 391 397 392 393 395 390
+[3,1,27]: 288 290 283 291 286 284
+[6,1,51]: 594
+[3,1,23]: 259 261 260
+[6,1,45]: 566 567 568
+[4,2,29]: 379
+End SQL-Op Map.
+-----------------------------
+
+-----------------------------
+BEGIN Transaction Dependency Graph:
+4 -> 12: WR WR 
+12 -> 4: vRW vRW vRW vRW vRW vRW 
+END Transaction Dependency Graph
+Operation Dependency Graph:
+630<12>[R(order_line-ol_o_id)]: 288<4>[W(order_line-ol_o_id)]
+634<12>[R(order_line-ol_o_id)]: 288<4>[W(order_line-ol_o_id)]
+282<4>[W(stock-s_quantity)]: 636<12>[R(stock-s_quantity)]
+631<12>[R(order_line-ol_w_id)]: 291<4>[W(order_line-ol_w_id)]
+635<12>[R(order_line-ol_w_id)]: 291<4>[W(order_line-ol_w_id)]
+284<4>[W(order_line-ol_d_id)]: 633<12>[R(order_line-ol_d_id)]
+639<12>[R(order_line-ol_i_id)]: 286<4>[W(order_line-ol_i_id)]
+629<12>[R(order_line-ol_d_id)]: 284<4>[W(order_line-ol_d_id)]
+END Operation Dependency Graph
+SQL <---> Operation Map:
+[3,1,26]: 282
+[7,1,54]: 636 634 639 635 633
+[7,1,53]: 630 631 629
+[3,1,27]: 288 286 291 284
+End SQL-Op Map.
+-----------------------------
+
+-----------------------------
+BEGIN Transaction Dependency Graph:
+4 -> 12: WR 
+12 -> 4: vRW vRW vRW 
+END Transaction Dependency Graph
+Operation Dependency Graph:
+628<12>[R(district-d_next_o_id)]: 251<4>[W(district-d_next_o_id)]
+631<12>[R(order_line-ol_w_id)]: 291<4>[W(order_line-ol_w_id)]
+630<12>[R(order_line-ol_o_id)]: 288<4>[W(order_line-ol_o_id)]
+284<4>[W(order_line-ol_d_id)]: 629<12>[R(order_line-ol_d_id)]
+END Operation Dependency Graph
+SQL <---> Operation Map:
+[3,1,21]: 251
+[7,1,52]: 628
+[7,1,53]: 631 630 629
+[3,1,27]: 291 288 284
+End SQL-Op Map.
+-----------------------------
+
+start set_cover.
+start update_graph.
+Round time record: dp_search: 1 ms, ksp: 1872 ms, set_cover: 0 ms.
+start DP search.
+total: 166
+start KSP.
+-----------------------------
+BEGIN Transaction Dependency Graph:
+12 -> 5: vRW vRW vRW 
+5 -> 12: WR WR WR WR WR WR 
+END Transaction Dependency Graph
+Operation Dependency Graph:
+630<12>[R(order_line-ol_o_id)]: 342<5>[W(order_line-ol_o_id)]
+632<12>[R(order_line-ol_i_id)]: 340<5>[W(order_line-ol_i_id)]
+345<5>[W(order_line-ol_w_id)]: 635<12>[R(order_line-ol_w_id)]
+631<12>[R(order_line-ol_w_id)]: 345<5>[W(order_line-ol_w_id)]
+336<5>[W(stock-s_quantity)]: 636<12>[R(stock-s_quantity)]
+340<5>[W(order_line-ol_i_id)]: 639<12>[R(order_line-ol_i_id)]
+342<5>[W(order_line-ol_o_id)]: 634<12>[R(order_line-ol_o_id)]
+338<5>[W(order_line-ol_d_id)]: 633<12>[R(order_line-ol_d_id)] 629<12>[R(order_line-ol_d_id)]
+END Operation Dependency Graph
+SQL <---> Operation Map:
+[3,2,26]: 336
+[7,1,53]: 630 629 631 632
+[3,2,27]: 338 342 340 345
+[7,1,54]: 635 633 636 639 634
+End SQL-Op Map.
+-----------------------------
+
+-----------------------------
+BEGIN Transaction Dependency Graph:
+12 -> 4: vRW 
+4 -> 12: WR WR 
+END Transaction Dependency Graph
+Operation Dependency Graph:
+629<12>[R(order_line-ol_d_id)]: 284<4>[W(order_line-ol_d_id)]
+291<4>[W(order_line-ol_w_id)]: 631<12>[R(order_line-ol_w_id)]
+288<4>[W(order_line-ol_o_id)]: 630<12>[R(order_line-ol_o_id)]
+END Operation Dependency Graph
+SQL <---> Operation Map:
+[7,1,53]: 629 631 630
+[3,1,27]: 284 291 288
+End SQL-Op Map.
+-----------------------------
+
+-----------------------------
+BEGIN Transaction Dependency Graph:
+12 -> 5: vRW 
+5 -> 12: WR WR WR WR 
+END Transaction Dependency Graph
+Operation Dependency Graph:
+633<12>[R(order_line-ol_d_id)]: 338<5>[W(order_line-ol_d_id)]
+336<5>[W(stock-s_quantity)]: 636<12>[R(stock-s_quantity)]
+342<5>[W(order_line-ol_o_id)]: 634<12>[R(order_line-ol_o_id)]
+345<5>[W(order_line-ol_w_id)]: 635<12>[R(order_line-ol_w_id)]
+340<5>[W(order_line-ol_i_id)]: 639<12>[R(order_line-ol_i_id)]
+END Operation Dependency Graph
+SQL <---> Operation Map:
+[3,2,26]: 336
+[3,2,27]: 338 342 345 340
+[7,1,54]: 633 636 635 634 639
+End SQL-Op Map.
+-----------------------------
+
+start set_cover.
+start update_graph.
+Round time record: dp_search: 1 ms, ksp: 1819 ms, set_cover: 0 ms.
+start DP search.
+total: 166
+start KSP.
+-----------------------------
+BEGIN Transaction Dependency Graph:
+5 -> 12: WR 
+12 -> 5: vRW vRW vRW 
+END Transaction Dependency Graph
+Operation Dependency Graph:
+632<12>[R(order_line-ol_i_id)]: 340<5>[W(order_line-ol_i_id)]
+338<5>[W(order_line-ol_d_id)]: 629<12>[R(order_line-ol_d_id)]
+630<12>[R(order_line-ol_o_id)]: 342<5>[W(order_line-ol_o_id)]
+631<12>[R(order_line-ol_w_id)]: 345<5>[W(order_line-ol_w_id)]
+END Operation Dependency Graph
+SQL <---> Operation Map:
+[3,2,27]: 338 342 340 345
+[7,1,53]: 632 629 630 631
+End SQL-Op Map.
+-----------------------------
+
+-----------------------------
+BEGIN Transaction Dependency Graph:
+4 -> 12: WR 
+12 -> 4: vRW vRW 
+END Transaction Dependency Graph
+Operation Dependency Graph:
+629<12>[R(order_line-ol_d_id)]: 284<4>[W(order_line-ol_d_id)]
+628<12>[R(district-d_next_o_id)]: 251<4>[W(district-d_next_o_id)]
+288<4>[W(order_line-ol_o_id)]: 630<12>[R(order_line-ol_o_id)]
+END Operation Dependency Graph
+SQL <---> Operation Map:
+[3,1,21]: 251
+[7,1,52]: 628
+[7,1,53]: 630 629
+[3,1,27]: 288 284
+End SQL-Op Map.
+-----------------------------
+
+-----------------------------
+BEGIN Transaction Dependency Graph:
+12 -> 4: vRW vRW vRW vRW 
+4 -> 12: WR WR WR 
+END Transaction Dependency Graph
+Operation Dependency Graph:
+630<12>[R(order_line-ol_o_id)]: 288<4>[W(order_line-ol_o_id)]
+284<4>[W(order_line-ol_d_id)]: 633<12>[R(order_line-ol_d_id)] 629<12>[R(order_line-ol_d_id)]
+639<12>[R(order_line-ol_i_id)]: 286<4>[W(order_line-ol_i_id)]
+282<4>[W(stock-s_quantity)]: 636<12>[R(stock-s_quantity)]
+634<12>[R(order_line-ol_o_id)]: 288<4>[W(order_line-ol_o_id)]
+635<12>[R(order_line-ol_w_id)]: 291<4>[W(order_line-ol_w_id)]
+END Operation Dependency Graph
+SQL <---> Operation Map:
+[3,1,26]: 282
+[7,1,53]: 630 629
+[3,1,27]: 288 284 291 286
+[7,1,54]: 635 634 639 633 636
+End SQL-Op Map.
+-----------------------------
+
+-----------------------------
+BEGIN Transaction Dependency Graph:
+12 -> 4: vRW 
+4 -> 12: WR 
+END Transaction Dependency Graph
+Operation Dependency Graph:
+629<12>[R(order_line-ol_d_id)]: 284<4>[W(order_line-ol_d_id)]
+288<4>[W(order_line-ol_o_id)]: 630<12>[R(order_line-ol_o_id)]
+END Operation Dependency Graph
+SQL <---> Operation Map:
+[7,1,53]: 629 630
+[3,1,27]: 284 288
+End SQL-Op Map.
+-----------------------------
+
+start set_cover.
+start update_graph.
+Round time record: dp_search: 1 ms, ksp: 1820 ms, set_cover: 0 ms.
+start DP search.
+total: 166
+start KSP.
+-----------------------------
+BEGIN Transaction Dependency Graph:
+12 -> 4: vRW vRW vRW vRW 
+4 -> 12: WR WR 
+END Transaction Dependency Graph
+Operation Dependency Graph:
+639<12>[R(order_line-ol_i_id)]: 286<4>[W(order_line-ol_i_id)]
+284<4>[W(order_line-ol_d_id)]: 629<12>[R(order_line-ol_d_id)]
+282<4>[W(stock-s_quantity)]: 636<12>[R(stock-s_quantity)]
+634<12>[R(order_line-ol_o_id)]: 288<4>[W(order_line-ol_o_id)]
+635<12>[R(order_line-ol_w_id)]: 291<4>[W(order_line-ol_w_id)]
+630<12>[R(order_line-ol_o_id)]: 288<4>[W(order_line-ol_o_id)]
+END Operation Dependency Graph
+SQL <---> Operation Map:
+[3,1,26]: 282
+[7,1,54]: 636 634 639 635
+[3,1,27]: 288 284 291 286
+[7,1,53]: 630 629
+End SQL-Op Map.
+-----------------------------
+
+-----------------------------
+BEGIN Transaction Dependency Graph:
+12 -> 4: vRW 
+4 -> 12: WR WR WR WR 
+END Transaction Dependency Graph
+Operation Dependency Graph:
+282<4>[W(stock-s_quantity)]: 636<12>[R(stock-s_quantity)]
+286<4>[W(order_line-ol_i_id)]: 639<12>[R(order_line-ol_i_id)]
+291<4>[W(order_line-ol_w_id)]: 635<12>[R(order_line-ol_w_id)]
+628<12>[R(district-d_next_o_id)]: 251<4>[W(district-d_next_o_id)]
+288<4>[W(order_line-ol_o_id)]: 634<12>[R(order_line-ol_o_id)]
+END Operation Dependency Graph
+SQL <---> Operation Map:
+[7,1,52]: 628
+[3,1,21]: 251
+[3,1,26]: 282
+[3,1,27]: 286 291 288
+[7,1,54]: 636 635 639 634
+End SQL-Op Map.
+-----------------------------
+
+-----------------------------
+BEGIN Transaction Dependency Graph:
+4 -> 12: WR 
+12 -> 4: vRW vRW vRW 
+END Transaction Dependency Graph
+Operation Dependency Graph:
+282<4>[W(stock-s_quantity)]: 636<12>[R(stock-s_quantity)]
+634<12>[R(order_line-ol_o_id)]: 288<4>[W(order_line-ol_o_id)]
+639<12>[R(order_line-ol_i_id)]: 286<4>[W(order_line-ol_i_id)]
+635<12>[R(order_line-ol_w_id)]: 291<4>[W(order_line-ol_w_id)]
+END Operation Dependency Graph
+SQL <---> Operation Map:
+[3,1,26]: 282
+[7,1,54]: 636 634 639 635
+[3,1,27]: 288 286 291
+End SQL-Op Map.
+-----------------------------
+
+start set_cover.
+start update_graph.
+Round time record: dp_search: 1 ms, ksp: 2030 ms, set_cover: 0 ms.
+start DP search.
+total: 166
+start KSP.
+Round time record: dp_search: 2 ms, ksp: 2090 ms, set_cover: 0 ms.
+Check mem peak is not supported for other system than Linux.
+[Final_Result] pglast_tpcc.yml[RC,w_corr,edge] (20,182,906,1490) 1 1 49990 15 606/11019 188(/1490) 0 0 646 0kB 606/11019/581/25/660/10359
+>>>Finish.

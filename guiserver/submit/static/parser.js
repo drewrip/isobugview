@@ -114,9 +114,54 @@ let op_regex = /([0-9]+)<([0-9]+)>\[([A-Za-z]{1})\(([A-Za-z-_]+)\)\]: (([0-9]+)<
 const hOffset = 75;
 const vOffset = 150;
 
+const log_sep = "-----------------------------";
 let node_width = 75;
 let node_height = 50;
 
+
+// The output log will have multiple graphs contained inside, so we need to split these up so we
+// can parse each of them individually
+function splitLog(raw_log){
+	let log_list = [];
+
+	let lines = raw_log.split("\n");
+
+	let i = 0;
+	let numLines = lines.length;
+
+	// Throw out all of the lines before the first log
+	while(i < numLines){
+		if(lines[i] == log_sep){
+			break;
+		} else {
+			i++;
+		}
+	}
+
+	let finished_log_ind = 0;
+	let curr_log = "";
+	let capture = false;
+	while(i < numLines){
+		if((lines[i] == log_sep) && !capture){
+			i++;
+			capture = true;
+		} else if((lines[i] == log_sep) && capture){
+			log_list[finished_log_ind] = curr_log;
+			curr_log = "";
+			finished_log_ind++;
+			i++;
+			capture = false;
+		} else if(lines[i] != log_sep && capture){
+			curr_log += lines[i] + "\n";
+			i++;
+		} else {
+			console.log(lines[i]);
+			i++;
+		}
+	}
+	
+	return log_list;
+}
 
 // Returns the new adj_list with the implicit edges connection operations of the same transaction in order
 function addImplicitEdges(adj_list){
