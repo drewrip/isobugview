@@ -47,10 +47,20 @@ def get_job(request, key):
 def create_job(request):
     if request.method == "POST":
         raw_log = request.POST["sql_log"]
+        raw_schema = request.POST["sql_schema"]
         logHash = salthash(raw_log)
-        newJob = Job(key=logHash, finished_file="jobs/"+logHash+".txt", log=raw_log)
+        newJob = Job(key=logHash, finished_file="jobs/"+logHash+"/report.log", log=raw_log, schema=raw_schema)
         newJob.save()
 
-        subprocess.Popen(["./dummy.sh", logHash])
+        os.mkdir("jobs/"+logHash)
+
+        with open("jobs/"+logHash+"/schema.csv", "w+") as f:
+            f.write(raw_schema)
+
+        with open("jobs/"+logHash+"/sql.log", "w+") as f:
+            f.write(raw_log)
+
+        
+        subprocess.Popen(["./runisodiff.sh", logHash])
 
     return redirect('/status/'+logHash)
