@@ -1,6 +1,9 @@
-FROM python:latest
+FROM ubuntu:latest
 ENV PYTHONUNBUFFERED 1
 COPY /guiserver .
-RUN pip install django
+COPY /db-isolation .
+RUN apt-get -y update
+RUN apt-get -y install python pip
+RUN pip3 install django pyyaml pglast
 EXPOSE 8000
-CMD python manage.py runserver 0.0.0.0:8000
+CMD python3 manage.py runserver 0.0.0.0:8000
