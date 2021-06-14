@@ -1,10 +1,13 @@
 <h1>Submit Log</h1>
 
-<form action="/createJob" name="createJobForm" method="post" id="createJobForm">
+<form action="/createJob" name="createJobForm" method="post" id="createJobForm" enctype="multipart/form-data">
   {% csrf_token %}
 
-  <textarea id="logInput" placeholder="SQL log to process" name="sql_log"></textarea>
-  <textarea id="schemaInput" placeholder="SQL schema associated with log" name="sql_schema"></textarea>
+  <label for="logInput">Choose an SQL log to analyze:</label>
+  <input type="file" id="logInput" name="sql_log">
+
+  <label for="schemaInput">Choose an SQL log to analyze:</label>
+  <input type="file" id="schemaInput" name="sql_schema">
   
   <input type="submit" value="Process">
 </form>

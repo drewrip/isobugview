@@ -46,10 +46,14 @@ def get_job(request, key):
 
 def create_job(request):
     if request.method == "POST":
-        raw_log = request.POST["sql_log"]
-        raw_schema = request.POST["sql_schema"]
+
+        raw_schema = request.FILES["sql_schema"].file.read().decode("utf-8")
+        raw_log = request.FILES["sql_log"].file.read().decode("utf-8")
+                
         logHash = salthash(raw_log)
+        
         newJob = Job(key=logHash, finished_file="jobs/"+logHash+"/report.log", log=raw_log, schema=raw_schema)
+        
         newJob.save()
 
         os.mkdir("jobs/"+logHash)
