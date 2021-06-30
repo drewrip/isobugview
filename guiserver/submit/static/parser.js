@@ -199,10 +199,10 @@ function addImplicitEdges(adj_list){
 function genGraph(log){
 
 	// Identifies all lines in the log that declare the edges
-	let edge_regex = /[0-9]+<[0-9]+>\[[A-Za-z]{1}\([A-Za-z-_]+\)\]: (?:[0-9]+<[0-9]+>\[[A-Za-z]{1}\([A-Za-z-_]+\)\][ ]?)+/gm;
+	let edge_regex = /[0-9]+<\[[0-9]+,[0-9]+,[0-9]+\]>\[[A-Za-z]{1}\([A-Za-z-_\[\]]+\)\]: (?:[0-9]+<\[[0-9]+,[0-9]+,[0-9]+\]>\[[A-Za-z]{1}\([A-Za-z-_\[\]]+\)\][ ]?)+/gm;
 
 	// Identifies the nodes that are used in the declaration of an edge
-	let node_regex = /([0-9]+)<([0-9]+)>\[([A-Za-z]{1})\(([A-Za-z-_]+)\)\]/gm;
+	let node_regex = /([0-9]+)<\[([0-9]+),[0-9]+,[0-9]+\]>\[([A-Za-z]{1})\(([A-Za-z-_\[\]]+)\)\]/gm;
 
 
 	// Matching all of the edges in the file
