@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 touch jobs/${1}/running.txt
 mkdir jobs/${1}/map
 mkdir jobs/${1}/sql
@@ -26,8 +25,6 @@ echo "schema_file = conf/schema/schema.csv" >> conf/pglast_schema.conf
 
 echo "Finished Parsing"
 
-./checker -f conf/pglast_schema.conf -p 1 -k 2 -n 2 -u ex -i rc -r 123456 -m n -j 15 -s b > running.txt
-
-cat running.txt
+./checker -f conf/pglast_schema.conf -p 8 -k 5 -n 5 -u ex -i rc -r 123456 -m n -j 15 -s b | tee -a running.txt
 
 mv running.txt report.log
