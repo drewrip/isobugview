@@ -1,105 +1,3 @@
-let infile_test = `
------------------------------
-BEGIN Transaction Dependency Graph:
-9 -> 13: WR WR WR WR WR WR WR WR WR WR WR 
-13 -> 9: vRW vRW vRW vRW vRW vRW 
-END Transaction Dependency Graph
-Operation Dependency Graph:
-565<9>[W(order_line-ol_w_id)]: 650<13>[R(order_line-ol_w_id)]
-644<13>[R(order_line-ol_d_id)]: 528<9>[W(order_line-ol_d_id)] 558<9>[W(order_line-ol_d_id)]
-556<9>[W(stock-s_quantity)]: 651<13>[R(stock-s_quantity)]
-560<9>[W(order_line-ol_i_id)]: 654<13>[R(order_line-ol_i_id)] 647<13>[R(order_line-ol_i_id)]
-646<13>[R(order_line-ol_w_id)]: 565<9>[W(order_line-ol_w_id)] 535<9>[W(order_line-ol_w_id)]
-562<9>[W(order_line-ol_o_id)]: 649<13>[R(order_line-ol_o_id)]
-558<9>[W(order_line-ol_d_id)]: 648<13>[R(order_line-ol_d_id)]
-535<9>[W(order_line-ol_w_id)]: 650<13>[R(order_line-ol_w_id)]
-530<9>[W(order_line-ol_i_id)]: 647<13>[R(order_line-ol_i_id)] 654<13>[R(order_line-ol_i_id)]
-645<13>[R(order_line-ol_o_id)]: 532<9>[W(order_line-ol_o_id)] 562<9>[W(order_line-ol_o_id)]
-528<9>[W(order_line-ol_d_id)]: 648<13>[R(order_line-ol_d_id)]
-532<9>[W(order_line-ol_o_id)]: 649<13>[R(order_line-ol_o_id)]
-END Operation Dependency Graph
-SQL <---> Operation Map:
-[5,2,43]: 556
-[5,2,40]: 532 535 530 528
-[7,2,54]: 648 651 650 649 654
-[7,2,53]: 645 644 646 647
-[5,2,44]: 558 560 565 562
-End SQL-Op Map.
------------------------------
-`;
-
-let infile_short_test = `
-BEGIN Transaction Dependency Graph:
-8 -> 4: vRW 
-4 -> 8: vRW WR WW vRW 
-END Transaction Dependency Graph
-Operation Dependency Graph:
-247<4>[R(district-d_next_o_id)]: 411<8>[W(district-d_next_o_id)]
-469<8>[R(stock-s_quantity)]: 282<4>[W(stock-s_quantity)]
-279<4>[R(stock-s_quantity)]: 472<8>[W(stock-s_quantity)]
-251<4>[W(district-d_next_o_id)]: 407<8>[R(district-d_next_o_id)] 411<8>[W(district-d_next_o_id)]
-END Operation Dependency Graph
-SQL <---> Operation Map:
-[3,1,20]: 247
-[3,1,26]: 282
-[5,1,43]: 472
-[5,1,42]: 469
-[3,1,25]: 279
-[3,1,21]: 251
-[5,1,33]: 407
-[5,1,34]: 411
-End SQL-Op Map.
-
-`
-
-let infile_basic_test = `
------------------------------
-BEGIN Transaction Dependency Graph:
-(4,2) -> (6,1): vRW 
-(6,1) -> (4,2): WR 
-END Transaction Dependency Graph
-Operation Dependency Graph:
-379<[4,2,29]>[R(customer-c_balance)]: 594<[6,1,51]>[W(customer-c_balance)]
-582<[6,1,48]>[W(orders-o_carrier_id)]: 387<[4,2,30]>[R(orders-o_carrier_id)]
-END Operation Dependency Graph
-SQL-Op Map:
-[6,1,51]: 594
-[4,2,29]: 379
-[6,1,48]: 582
-[4,2,30]: 387
-End SQL-Op Map.
------------------------------
-`
-
-let default_test = `
------------------------------
-BEGIN Transaction Dependency Graph:
-7 -> 10: vRW 
-7 -> 4: vRW 
-10 -> 4: vRW vRW vRW vRW vRW 
-4 -> 7: WR WR WR WR 
-END Transaction Dependency Graph
-Operation Dependency Graph:
-581<10>[R(orders-o_w_id)]: 258<4>[W(orders-o_w_id)]
-578<10>[R(orders-o_c_id)]: 253<4>[W(orders-o_c_id)]
-255<4>[W(orders-o_entry_d)]: 388<7>[R(orders-o_entry_d)]
-387<7>[R(orders-o_carrier_id)]: 582<10>[W(orders-o_carrier_id)]
-576<10>[R(orders-o_id)]: 256<4>[W(orders-o_id)]
-575<10>[R(orders-o_d_id)]: 254<4>[W(orders-o_d_id)]
-256<4>[W(orders-o_id)]: 389<7>[R(orders-o_id)] 386<7>[R(orders-o_id)]
-577<10>[R(orders-o_w_id)]: 258<4>[W(orders-o_w_id)]
-258<4>[W(orders-o_w_id)]: 385<7>[R(orders-o_w_id)]
-384<7>[R(orders-o_d_id)]: 254<4>[W(orders-o_d_id)]
-END Operation Dependency Graph
-SQL <---> Operation Map:
-[6,1,48]: 581 582
-[4,2,30]: 388 389 384 385 387 386
-[6,1,47]: 578 575 577 576
-[3,1,22]: 255 254 253 258 256
-End SQL-Op Map.
------------------------------
-`
-
 /* Regex not currently in use
 
 let edge_label_regex = /([0-9]+) -> ([0-9])+: ([A-Za-z ]+)+/gm;
@@ -276,15 +174,14 @@ function newTestNode(n){
 
 // Returns whether or not the node has any incoming edges
 function hasInEdges(adj_list, node){
-	let res = false;
 	adj_list.forEach(value => {
 		value.forEach(n => {
 			if(JSON.stringify(n) == node){
-				res = true;
+				return true;
 			}
 		});
 	});
-	return res;
+	return false;
 }
 
 // Initializes the node in the map, returns the new map
@@ -301,11 +198,7 @@ function addEdge(adj_list, src, dst){
 
 // Removes the node from the adjacency list and returns new list
 function removeNode(adj_list, node){
-
-	console.log("Has: " + adj_list.has(node));
-	// Deletes the node from the map
-	console.log("Deleted: " + adj_list.delete(node));
-
+	let res = adj_list.delete(node);
 	// Iterates over each element in that map looking for edges that
 	// go to the node and removes the destination from the list
 	adj_list.forEach((value, key) => {
@@ -313,8 +206,6 @@ function removeNode(adj_list, node){
 
 			// If the element in the list is equal to the node we want to remove
 			// then remove the node
-
-			console.log(JSON.stringify(value[i]) == node);
 			if(JSON.stringify(value[i]) == node){
 				adj_list.set(key, value.splice(i, 1));
 			}
@@ -340,9 +231,14 @@ function topoSort(adj_list){
 
 	while(adj_list.size > 0){
 		let no_incoming = findNoIncomingNode(adj_list);
-		console.log(no_incoming);
 		ordered_edges.push(no_incoming);
+        let beg_size = adj_list.size;
 		adj_list = removeNode(adj_list, no_incoming);
+        let end_size = adj_list.size;
+        if(beg_size == end_size){
+            console.log("topoSort in endless loop")
+            break;
+        }
 	}
 
 	return ordered_edges;
@@ -352,7 +248,6 @@ function topoSort(adj_list){
 function getGraphLayout(adj_list){
 
 	let adj_list_copy = new Map(adj_list);
-
 	let node_order = topoSort(adj_list_copy);
 	
 
