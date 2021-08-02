@@ -121,14 +121,13 @@
 
   function render_graph(log){
 
-	  console.log(log);
       let adj_list = genGraph(log);
       let g = getGraphLayout(adj_list);
 
       var svg = d3.select("#graph_area")
           .append("svg")
           .attr("width", (node_width * g.nodes.length) + 150)
-          .attr("height", 400)
+          .attr("height", g.txns.length * 150)
           .lower();
 
       width = +svg.attr("width"),

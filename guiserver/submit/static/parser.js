@@ -71,12 +71,12 @@ function addImplicitEdges(adj_list){
 	adj_list.forEach((value, key) => {
 		let parsed_key = JSON.parse(key);
 		// Ensure that the txn -> [...]
-		if(!ordered_ops.has(parsed_key.node.txn_id)){
-			ordered_ops.set(parsed_key.node.txn_id, []);
+		if(!ordered_ops.has(parsed_key.node.label)){
+			ordered_ops.set(parsed_key.node.label, []);
 		}
 
 		// Pushing the operation onto the list of operations for each transaction
-		ordered_ops.get(parsed_key.node.txn_id).push(parsed_key);
+		ordered_ops.get(parsed_key.node.label).push(parsed_key);
 
 	});
 	ordered_ops.forEach((value, key) => {
@@ -100,7 +100,7 @@ function genGraph(log){
 	let edge_regex = /[0-9]+<\[[0-9]+,[0-9]+,[0-9]+\]>\[[A-Za-z]{1}\([A-Za-z-_\[\]]+\)\]: (?:[0-9]+<\[[0-9]+,[0-9]+,[0-9]+\]>\[[A-Za-z]{1}\([A-Za-z-_\[\]]+\)\][ ]?)+/gm;
 
 	// Identifies the nodes that are used in the declaration of an edge
-	let node_regex = /([0-9]+)<\[([0-9]+),[0-9]+,[0-9]+\]>\[([A-Za-z]{1})\(([A-Za-z-_\[\]]+)\)\]/gm;
+	let node_regex = /([0-9]+)<\[([0-9]+),([0-9]+),[0-9]+\]>\[([A-Za-z]{1})\(([A-Za-z-_\[\]]+)\)\]/gm;
 
 
 	// Matching all of the edges in the file
@@ -122,8 +122,10 @@ function genGraph(log){
 			node: {
 				op_num: parsed_ops[0][1],
 				txn_id: parsed_ops[0][2],
-				type: parsed_ops[0][3],
-				sql: parsed_ops[0][4],
+				minor_id: parsed_ops[0][3],
+				label: "("+parsed_ops[0][2]+","+parsed_ops[0][3]+")",
+				type: parsed_ops[0][4],
+				sql: parsed_ops[0][5],
 			}
 		};
 
@@ -133,8 +135,10 @@ function genGraph(log){
 				node: {
 					op_num: parsed_ops[j][1],
 					txn_id: parsed_ops[j][2],
-					type: parsed_ops[j][3],
-					sql: parsed_ops[j][4],
+					minor_id: parsed_ops[j][3],
+					label: "("+parsed_ops[j][2]+","+parsed_ops[j][3]+")",
+					type: parsed_ops[j][4],
+					sql: parsed_ops[j][5],
 				}
 			};
 
@@ -174,13 +178,17 @@ function newTestNode(n){
 
 // Returns whether or not the node has any incoming edges
 function hasInEdges(adj_list, node){
-	adj_list.forEach(value => {
-		value.forEach(n => {
-			if(JSON.stringify(n) == node){
+
+	let map_list_form = [...adj_list.entries()]
+	for(let i = 0; i < map_list_form.length; i++){
+		let edge_list = map_list_form[i][1]
+		for(let j = 0; j < edge_list.length; j++){
+			if(JSON.stringify(edge_list[j]) == node){
 				return true;
 			}
-		});
-	});
+		}	
+	}
+	
 	return false;
 }
 
@@ -228,7 +236,6 @@ function findNoIncomingNode(adj_list){
 // Returns an ordered list of nodes
 function topoSort(adj_list){
 	let ordered_edges = [];
-
 	while(adj_list.size > 0){
 		let no_incoming = findNoIncomingNode(adj_list);
 		ordered_edges.push(no_incoming);
@@ -262,7 +269,7 @@ function getGraphLayout(adj_list){
 
 	adj_list.forEach((value, key) => {
 		let parsed_key = JSON.parse(key);
-		txn_set.add(parsed_key.node.txn_id);
+		txn_set.add(parsed_key.node.label);
 	});
 
 	let sorted_list = [...txn_set];
@@ -292,8 +299,10 @@ function getGraphLayout(adj_list){
 			"sql": curr.node.sql,
 			"op_num": curr.node.op_num,
 			"txn_id": curr.node.txn_id,
+			"minor_id": curr.node.minor_id,
+			"label": curr.node.label,
 			"x": 50 + (i*hOffset),
-			"y": 50 + (txn_mapping.get(curr.node.txn_id)*vOffset)
+			"y": 50 + (txn_mapping.get(curr.node.label)*vOffset)
 		};
 
 		g.nodes.push(gnode);
@@ -310,15 +319,16 @@ function getGraphLayout(adj_list){
 		let name = curr.node.type + "(" + curr.node.op_num + ")";
 
 		let x_cord = 50 + (i*hOffset);
-		let y_cord = 50 + (txn_mapping.get(curr.node.txn_id)*vOffset);
+		let y_cord = 50 + (txn_mapping.get(curr.node.label)*vOffset);
 
-		console.log("T" + curr.node.txn_id + ": " + name + " @ (" + x_cord + ", " + y_cord + ")");
+		console.log("T" + curr.node.label + ": " + name + " @ (" + x_cord + ", " + y_cord + ")");
 		let gnode = {
 			"name": name,
 			"type": curr.node.type,
 			"sql": curr.node.sql,
 			"op_num": curr.node.op_num,
 			"txn_id": curr.node.txn_id,
+			"label": curr.node.label,
 			"x": x_cord,
 			"y": y_cord
 		};
@@ -327,7 +337,7 @@ function getGraphLayout(adj_list){
 			let e = curr_edges[j];
 
 			// Not adding edges between operations in the same transaction, they're implicit
-			if(gnode.txn_id == e.node.txn_id){
+			if(gnode.label == e.node.label){
 				continue;
 			}
 
