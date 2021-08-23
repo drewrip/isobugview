@@ -254,23 +254,53 @@
   // Get a reference to the table
   let tableRef = document.getElementById("log_table");
 
+  let txnNumsRegex = /(\([0-9]+,[0-9]+\))/g;
+
 
   for(let i = 0; i < log_list.length; i++){
 
 	  let newRow = tableRef.insertRow(-1);
 
 	  let numCell = newRow.insertCell(0);
-	  let drawCell = newRow.insertCell(1);
+	  let txnsCell = newRow.insertCell(1);
+	  let drawCell = newRow.insertCell(2);
+	  let tagCell = newRow.insertCell(3);
 	  
 	  // Append a text node to the cell
 	  let numText = document.createTextNode((i+1) + "");
 	  numCell.appendChild(numText);
 
+	  let txnsText = "T: ";
+	  let matches = log_list[i].match(txnNumsRegex);
+	  let noDupSet = new Set(matches);
+	  matches = Array.from(noDupSet);
+	  matches.sort((a, b) => {
+		  return a.toString().localeCompare(b);
+	  });
+	  for(let j = 0; j < matches.length; j++){
+		  txnsText += matches[j]
+	  }
+	  let txnsTextNode = document.createElement("p");
+	  txnsTextNode.textContent = txnsText;
+	  txnsCell.appendChild(txnsTextNode);
+	  
 	  let drawElement = document.createElement("a");
 	  let drawText = document.createTextNode("Draw");
 	  drawElement.setAttribute("href", "javascript:visualize(log_list["+i+"])");
 	  drawElement.appendChild(drawText);
 	  drawCell.appendChild(drawElement);
+
+	  let rawTagText = "";
+	  if(i == 0){
+		  rawTagText = "click to tag this cycle";
+	  } else {
+		  rawTagText = "...";
+	  }
+
+	  let tagText = document.createElement("p");
+	  tagText.textContent = rawTagText;
+	  tagText.setAttribute("contenteditable", "true");
+	  tagCell.appendChild(tagText);
 	  
   }
   

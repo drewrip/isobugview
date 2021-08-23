@@ -58,10 +58,10 @@ def create_job(request):
 
         os.mkdir("jobs/"+logHash)
 
-        with open("jobs/"+logHash+"/schema.csv", "w+") as f:
+        with open("jobs/"+logHash+"/app_db_info.csv", "w+", encoding="utf-8") as f:
             f.write(raw_schema)
 
-        with open("jobs/"+logHash+"/sql.log", "w+") as f:
+        with open("jobs/"+logHash+"/app.log", "w+", encoding="utf-8") as f:
             f.write(raw_log)
 
         

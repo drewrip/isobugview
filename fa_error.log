@@ -1,0 +1,42 @@
+SELECT value FROM sys_prefs WHERE name='version_id'
+SELECT name, value FROM sys_prefs
+This A_Const has no column ref.
+No column refs in this expression(A_Const =/</> A_Const).
+
+No column refs in this expression(A_Const =/</> A_Const).
+
+This list has no column ref.
+This A_Const has no column ref.
+This A_Const has no column ref.
+This list has no column ref.
+This A_Const has no column ref.
+This A_Const has no column ref.
+This list has no column ref.
+This A_Const has no column ref.
+This A_Const has no column ref.
+This list has no column ref.
+No column refs in this expression(A_Const =/</> A_Const).
+
+No column refs in this expression(A_Const =/</> A_Const).
+
+No column refs in this expression(A_Const =/</> A_Const).
+
+No column refs in this expression(A_Const =/</> A_Const).
+
+This list has no column ref.
+This A_Const has no column ref.
+This A_Const has no column ref.
+This list has no column ref.
+This A_Const has no column ref.
+This A_Const has no column ref.
+This list has no column ref.
+This A_Const has no column ref.
+This A_Const has no column ref.
+This list has no column ref.
+Traceback (most recent call last):
+  File "pglast_sqlparser.py", line 1933, in <module>
+    parseResult = generateOpsList(txnlist, dbSchema)
+  File "pglast_sqlparser.py", line 1597, in generateOpsList
+    root = Node(parse_sql(stmt))
+  File "pglast/parser.pyx", line 76, in pglast.parser.parse_sql
+pglast.parser.ParseError: syntax error at or near "end", at location 37
