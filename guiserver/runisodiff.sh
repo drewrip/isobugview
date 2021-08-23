@@ -18,7 +18,7 @@ echo "Starting Analysis"
 python3 pglast_sqlparser.py app.log app_db_info.csv .
 
 # Generate configs
-python3 log_parser.py pglast_app.txt
+python3 log_parser.py pglast_app.txt app_db_info.csv
 
 mv app_db_info.csv conf/schema/app_db_info.csv
 
