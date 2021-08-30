@@ -52,7 +52,7 @@ def create_job(request):
                 
         logHash = salthash(raw_log)
         
-        newJob = Job(key=logHash, finished_file="jobs/"+logHash+"/report.log", log=raw_log, schema=raw_schema)
+        newJob = Job(key=logHash, finished_file="jobs/"+logHash+"/finished.json", log=raw_log, schema=raw_schema)
         
         newJob.save()
 

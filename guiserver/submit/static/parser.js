@@ -12,54 +12,9 @@ let op_regex = /([0-9]+)<([0-9]+)>\[([A-Za-z]{1})\(([A-Za-z-_]+)\)\]: (([0-9]+)<
 const hOffset = 75;
 const vOffset = 150;
 
-const log_sep = "-----------------------------";
 let node_width = 75;
 let node_height = 50;
 
-
-// The output log will have multiple graphs contained inside, so we need to split these up so we
-// can parse each of them individually
-function splitLog(raw_log){
-	let log_list = [];
-
-	let lines = raw_log.split("\n");
-
-	let i = 0;
-	let numLines = lines.length;
-
-	// Throw out all of the lines before the first log
-	while(i < numLines){
-		if(lines[i] == log_sep){
-			break;
-		} else {
-			i++;
-		}
-	}
-
-	let finished_log_ind = 0;
-	let curr_log = "";
-	let capture = false;
-	while(i < numLines){
-		if((lines[i] == log_sep) && !capture){
-			i++;
-			capture = true;
-		} else if((lines[i] == log_sep) && capture){
-			log_list[finished_log_ind] = curr_log;
-			curr_log = "";
-			finished_log_ind++;
-			i++;
-			capture = false;
-		} else if(lines[i] != log_sep && capture){
-			curr_log += lines[i] + "\n";
-			i++;
-		} else {
-			console.log(lines[i]);
-			i++;
-		}
-	}
-	
-	return log_list;
-}
 
 // Returns the new adj_list with the implicit edges connection operations of the same transaction in order
 function addImplicitEdges(adj_list){
@@ -94,86 +49,66 @@ function addImplicitEdges(adj_list){
 	return adj_list;
 }
 
+// Take the node format given by isodiff and translate it to a standard format
+function translateNode(isodiffNode){
+	let readOrWrite = (isodiffNode.op == 0) ? "R" : "W";
+	let newNode = {
+		node: {
+			op_num: isodiffNode.index,
+			txn_id: isodiffNode.txn_index,
+			index: isodiffNode.index,
+			type: readOrWrite,
+			sql: isodiffNode.sql_index,
+		}
+	}
+	return newNode;
+}
+
 function genGraph(log){
-
-	// Identifies all lines in the log that declare the edges
-	let edge_regex = /[0-9]+<\[[0-9]+,[0-9]+,[0-9]+\]>\[[A-Za-z]{1}\([A-Za-z-_\[\]]+\)\]: (?:[0-9]+<\[[0-9]+,[0-9]+,[0-9]+\]>\[[A-Za-z]{1}\([A-Za-z-_\[\]]+\)\][ ]?)+/gm;
-
-	// Identifies the nodes that are used in the declaration of an edge
-	let node_regex = /([0-9]+)<\[([0-9]+),([0-9]+),[0-9]+\]>\[([A-Za-z]{1})\(([A-Za-z-_\[\]]+)\)\]/gm;
-
-
-	// Matching all of the edges in the file
-	const edges = log.match(edge_regex);
 
 	// Creating the initial adjacency map
 	let adj_list = new Map();
 
-	// Iterating over each of the matched lines in the regex
+	let OpMap = new Map();
+	let TxnMap = new Map();
+
+	let nodes = log.OpDepGraph.OpNodes;
+	let txns = log.TxnDepGraph.TxnNodes;
+
+	for(let i = 0; i < txns.length; i++){
+		TxnMap.set(txns[i].index, txns[i].tid);
+	}
+	// Creating a mapping OpMap: index -> operation
+	for(let i = 0; i < nodes.length; i++){
+		let translatedNode = translateNode(nodes[i]);
+		let ids = TxnMap.get(nodes[i].txn_index);
+		translatedNode.node.major_id = ids.txn_major;
+		translatedNode.node.minor_id = ids.txn_minor;
+		translatedNode.node.label = "("+ids.txn_major+","+ids.txn_minor+")";
+		OpMap.set(nodes[i].index, JSON.stringify(translatedNode));
+	}
+
+	let edges = log.OpDepGraph.Edges;
+
 	for(let i = 0; i < edges.length; i++){
-
-		// Getting the array of matched elements
-		let parsed_edge = edges[i];
-
-		let parsed_ops = [...parsed_edge.matchAll(node_regex)];
-
-		// Creating a source node object from the first 4 matched elements
-		let src = {
-			node: {
-				op_num: parsed_ops[0][1],
-				txn_id: parsed_ops[0][2],
-				minor_id: parsed_ops[0][3],
-				label: "("+parsed_ops[0][2]+","+parsed_ops[0][3]+")",
-				type: parsed_ops[0][4],
-				sql: parsed_ops[0][5],
-			}
-		};
-
-		// Iterating over all of the nodes in the line
-		for(let j = 1; j < parsed_ops.length; j++){
-			let dst = {
-				node: {
-					op_num: parsed_ops[j][1],
-					txn_id: parsed_ops[j][2],
-					minor_id: parsed_ops[j][3],
-					label: "("+parsed_ops[j][2]+","+parsed_ops[j][3]+")",
-					type: parsed_ops[j][4],
-					sql: parsed_ops[j][5],
-				}
-			};
-
-			// If the source node doesn't exist in the adjacency list, set it equal to a list first
-			if(!adj_list.has(JSON.stringify(src))){
-				adj_list.set(JSON.stringify(src), []);
-			}
-
-			// Push the destination node to the list of the source node
-			adj_list.get(JSON.stringify(src)).push(dst);
-
-			// Adding the dst node to the list of key nodes if it doesn't exist
-			if(!adj_list.has(JSON.stringify(dst))){
-				adj_list.set(JSON.stringify(dst), []);
-			}
-
+		
+		let src = OpMap.get(edges[i].src);
+		let dst = OpMap.get(edges[i].dst);
+		
+		if(!adj_list.has(src)){
+			adj_list.set(src, []);
 		}
 
+		if(!adj_list.has(dst)){
+			adj_list.set(dst, []);
+		}
+		
+		adj_list.get(src).push(JSON.parse(dst));
 	}
 
 	adj_list = addImplicitEdges(adj_list);
 
 	return adj_list;
-}
-
-function newTestNode(n){
-	let test = {
-		node: {
-			op_num: n,
-			txn_id: n,
-			type: n,
-			sql: n,
-		}
-	};
-	return test;
 }
 
 // Returns whether or not the node has any incoming edges
@@ -255,8 +190,8 @@ function topoSort(adj_list){
 function getGraphLayout(adj_list){
 
 	let adj_list_copy = new Map(adj_list);
+
 	let node_order = topoSort(adj_list_copy);
-	
 
 	console.log("Finished parsing and ordering");
 
@@ -289,7 +224,7 @@ function getGraphLayout(adj_list){
 
 	// List of the nodes in graphable form
 	for(let i = 0; i < node_order.length; i++){
-
+		
 		let curr_raw_order = node_order[i];
 		let curr = JSON.parse(curr_raw_order);
 
@@ -299,7 +234,9 @@ function getGraphLayout(adj_list){
 			"sql": curr.node.sql,
 			"op_num": curr.node.op_num,
 			"txn_id": curr.node.txn_id,
+			"major_id": curr.node.major_id,
 			"minor_id": curr.node.minor_id,
+			"index": curr.node.index,
 			"label": curr.node.label,
 			"x": 50 + (i*hOffset),
 			"y": 50 + (txn_mapping.get(curr.node.label)*vOffset)
@@ -328,6 +265,9 @@ function getGraphLayout(adj_list){
 			"sql": curr.node.sql,
 			"op_num": curr.node.op_num,
 			"txn_id": curr.node.txn_id,
+			"major_id": curr.node.major_id,
+			"minor_id": curr.node.minor_id,
+			"index": curr.node.index,
 			"label": curr.node.label,
 			"x": x_cord,
 			"y": y_cord
@@ -343,7 +283,7 @@ function getGraphLayout(adj_list){
 
 			let link_src = Object.assign({}, gnode);
 			let link_dst = Object.assign({}, g.nodes.filter(function(n){
-					return e.node.txn_id == n.txn_id && e.node.op_num == n.op_num;
+					return e.node.txn_id == n.txn_id && e.node.index == n.index;
 				})[0]);
 
 			// Draw the arrow between nodes from the edge to the edge rather than to the center

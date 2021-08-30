@@ -1,6 +1,6 @@
 #!/bin/bash
 
-touch jobs/${1}/running.txt
+touch jobs/${1}/running.json
 mkdir jobs/${1}/map
 mkdir jobs/${1}/sql
 mkdir jobs/${1}/conf
@@ -18,18 +18,17 @@ echo "Starting Analysis"
 python3 pglast_sqlparser.py app.log app_db_info.csv .
 
 # Generate configs
-python3 log_parser.py pglast_app.txt
+python3 log_parser.py pglast_app.txt app_db_info.csv
 
 mv app_db_info.csv conf/schema/app_db_info.csv
 
-echo "schema_file = conf/schema/app_db_info.csv" >> conf/pglast_app.conf
-
+#echo "schema_file = conf/schema/app_db_info.csv" >> conf/pglast_app.conf
 
 ls conf/
 cat conf/pglast_app.conf
 
 echo "Finished Parsing"
 
-./checker -f conf/pglast_app.conf -p 8 -k 2 -n 2 -u ex -i rc -r 123456 -m n -j 15 -s b | tee -a running.txt
+./checker -f conf/pglast_app.conf -p 8 -k 3 -n 3 -u ex -i rc -r 123456 -m n -j 15 -g row -s b -c 15 -o running.json
 
-mv running.txt report.log
+mv running.json finished.json
