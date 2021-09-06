@@ -187,7 +187,7 @@ function topoSort(adj_list){
 }
 
 // Returns the object to pass to D3 to represent the vertices and edges
-function getGraphLayout(adj_list){
+function getGraphLayout(adj_list, edge_attrs){
 
 	let adj_list_copy = new Map(adj_list);
 
@@ -296,7 +296,8 @@ function getGraphLayout(adj_list){
 			}
 			g.links.push({
 				"source": link_src,
-				"target": link_dst
+				"target": link_dst,
+				"attrs": edge_attrs.get(link_src.index+","+link_dst.index)
 			});
 		}
 
