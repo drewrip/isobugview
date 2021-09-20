@@ -288,12 +288,13 @@ function getGraphLayout(adj_list, edge_attrs){
 
 			// Draw the arrow between nodes from the edge to the edge rather than to the center
 			if(link_src.y > link_dst.y){
-				link_src.y -= node_height/2;
-				link_dst.y += node_height/2;
+				link_dst.y += node_height;
 			} else {
-				link_src.y += node_height/2;
-				link_dst.y -= node_height/2;
+				link_src.y += node_height;
 			}
+
+			link_src.x += node_width/2;
+			link_dst.x += node_width/2;
 			g.links.push({
 				"source": link_src,
 				"target": link_dst,

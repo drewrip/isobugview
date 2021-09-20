@@ -34,7 +34,7 @@
 		<div class="container-fluid" id="wrapper">
 			<div class="row">
 				<nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
-					<div class="position-sticky pt-3">
+					<div class="sidebar-sticky pt-3">
 						<ul id="txnList" class="nav flex-column">
 							<!-- sidebar table list of transactions to view -->
 						</ul>
@@ -47,10 +47,6 @@
 					</div>
 					<div id="graph_area"></div>
 					<div id="sql_area" style="visibility: hidden;">
-						<p class="key">Type: </p><p id="op_type"></p>
-						<p class="key">Related SQL Statement: </p>
-  						<p id="sql_src_index"</p><p id="sql_stmt_src"></p>
-						<p id="sql_dst_index"</p><p id="sql_stmt_dst"></p>
 					</div>
 				</main>
 
@@ -65,6 +61,21 @@
  let incoming_json = JSON.parse(`{% autoescape off %}{{job.result}}{% endautoescape %}`);
 
  let SQLJSON = incoming_json.SQL_Examples;
+
+ let txn_sql_map = new Map();
+ let txn_sql_list = incoming_json.TransactionSqlMap;
+ for(let i = 0; i < txn_sql_list.length; i++){
+	 let index_example_list = [];
+	 let sql_list_temp = txn_sql_list[i].sql_list;
+	 for(let j = 0; j < sql_list_temp.length; j++){
+		 index_example_list.push({"index": sql_list_temp[j], "statement": SQLJSON[sql_list_temp[j]].example})
+	 }
+
+	 let tid = txn_sql_list[i].tid;
+
+	 txn_sql_map.set("(" + tid.txn_major + "," + tid.txn_minor + ")", index_example_list);
+ }
+ 
  function visualize(log){
 
      // Remove any existing graph
@@ -90,21 +101,23 @@
 
 		 edge_attrs.set(e.src+","+e.dst, attrs);
 	 }
+
+	 let y_axis_graph_padding = 50;
 	 
      let adj_list = genGraph(log);
      let g = getGraphLayout(adj_list, edge_attrs);
 
      var svg = d3.select("#graph_area")
 				 .append("svg")
-				 .attr("width", (node_width * g.nodes.length) + 150)
-				 .attr("height", g.txns.length * 150)
+				 .attr("height", "60vh")
+				 .attr("viewBox", "0 0 " + ((node_width * g.nodes.length) + 150) + " " + g.txns.length * 150)
 				 .lower();
 
      width = +svg.attr("width"),
 		 height = +svg.attr("height");
 
      svg.append("defs").append("marker")
-        .attr("id", "arrow")
+        .attr("id", "arrow-black")
         .attr("viewBox", "0 -5 10 10")
         .attr("refX", 10)
         .attr("refY", 0)
@@ -112,9 +125,33 @@
         .attr("markerHeight", 10)
         .attr("orient", "auto")
         .append("svg:path")
-        .attr("color", "black")
+        .attr("fill", "black")
         .attr("d", "M0,-5L10,0L0,5");
 
+	 svg.select("defs").append("marker")
+        .attr("id", "arrow-orange")
+        .attr("viewBox", "0 -5 10 10")
+        .attr("refX", 10)
+        .attr("refY", 0)
+        .attr("markerWidth", 5)
+        .attr("markerHeight", 10)
+        .attr("orient", "auto")
+        .append("svg:path")
+        .attr("fill", "orange")
+        .attr("d", "M0,-5L10,0L0,5");
+
+	 svg.select("defs").append("marker")
+        .attr("id", "arrow-gray")
+        .attr("viewBox", "0 -5 10 10")
+        .attr("refX", 10)
+        .attr("refY", 0)
+        .attr("markerWidth", 5)
+        .attr("markerHeight", 10)
+        .attr("orient", "auto")
+        .append("svg:path")
+        .attr("fill", "gray")
+        .attr("d", "M0,-5L10,0L0,5");
+	 
      let transactions = svg.selectAll(".txn_label")
 						   .data(g.txns)
 						   .enter()
@@ -128,6 +165,23 @@
 						   })
 						   .attr("y", function(d){
 							   return d.y;
+						   })
+	 					   .on("click", function(d, i){	   
+							   d3.select("#el"+i).attr("visibility", "visible");
+
+							   d3.select("p").attr("visibility", "visible");
+
+							   document.getElementById("sql_area").style.visibility = "visible";
+
+							   let statement_list = txn_sql_map.get(d.txn);
+							   
+							   let detail_box = "<b>Statements for " + d.txn + "</b>: <br><br>";
+
+							   for(let i = 0; i < statement_list.length; i++){
+								   detail_box += "<b>" + statement_list[i].index + "</b>: " + statement_list[i].statement + "<br><br>";
+							   }
+							   
+							   document.getElementById("sql_area").innerHTML = detail_box;
 						   });
 
      var link = svg.selectAll("line")
@@ -136,20 +190,19 @@
 				   .append("line")
 				   .attr("class", "links")
 				   .attr("x1", function(d){
-					   return d.source.x + (node_width/2);
+					   return y_axis_graph_padding + d.source.x;
 				   })
 				   .attr("y1", function(d){
-					   return d.source.y + (node_height/2);
+					   return d.source.y;
 				   })
 				   .attr("x2", function(d){
-					   return d.target.x + (node_width/2);
+					   return y_axis_graph_padding + d.target.x;
 				   })
 				   .attr("y2", function(d){
-					   return d.target.y + (node_height/2);
+					   return d.target.y;
 				   })
 				   .attr("stroke-width", 3)
 				   .attr("stroke", function(d){
-					   // Returns orange
 					   if(d.attrs.includes("original")){
 						   return "black";
 					   } else if(d.attrs.includes("correlated")){
@@ -163,39 +216,42 @@
 						   return "100%"
 					   }
 				   })
-				   .attr("marker-end", "url(#arrow)")
+				   .attr("marker-end", function(d){
+					   if(d.attrs.includes("original")){
+						   return "url(#arrow-black)";
+					   } else if(d.attrs.includes("correlated")){
+						   return "url(#arrow-orange)";
+					   }
+				   })
 				   .on("click", function(d, i){
 					   // This is needed to ensure that the edges go back to their original color
 					   d3.selectAll("line").attr("stroke", function(d){
-						   // Returns orange
 						   if(d.attrs.includes("original")){
 							   return "black";
 						   } else if(d.attrs.includes("correlated")){
 							   return "orange";
 						   }
 					   })
+					   .attr("marker-end", function(d){
+						   if(d.attrs.includes("original")){
+							   return "url(#arrow-black)";
+						   } else if(d.attrs.includes("correlated")){
+							   return "url(#arrow-orange)";
+						   }
+					   });
 					   
 					   d3.select("#el"+i).attr("visibility", "visible");
-					   d3.select(this).attr("stroke", "grey");
+					   d3.select(this).attr("stroke", "gray").attr("marker-end", "url(#arrow-gray)");
 
 					   d3.select("p").attr("visibility", "visible");
 
 					   document.getElementById("sql_area").style.visibility = "visible";
-					   document.getElementById("op_type").innerHTML = d.source.type + d.target.type;
-					   document.getElementById("sql_src_index").innerHTML = d.source.sql;
-					   document.getElementById("sql_dst_index").innerHTML = d.target.sql;
-					   document.getElementById("sql_stmt_src").innerHTML = SQLJSON[d.source.sql].example;
-					   document.getElementById("sql_stmt_dst").innerHTML = SQLJSON[d.target.sql].example;
-				   })
-     /*.on("mouseout", function(d, i){
-		d3.select("#el"+i).attr("visibility", "hidden");
-		d3.select(this).attr("stroke", "black");
 
-		document.getElementById("sql_area").style.visibility = "hidden";
-		document.getElementById("op_type").innerHTML = "";
-		document.getElementById("sql_stmt_src").innerHTML = "";
-		document.getElementById("sql_stmt_dst").innerHTML = "";
-		})*/;
+					   let detail_box = "Type: " + d.source.type + d.target.type + "<br><br>";
+					   detail_box += "<b>" + d.source.sql + "</b>: " + SQLJSON[d.source.sql].example + "<br><br>";
+					   detail_box += "<b>" + d.target.sql + "</b>: " + SQLJSON[d.target.sql].example + "<br><br>";
+					   document.getElementById("sql_area").innerHTML = detail_box;
+				   })
 
      // Adding the nodes
      var node = svg.append("g")
@@ -206,7 +262,7 @@
 
      var rect = node.append("rect")
 					.attr("x", function(d){
-						return d.x;
+						return y_axis_graph_padding + d.x;
 					})
 					.attr("y", function(d){
 						return d.y;
@@ -225,7 +281,7 @@
 							   return d.type + "(" + d.op_num + ")";
 						   })
 						   .attr('x', function(d){
-							   return d.x + 10;
+							   return y_axis_graph_padding + d.x + 10;
 						   })
 						   .attr('y', function(d){
 							   return d.y + 30;

@@ -29,6 +29,6 @@ cat conf/pglast_app.conf
 
 echo "Finished Parsing"
 
-./checker -f conf/pglast_app.conf -p 8 -k 3 -n 3 -u ex -i rc -r 123456 -m n -j 15 -g row -s b -c 15 -o running.json
+./checker -f conf/pglast_app.conf -p 8 -k 4 -n 4 -u ex -i rc -r 123456 -m n -j 15 -g row -s b -c 15 -o running.json
 
 mv running.json finished.json
