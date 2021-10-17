@@ -6,4 +6,5 @@ class Job(models.Model):
     schema = models.TextField()
     finished_file = models.FilePathField(path="/jobs")
     status = models.CharField(max_length=16)
+    state = models.TextField()
     

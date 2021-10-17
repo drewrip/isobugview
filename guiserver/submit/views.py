@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect
+from django.http import JsonResponse
 from submit.models import Job
 
-import hashlib, time, subprocess
+import hashlib, time, subprocess, json
 
 import os.path
 from os import path
@@ -52,7 +53,7 @@ def create_job(request):
                 
         logHash = salthash(raw_log)
         
-        newJob = Job(key=logHash, finished_file="jobs/"+logHash+"/finished.json", log=raw_log, schema=raw_schema)
+        newJob = Job(key=logHash, finished_file="jobs/"+logHash+"/finished.json", log=raw_log, schema=raw_schema, state="{}")
         
         newJob.save()
 
@@ -68,3 +69,27 @@ def create_job(request):
         subprocess.Popen(["./runisodiff.sh", logHash])
 
     return redirect('/status/'+logHash)
+
+
+def update_state(request, key):
+
+    job = Job.objects.get(key=key)
+    
+    res = {}
+    
+    if request.method == "POST":
+        job.state = request.body.decode("UTF-8")
+        job.save()
+
+    return JsonResponse(res)
+
+def get_state(request, key):
+
+    job = Job.objects.get(key=key)
+
+    res = ""
+    
+    if request.method == "GET":
+        res = job.state
+
+    return res

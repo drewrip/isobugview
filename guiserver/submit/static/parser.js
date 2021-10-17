@@ -9,12 +9,13 @@ let op_regex = /([0-9]+)<([0-9]+)>\[([A-Za-z]{1})\(([A-Za-z-_]+)\)\]: (([0-9]+)<
 */
 
 
-const hOffset = 75;
-const vOffset = 150;
 
-let node_width = 75;
+
+let node_width = 100;
 let node_height = 50;
 
+const hOffset = node_width;
+const vOffset = 150;
 
 // Returns the new adj_list with the implicit edges connection operations of the same transaction in order
 function addImplicitEdges(adj_list){
