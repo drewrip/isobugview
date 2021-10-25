@@ -1,0 +1,111 @@
+Transaction 0:
+<0> UPDATE warehouse SET w_ytd = w_ytd + 4909 WHERE w_id = 1
+<1> SELECT w_street_1, w_street_2, w_city, w_state, w_zip, w_name FROM warehouse WHERE w_id = 1
+<2> UPDATE district SET d_ytd = d_ytd + 4909 WHERE d_w_id = 1 AND d_id = 7
+<3> SELECT d_street_1, d_street_2, d_city, d_state, d_zip, d_name FROM district WHERE d_w_id = 1 AND d_id = 7
+<4> SELECT count(c_id) FROM customer WHERE c_w_id = 1 AND c_d_id = 7 AND c_last = 'BARABLEOUGHT'
+<5> SELECT c_id FROM customer WHERE c_w_id = 1 AND c_d_id = 7 AND c_last = 'BARABLEOUGHT' ORDER BY c_first
+<6> SELECT c_first, c_middle, c_last, c_street_1, c_street_2, c_city, c_state, c_zip, c_phone, c_credit, c_credit_lim, c_discount, c_balance, c_since FROM customer WHERE c_w_id = 1 AND c_d_id = 7 AND c_id = 22 FOR UPDATE
+<7> SELECT c_data FROM customer WHERE c_w_id = 1 AND c_d_id = 7 AND c_id = 22
+<8> UPDATE customer SET c_balance = -4919, c_data = 'SSppW6buj8CZd44BOAX9GHgPPHSmxf6Q6uDcyoUhugGXlLg7TEEhVu6u9We5ClTIfgsdTMKN3ZtouZtLn72G17A9dpEnYh5BNvmoI6CLd37Va0qM7rc6ynFbaTP6ASHWO3Ke7UzlV4G645S9w4DspTRNuoT3HiZdjrHpMEapIovKtNTnQefD77Z0v03AjalQP0FjCpZUcUoTqFFEuuRzzyztz01iYl8ylMhy9EQlhDDXSSjKK8II7FB6GAmmvsifEOdOc17JEKofmXz7gFPnVYrjidVcVEHkcs8EtFW6YKlKqiPWymHTI8AzlfbGtqyTi4gZKAfsUOAK7Yo3I5UbBeauH999z7cfCGEUQsKtGUDL00MJ3ouFQS9ibGrYORDaiP26FMzUoDppBA8Ey0RPQZ7zpwXDNil37nAL79pwKcjTmpijn98DiDCW7jjUPTWUEepMneG6HzZ3oFmZPsm53yZAfJd4k9YynOKY2Y' WHERE c_w_id = 1 AND c_d_id = 7 AND c_id = 22
+<9> INSERT INTO history(h_c_d_id, h_c_w_id, h_c_id, h_d_id, h_w_id, h_date, h_amount, h_data) VALUES(7, 1, 22, 7, 1, '2020-02-25 16:36:30', 4909, 'YSbGy05ZrJKHGOLYH')
+END
+Transaction 1:
+<10> UPDATE warehouse SET w_ytd = w_ytd + 3683 WHERE w_id = 1
+END
+Transaction 2:
+<11> SELECT w_street_1, w_street_2, w_city, w_state, w_zip, w_name FROM warehouse WHERE w_id = 1
+END
+Transaction 3:
+<12> UPDATE district SET d_ytd = d_ytd + 4271 WHERE d_w_id = 1 AND d_id = 3
+END
+Transaction 4:
+<13> SELECT d_street_1, d_street_2, d_city, d_state, d_zip, d_name FROM district WHERE d_w_id = 1 AND d_id = 2
+END
+Transaction 5:
+<14> SELECT count(c_id) FROM customer WHERE c_w_id = 1 AND c_d_id = 9 AND c_last = 'ESEEINGOUGHT'
+END
+Transaction 6:
+<15> SELECT c_first, c_middle, c_last, c_street_1, c_street_2, c_city, c_state, c_zip, c_phone, c_credit, c_credit_lim, c_discount, c_balance, c_since FROM customer WHERE c_w_id = 1 AND c_d_id = 9 AND c_id = 1768 FOR UPDATE
+END
+Transaction 7:
+<16> UPDATE customer SET c_balance = -116 WHERE c_w_id = 1 AND c_d_id = 7 AND c_id = 234
+END
+Transaction 8:
+<17> INSERT INTO history(h_c_d_id, h_c_w_id, h_c_id, h_d_id, h_w_id, h_date, h_amount, h_data) VALUES(6, 1, 436, 6, 1, '2020-02-25 16:36:38', 902, 'YSbGy05ZrRnh39fEr')
+END
+Transaction 9:
+<18> SELECT c_data FROM customer WHERE c_w_id = 1 AND c_d_id = 1 AND c_id = 2973
+END
+Transaction 10:
+<19> UPDATE customer SET c_balance = -1931, c_data = 'jMD1ouzLLvqda0dpaZj8NYh9GbCZVf0EzCEm4B7N6v1gveTUBDcZlJi0usZOVYcVkoHozMB5HCjAoDe0OFX7YF7R5hpbFP6xCLj9huDy5u8r5lpT0MbWZixfNkGa8KXKfGTK9eICZO3e7t85DjcnPXSnIgNQytib79vGoBSLXUzdL5iYoKLCslz8PKWLBCwJLpZ7y0SUUQ7nVnLI8fUyOR6oja7vm2E5plDmjfGB3LyZ8KrExJCLkG7ToFMaHag4Krq3U6FYPB7YVwmQFxmzBtQ06laLLEQd5GfaNs6k3DIX93xMyjJ9bj9hUk1owRP2h4a2wgnyr3Vy6SK4AbElKLQn3RZ0qw0YzYatCLr1PMzVnHYxskgA54v9US7KP7sOdRHpm7qBTnfE2DBuvp20uw7OMEglJZ7wyNjkUZuvKZAMkJEf9Fd1BlNXx3HFaM9YjtHBQB5liF7SWK7' WHERE c_w_id = 1 AND c_d_id = 7 AND c_id = 1360
+END
+Transaction 11:
+<20> SELECT c_discount, c_last, c_credit, w_tax FROM customer, warehouse WHERE warehouse.w_id = 1 AND c_w_id = w_id AND c_d_id = 9
+END
+Transaction 12:
+<21> SELECT d_next_o_id, d_tax FROM district WHERE d_id = 6 AND d_w_id = 1 FOR UPDATE
+END
+Transaction 13:
+<22> UPDATE district SET d_next_o_id = 3198 + 1 WHERE d_id = 3 AND d_w_id = 1
+END
+Transaction 14:
+<23> INSERT INTO orders (o_id, o_d_id, o_w_id, o_c_id, o_entry_d, o_ol_cnt, o_all_local) VALUES(3184, 8, 1, 1534, '2020-02-25 16:36:33', 2, 1)
+END
+Transaction 15:
+<24> INSERT INTO new_orders (no_o_id, no_d_id, no_w_id) VALUES (3248,6,1)
+END
+Transaction 16:
+<25> SELECT i_price, i_name, i_data FROM item WHERE i_id = 63356
+END
+Transaction 17:
+<26> SELECT s_quantity, s_data, s_dist_01, s_dist_02, s_dist_03, s_dist_04, s_dist_05, s_dist_06, s_dist_07, s_dist_08, s_dist_09, s_dist_10 FROM stock WHERE s_i_id = 24241 AND s_w_id = 1 FOR UPDATE
+END
+Transaction 18:
+<27> UPDATE stock SET s_quantity = 20 WHERE s_i_id = 3996 AND s_w_id = 1
+END
+Transaction 19:
+<28> INSERT INTO order_line (ol_o_id, ol_d_id, ol_w_id, ol_number, ol_i_id, ol_supply_w_id, ol_quantity, ol_amount, ol_dist_info) VALUES (3233, 9, 1, 1, 65530, 1, 10, 79.93699645996094, 'fHiKjjImEsJYnc6rkUJ6FbLa')
+END
+Transaction 20:
+<29> SELECT c_balance, c_first, c_middle, c_last FROM customer WHERE c_w_id = 1 AND c_d_id = 10 AND c_last = 'BARABLEOUGHT' ORDER BY c_first
+END
+Transaction 21:
+<30> SELECT o_id, o_entry_d, COALESCE(o_carrier_id,0) FROM orders WHERE o_w_id = 1 AND o_d_id = 1 AND o_c_id = 2384 AND o_id = (SELECT MAX(o_id) FROM orders WHERE o_w_id = 1 AND o_d_id = 1 AND o_c_id = 2384)
+END
+Transaction 22:
+<31> SELECT ol_i_id, ol_supply_w_id, ol_quantity, ol_amount, ol_delivery_d FROM order_line WHERE ol_w_id = 1 AND ol_d_id = 1 AND ol_o_id = 1527
+END
+Transaction 23:
+<32> SELECT COALESCE(MIN(no_o_id),0) FROM new_orders WHERE no_d_id = 1 AND no_w_id = 1
+END
+Transaction 24:
+<33> DELETE FROM new_orders WHERE no_o_id = 2287 AND no_d_id = 6 AND no_w_id = 1
+END
+Transaction 25:
+<34> SELECT o_c_id FROM orders WHERE o_id = 2299 AND o_d_id = 8 AND o_w_id = 1
+END
+Transaction 26:
+<35> UPDATE orders SET o_carrier_id = 3 WHERE o_id = 2273 AND o_d_id = 7 AND o_w_id = 1
+END
+Transaction 27:
+<36> UPDATE order_line SET ol_delivery_d = '2020-02-25 16:36:35' WHERE ol_o_id = 2282 AND ol_d_id = 2 AND ol_w_id = 1
+END
+Transaction 28:
+<37> SELECT SUM(ol_amount) FROM order_line WHERE ol_o_id = 2289 AND ol_d_id = 2 AND ol_w_id = 1
+END
+Transaction 29:
+<38> UPDATE customer SET c_balance = c_balance + 525.8800048828125 , c_delivery_cnt = c_delivery_cnt + 1 WHERE c_id = 1991 AND c_d_id = 9 AND c_w_id = 1
+END
+Transaction 30:
+<39> SELECT d_next_o_id FROM district WHERE d_id = 2 AND d_w_id = 1
+END
+Transaction 31:
+<40> SELECT  ol_i_id FROM order_line WHERE ol_w_id = 1 AND ol_d_id = 5 AND ol_o_id < 3205 AND ol_o_id >= (3205 - 20)
+END
+Transaction 32:
+<41> SELECT count(distinct (s_i_id)) FROM stock, order_line WHERE ol_w_id = 20 AND ol_d_id = 0 AND ol_o_id >= 0 - 20 AND s_w_id = 0 AND s_i_id = ol_i_id AND s_quantity < 0
+END
+Transaction 33:
+<42> SELECT c_balance, c_first, c_middle, c_last FROM customer WHERE c_w_id = 1 AND c_d_id = 1 AND c_id = 528
+END

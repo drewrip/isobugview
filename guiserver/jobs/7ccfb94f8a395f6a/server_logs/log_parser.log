@@ -1,0 +1,9 @@
+Read raw data
+Traceback (most recent call last):
+  File "/home/drew/isodiffgui/guiserver/jobs/7ccfb94f8a395f6a/log_parser.py", line 906, in <module>
+    main()
+  File "/home/drew/isodiffgui/guiserver/jobs/7ccfb94f8a395f6a/log_parser.py", line 768, in main
+    txn_dic, txn_sql_trace = read_log(file_name)
+  File "/home/drew/isodiffgui/guiserver/jobs/7ccfb94f8a395f6a/log_parser.py", line 279, in read_log
+    with open(log_name, 'r') as f:
+FileNotFoundError: [Errno 2] No such file or directory: 'pglast_app.txt'

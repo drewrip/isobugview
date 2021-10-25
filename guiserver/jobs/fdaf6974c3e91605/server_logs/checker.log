@@ -1,0 +1,54 @@
+Program starts. (loopyKSP)
+Init checker finished.
+op size: 168.
+op_pred_map: 88.
+sql_op_map size: 86
+building txn graph is finished.
+Init isodiff finished.
+Add vul count 472
+>>>Start run_checker.
+start DP search.
+dp_set size: 64
+dp_set_refined size: 16
+start KSP.
+total: 16
+finish KSP.
+Round time record: dp_search: 0 ms, ksp: 1 ms, set_cover: 0 ms.
+start DP search.
+dp_set size: 20
+dp_set_refined size: 5
+start KSP.
+total: 5
+finish KSP.
+Round time record: dp_search: 0 ms, ksp: 1 ms, set_cover: 0 ms.
+start DP search.
+dp_set size: 16
+dp_set_refined size: 4
+start KSP.
+total: 4
+finish KSP.
+Round time record: dp_search: 0 ms, ksp: 0 ms, set_cover: 0 ms.
+start DP search.
+dp_set size: 40
+dp_set_refined size: 10
+start KSP.
+total: 10
+finish KSP.
+Round time record: dp_search: 0 ms, ksp: 0 ms, set_cover: 0 ms.
+Memory Peak is 597996 kB
+[Final_Result] pglast_app.json[RC,w_corr,obj,threshold=15,seed=123456,exe_mode=e,loopy,objType=row] (68,542,168,1486) 5 5 6 4 41/249 0(/84) 0 472 206 35 597996kB 41 249 25 224 290 0 458 100.000% 77.241% 8.621% #delta_cycle:74 ksp_total_time:0ms
+obj to cut:
+ KSP_SEARCH: 1 ms(7.143%), PATH_EXPANSION: 0 ms(0.000%), OP_NO_CORR: 6 ms(42.857%), CORR_RECUR_SEARCH: 7 ms(50.000%)
+CHECK_EXISTENCE: 2 ms, NO_CORR_BUILD_GRAPH: 0 ms, NO_CORR_TIMING_VIOLATION: 1 ms, BUILD_EDGE_SET: 0 ms, PRED_CONFLICT: 0 ms, SEARCH_CONFLICT: 0 ms, CHECK_EXISTENCE_CORR: 0 ms, BUILD_CANDIDATE_SET: 0 ms, INIT_IC: 0 ms, CORR_CHECKING: 7 ms, POST_PROCESSING: 0 ms, RECUR_TEST_ADD_EDGE: 1 ms, VALIDATE_CYCLE: 2 ms, FEEDBACK_TEST: 1 ms, ADD_TO_CYCLE: 0 ms, RECUR_INIT_EXE_GRAPH: 0 ms, RECUR_TIMING_VIOLATION: 0 ms, RECUR_RESET_GRAPH: 0 ms, 
+TXN_TRIED: 173, TXN_FOUND: 173, OP_TRIED: 458, OP_FOUND: 41, OP_DUP_NO_CORR: 137, OP_DUP_W_CORR: 31, OP_FAILED_NO_CORR: 224, OP_FAILED_W_CORR: 25, OP_FAILED_TIMEOUT: 0, SHORTEST_PATH_COUNT: 0, KSP_PATH_INTENDED: 0, KSP_PATH_EXPLORED: 173, KSP_PATH_ABANDONED: 145, SHADOW_INVALIDATE: 0
+INVALID_OP_SEARCH: 9 ms, VALID_OP_SEARCH: 3 ms
+OP Analysis avg. Runtime (ns): RESULT_PASS: 94786.878 RESULT_DUP_NO_CORR: 5337.562 RESULT_FAILED_NO_CORR: 12052.759 RESULT_DUP_W_CORR: 25202.097 RESULT_FAILED_W_CORR: 215130.960 RESULT_FAILED_TIMEOUT: 0.000
+Total contention time: 3.032, total hash lookup time: 0.650
+Ksp stats per round: [1: 57232.688ns, 54192.000ns, 19743.360ns] [2: 23415.200ns, 21510.000ns, 4379.198ns] [3: 20809.500ns, 20308.000ns, 1303.005ns] [4: 28821.900ns, 27676.000ns, 4298.206ns]
+DiOpEdgeHashMap size: 0Tested: 0, return not existed: 0
+123456
+check_failed_conflict_count: 555, add_failed_count(check/add): 249/246
+total op cycle explored: 458
+round robin op cycles: 0
+>>>Finish.
+Finish loopy solution.

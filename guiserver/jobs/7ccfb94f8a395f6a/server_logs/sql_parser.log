@@ -1,0 +1,667 @@
+Reading from file app.log
+['app', 'db', 'info.csv']
+SELECT name, value FROM sys_prefs
+SELECT * FROM users WHERE user_id = 'admin' AND password='5f4dcc3b5aa765d61d8327deb882cf99'
+SELECT * FROM users WHERE user_id='admin'
+SELECT * FROM security_roles WHERE id=2
+UPDATE users SET last_visit_date='2019-08-01 18:54:34' WHERE user_id='admin'
+SELECT name, value FROM sys_prefs
+SELECT value FROM sys_prefs WHERE name='version_id'
+SELECT name, value FROM sys_prefs
+SELECT name, value FROM sys_prefs
+SELECT value FROM sys_prefs WHERE name='version_id'
+SELECT name, value FROM sys_prefs
+SELECT pos.*, loc.location_name, acc.bank_account_name FROM sales_pos as pos LEFT JOIN locations as loc on pos.pos_location=loc.loc_code LEFT JOIN bank_accounts as acc on pos.pos_account=acc.id WHERE pos.id='1'
+SELECT * FROM fiscal_year WHERE id='2'
+SELECT `trans_type`,`prefix`,`description`,`default`,`pattern`,`id`,`inactive` FROM reflines WHERE trans_type='30' AND `default`
+SELECT MAX(CAST(SUBSTR(reference, 1,LENGTH(reference)-5) AS UNSIGNED)) FROM `sales_orders` tbl LEFT JOIN voided v ON tbl.`order_no`=v.id AND v.type='30' WHERE ISNULL(v.id) AND tbl.`trans_type`='30' AND `reference` REGEXP '^[0-9]*/2019$'
+SELECT debtor.name, debtor.curr_code, terms.terms, debtor.credit_limit, credit_status.dissallow_invoices, credit_status.reason_description, Sum(IFNULL(IF(`type` IN(11,12,2), -1, 1)*(trans.ov_amount + trans.ov_gst + trans.ov_freight + trans.ov_freight_tax + trans.ov_discount),0)) AS Balance, Sum(IF ((TO_DAYS('2019-08-01') - TO_DAYS(IF (trans.type=10, trans.due_date, trans.tran_date))) > 0,IFNULL(IF(`type` IN(11,12,2), -1, 1)*(trans.ov_amount + trans.ov_gst + trans.ov_freight + trans.ov_freight_tax + trans.ov_discount),0),0)) AS Due, Sum(IF ((TO_DAYS('2019-08-01') - TO_DAYS(IF (trans.type=10, trans.due_date, trans.tran_date))) > 30,IFNULL(IF(`type` IN(11,12,2), -1, 1)*(trans.ov_amount + trans.ov_gst + trans.ov_freight + trans.ov_freight_tax + trans.ov_discount),0),0)) AS Overdue1, Sum(IF ((TO_DAYS('2019-08-01') - TO_DAYS(IF (trans.type=10, trans.due_date, trans.tran_date))) > 60,IFNULL(IF(`type` IN(11,12,2), -1, 1)*(trans.ov_amount + trans.ov_gst + trans.ov_freight + trans.ov_freight_tax + trans.ov_discount),0),0)) AS Overdue2 FROM debtors_master debtor LEFT JOIN debtor_trans trans ON trans.tran_date <= '2019-08-01' AND debtor.debtor_no = trans.debtor_no AND trans.type <> 13 LEFT JOIN payment_terms terms ON 1 = 1 LEFT JOIN credit_status as credit_status ON 1 = 1 WHERE debtor.payment_terms = terms.terms_indicator AND debtor.credit_status = credit_status.id GROUP BY debtor.name, terms.terms, terms.days_before_due, terms.day_in_following_month, debtor.credit_limit, credit_status.dissallow_invoices, credit_status.reason_description
+SELECT COUNT(*) FROM stock_master WHERE mb_flag!='F'
+SELECT COUNT(*) FROM cust_branch WHERE inactive='0'
+SELECT debtor_no, debtor_ref, curr_code, inactive FROM debtors_master ORDER BY debtor_ref
+SELECT branch_code, branch_ref FROM cust_branch WHERE debtor_no='1' AND (inactive = 0) ORDER BY branch_ref
+SELECT cust.name, cust.address, credit_status.dissallow_invoices, cust.sales_type AS salestype, cust.dimension_id, cust.dimension2_id, stype.sales_type, stype.tax_included, stype.factor, cust.curr_code, cust.discount, cust.payment_terms, cust.pymt_discount, cust.credit_limit as cur_credit FROM debtors_master as cust LEFT JOIN debtor_trans trans ON trans.type!=13 AND trans.debtor_no = cust.debtor_no LEFT JOIN credit_status as credit_status ON 1 = 1 LEFT JOIN sales_types as stype ON 1 = 1 WHERE cust.sales_type=stype.id AND cust.credit_status=credit_status.id AND cust.debtor_no='1' GROUP by cust.debtor_no
+SELECT *, (t.days_before_due=0) AND (t.day_in_following_month=0) as cash_sale FROM payment_terms t WHERE terms_indicator='4'
+SELECT debtor.name, debtor.curr_code, terms.terms, debtor.credit_limit, credit_status.dissallow_invoices, credit_status.reason_description, Sum(IFNULL(IF(`type` IN(11,12,2), -1, 1)*(trans.ov_amount + trans.ov_gst + trans.ov_freight + trans.ov_freight_tax + trans.ov_discount),0)) AS Balance, Sum(IF ((TO_DAYS('2019-08-01') - TO_DAYS(IF (trans.type=10, trans.due_date, trans.tran_date))) > 0,IFNULL(IF(`type` IN(11,12,2), -1, 1)*(trans.ov_amount + trans.ov_gst + trans.ov_freight + trans.ov_freight_tax + trans.ov_discount),0),0)) AS Due, Sum(IF ((TO_DAYS('2019-08-01') - TO_DAYS(IF (trans.type=10, trans.due_date, trans.tran_date))) > 30,IFNULL(IF(`type` IN(11,12,2), -1, 1)*(trans.ov_amount + trans.ov_gst + trans.ov_freight + trans.ov_freight_tax + trans.ov_discount),0),0)) AS Overdue1, Sum(IF ((TO_DAYS('2019-08-01') - TO_DAYS(IF (trans.type=10, trans.due_date, trans.tran_date))) > 60,IFNULL(IF(`type` IN(11,12,2), -1, 1)*(trans.ov_amount + trans.ov_gst + trans.ov_freight + trans.ov_freight_tax + trans.ov_discount),0),0)) AS Overdue2 FROM debtors_master debtor LEFT JOIN debtor_trans trans ON trans.tran_date <= '2019-08-01' AND debtor.debtor_no = trans.debtor_no AND trans.type <> 13 LEFT JOIN payment_terms terms ON 1 = 1 LEFT JOIN credit_status as credit_status ON 1 = 1 WHERE debtor.payment_terms = terms.terms_indicator AND debtor.credit_status = credit_status.id AND debtor.debtor_no = '1' GROUP BY debtor.name, terms.terms, terms.days_before_due, terms.day_in_following_month, debtor.credit_limit, credit_status.dissallow_invoices, credit_status.reason_description
+SELECT branch.br_name, branch.br_address, branch.br_post_address, default_location, location_name, default_ship_via, tax_group.name AS tax_group_name, tax_group.id AS tax_group_id FROM cust_branch branch,tax_groups tax_group,locations as location WHERE branch.tax_group_id = tax_group.id AND location.loc_code=default_location AND branch.branch_code='1' AND branch.debtor_no='1'
+SELECT p.*, r.action, r.type, CONCAT(r.type,'.',r.action) as ext_type FROM crm_persons p,crm_contacts r WHERE r.person_id=p.id AND ((r.type='cust_branch' AND r.entity_id='1') OR (r.type='customer' AND r.entity_id='1')) AND (r.action='order' OR r.action='general')
+SELECT t.id as tax_type_id,CONCAT(t.name, ' (', t.rate, '%)') as tax_type_name,t.sales_gl_code, t.purchasing_gl_code, IF(g.tax_type_id, t.rate, NULL) as rate, g.tax_shipping FROM tax_types t LEFT JOIN tax_group_items g ON t.id=g.tax_type_id AND g.tax_group_id='1' WHERE t.inactive='0'
+SELECT * FROM reflines WHERE trans_type='30' AND CHAR_LENGTH(`prefix`) AND LEFT('001/2019', CHAR_LENGTH(`prefix`)) = `prefix` UNION SELECT * FROM reflines WHERE trans_type='30' AND `prefix`=''
+SELECT * FROM reflines WHERE `id`='19'
+SELECT begin FROM fiscal_year WHERE end >= '2019-08-01' AND begin <= '2019-08-01'
+SELECT count(*) FROM reflines WHERE trans_type='30' AND inactive='0'
+SELECT terms_indicator, terms, inactive FROM payment_terms ORDER BY terms
+SELECT id, sales_type, inactive FROM sales_types ORDER BY sales_type
+SELECT stk_code FROM sales_order_details d WHERE order_no = (SELECT order_no FROM sales_orders o WHERE debtor_no='1' ORDER BY order_no DESC LIMIT 1) ORDER BY d.id DESC LIMIT 1
+SELECT i.item_code, i.description, c.description, count(*)>1 as kit, i.inactive, if(count(*)>1, '0', s.editable) as editable FROM stock_master s,item_codes i LEFT JOIN stock_category c ON i.category_id=c.category_id WHERE i.stock_id=s.stock_id AND mb_flag != 'F' AND i.inactive='0' AND s.inactive='0' AND s.no_sale='0' GROUP BY i.item_code ORDER BY c.description,i.item_code
+SELECT item.material_cost, item.units, unit.decimals FROM stock_master item,item_units unit WHERE item.stock_id='102' AND item.units=unit.abbr
+SELECT price, curr_abrev, sales_type_id FROM prices WHERE stock_id = '102' AND (curr_abrev = 'USD' OR curr_abrev = 'USD')
+SELECT loc_code, location_name, inactive FROM locations WHERE fixed_asset=0 ORDER BY location_name
+SELECT name, value FROM sys_prefs
+SELECT value FROM sys_prefs WHERE name='version_id'
+SELECT name, value FROM sys_prefs
+SELECT COUNT(*) FROM stock_master WHERE mb_flag!='F'
+SELECT COUNT(*) FROM cust_branch WHERE inactive='0'
+SELECT debtor_no, debtor_ref, curr_code, inactive FROM debtors_master ORDER BY debtor_ref
+SELECT branch_code, branch_ref FROM cust_branch WHERE debtor_no='1' AND (inactive = 0) ORDER BY branch_ref
+SELECT cust.name, cust.address, credit_status.dissallow_invoices, cust.sales_type AS salestype, cust.dimension_id, cust.dimension2_id, stype.sales_type, stype.tax_included, stype.factor, cust.curr_code, cust.discount, cust.payment_terms, cust.pymt_discount, cust.credit_limit as cur_credit FROM debtors_master as cust LEFT JOIN debtor_trans trans ON trans.type!=13 AND trans.debtor_no = cust.debtor_no LEFT JOIN credit_status as credit_status ON 1 = 1 LEFT JOIN sales_types as stype ON 1 = 1 WHERE cust.sales_type=stype.id AND cust.credit_status=credit_status.id AND cust.debtor_no='1' GROUP by cust.debtor_no
+SELECT * FROM reflines WHERE trans_type='30' AND CHAR_LENGTH(`prefix`) AND LEFT('001/2019', CHAR_LENGTH(`prefix`)) = `prefix` UNION SELECT * FROM reflines WHERE trans_type='30' AND `prefix`=''
+SELECT count(*) FROM reflines WHERE trans_type='30' AND inactive='0'
+SELECT terms_indicator, terms, inactive FROM payment_terms ORDER BY terms
+SELECT id, sales_type, inactive FROM sales_types ORDER BY sales_type
+SELECT i.item_code, i.description, c.description, count(*)>1 as kit, i.inactive, if(count(*)>1, '0', s.editable) as editable FROM stock_master s,item_codes i LEFT JOIN stock_category c ON i.category_id=c.category_id WHERE i.stock_id=s.stock_id AND mb_flag != 'F' AND i.inactive='0' AND s.inactive='0' AND s.no_sale='0' GROUP BY i.item_code ORDER BY c.description,i.item_code
+SELECT item.material_cost, item.units, unit.decimals FROM stock_master item,item_units unit WHERE item.stock_id='102' AND item.units=unit.abbr
+SELECT price, curr_abrev, sales_type_id FROM prices WHERE stock_id = '102' AND (curr_abrev = 'USD' OR curr_abrev = 'USD')
+SELECT loc_code, location_name, inactive FROM locations WHERE fixed_asset=0 ORDER BY location_name
+SELECT name, value FROM sys_prefs
+SELECT value FROM sys_prefs WHERE name='version_id'
+SELECT name, value FROM sys_prefs
+SELECT COUNT(*) FROM stock_master WHERE mb_flag!='F'
+SELECT COUNT(*) FROM cust_branch WHERE inactive='0'
+SELECT debtor_no, debtor_ref, curr_code, inactive FROM debtors_master ORDER BY debtor_ref
+SELECT branch_code, branch_ref FROM cust_branch WHERE debtor_no='1' AND (inactive = 0) ORDER BY branch_ref
+SELECT cust.name, cust.address, credit_status.dissallow_invoices, cust.sales_type AS salestype, cust.dimension_id, cust.dimension2_id, stype.sales_type, stype.tax_included, stype.factor, cust.curr_code, cust.discount, cust.payment_terms, cust.pymt_discount, cust.credit_limit as cur_credit FROM debtors_master as cust LEFT JOIN debtor_trans trans ON trans.type!=13 AND trans.debtor_no = cust.debtor_no LEFT JOIN credit_status as credit_status ON 1 = 1 LEFT JOIN sales_types as stype ON 1 = 1 WHERE cust.sales_type=stype.id AND cust.credit_status=credit_status.id AND cust.debtor_no='1' GROUP by cust.debtor_no
+SELECT * FROM reflines WHERE trans_type='30' AND CHAR_LENGTH(`prefix`) AND LEFT('001/2019', CHAR_LENGTH(`prefix`)) = `prefix` UNION SELECT * FROM reflines WHERE trans_type='30' AND `prefix`=''
+SELECT count(*) FROM reflines WHERE trans_type='30' AND inactive='0'
+SELECT terms_indicator, terms, inactive FROM payment_terms ORDER BY terms
+SELECT id, sales_type, inactive FROM sales_types ORDER BY sales_type
+SELECT i.item_code, i.description, c.description, count(*)>1 as kit, i.inactive, if(count(*)>1, '0', s.editable) as editable FROM stock_master s,item_codes i LEFT JOIN stock_category c ON i.category_id=c.category_id WHERE i.stock_id=s.stock_id AND mb_flag != 'F' AND i.inactive='0' AND s.inactive='0' AND s.no_sale='0' GROUP BY i.item_code ORDER BY c.description,i.item_code
+SELECT item.material_cost, item.units, unit.decimals FROM stock_master item,item_units unit WHERE item.stock_id='102' AND item.units=unit.abbr
+SELECT price, curr_abrev, sales_type_id FROM prices WHERE stock_id = '102' AND (curr_abrev = 'USD' OR curr_abrev = 'USD')
+SELECT loc_code, location_name, inactive FROM locations WHERE fixed_asset=0 ORDER BY location_name
+SELECT name, value FROM sys_prefs
+SELECT value FROM sys_prefs WHERE name='version_id'
+SELECT name, value FROM sys_prefs
+SELECT COUNT(*) FROM stock_master WHERE mb_flag!='F'
+SELECT COUNT(*) FROM cust_branch WHERE inactive='0'
+SELECT debtor_no, debtor_ref, curr_code, inactive FROM debtors_master ORDER BY debtor_ref
+SELECT branch_code, branch_ref FROM cust_branch WHERE debtor_no='1' AND (inactive = 0) ORDER BY branch_ref
+SELECT cust.name, cust.address, credit_status.dissallow_invoices, cust.sales_type AS salestype, cust.dimension_id, cust.dimension2_id, stype.sales_type, stype.tax_included, stype.factor, cust.curr_code, cust.discount, cust.payment_terms, cust.pymt_discount, cust.credit_limit as cur_credit FROM debtors_master as cust LEFT JOIN debtor_trans trans ON trans.type!=13 AND trans.debtor_no = cust.debtor_no LEFT JOIN credit_status as credit_status ON 1 = 1 LEFT JOIN sales_types as stype ON 1 = 1 WHERE cust.sales_type=stype.id AND cust.credit_status=credit_status.id AND cust.debtor_no='1' GROUP by cust.debtor_no
+SELECT * FROM reflines WHERE trans_type='30' AND CHAR_LENGTH(`prefix`) AND LEFT('001/2019', CHAR_LENGTH(`prefix`)) = `prefix` UNION SELECT * FROM reflines WHERE trans_type='30' AND `prefix`=''
+SELECT count(*) FROM reflines WHERE trans_type='30' AND inactive='0'
+SELECT terms_indicator, terms, inactive FROM payment_terms ORDER BY terms
+SELECT id, sales_type, inactive FROM sales_types ORDER BY sales_type
+SELECT i.item_code, i.description, c.description, count(*)>1 as kit, i.inactive, if(count(*)>1, '0', s.editable) as editable FROM stock_master s,item_codes i LEFT JOIN stock_category c ON i.category_id=c.category_id WHERE i.stock_id=s.stock_id AND mb_flag != 'F' AND i.inactive='0' AND s.inactive='0' AND s.no_sale='0' GROUP BY i.item_code ORDER BY c.description,i.item_code
+SELECT item.material_cost, item.units, unit.decimals FROM stock_master item,item_units unit WHERE item.stock_id='102' AND item.units=unit.abbr
+SELECT price, curr_abrev, sales_type_id FROM prices WHERE stock_id = '102' AND (curr_abrev = 'USD' OR curr_abrev = 'USD')
+SELECT loc_code, location_name, inactive FROM locations WHERE fixed_asset=0 ORDER BY location_name
+SELECT name, value FROM sys_prefs
+SELECT value FROM sys_prefs WHERE name='version_id'
+SELECT name, value FROM sys_prefs
+SELECT COUNT(*) FROM stock_master WHERE mb_flag!='F'
+SELECT COUNT(*) FROM cust_branch WHERE inactive='0'
+SELECT debtor_no, debtor_ref, curr_code, inactive FROM debtors_master ORDER BY debtor_ref
+SELECT branch_code, branch_ref FROM cust_branch WHERE debtor_no='1' AND (inactive = 0) ORDER BY branch_ref
+SELECT cust.name, cust.address, credit_status.dissallow_invoices, cust.sales_type AS salestype, cust.dimension_id, cust.dimension2_id, stype.sales_type, stype.tax_included, stype.factor, cust.curr_code, cust.discount, cust.payment_terms, cust.pymt_discount, cust.credit_limit as cur_credit FROM debtors_master as cust LEFT JOIN debtor_trans trans ON trans.type!=13 AND trans.debtor_no = cust.debtor_no LEFT JOIN credit_status as credit_status ON 1 = 1 LEFT JOIN sales_types as stype ON 1 = 1 WHERE cust.sales_type=stype.id AND cust.credit_status=credit_status.id AND cust.debtor_no='1' GROUP by cust.debtor_no
+SELECT * FROM reflines WHERE trans_type='30' AND CHAR_LENGTH(`prefix`) AND LEFT('001/2019', CHAR_LENGTH(`prefix`)) = `prefix` UNION SELECT * FROM reflines WHERE trans_type='30' AND `prefix`=''
+SELECT count(*) FROM reflines WHERE trans_type='30' AND inactive='0'
+SELECT terms_indicator, terms, inactive FROM payment_terms ORDER BY terms
+SELECT id, sales_type, inactive FROM sales_types ORDER BY sales_type
+SELECT i.item_code, i.description, c.description, count(*)>1 as kit, i.inactive, if(count(*)>1, '0', s.editable) as editable FROM stock_master s,item_codes i LEFT JOIN stock_category c ON i.category_id=c.category_id WHERE i.stock_id=s.stock_id AND mb_flag != 'F' AND i.inactive='0' AND s.inactive='0' AND s.no_sale='0' GROUP BY i.item_code ORDER BY c.description,i.item_code
+SELECT item.material_cost, item.units, unit.decimals FROM stock_master item,item_units unit WHERE item.stock_id='102' AND item.units=unit.abbr
+SELECT price, curr_abrev, sales_type_id FROM prices WHERE stock_id = '102' AND (curr_abrev = 'USD' OR curr_abrev = 'USD')
+SELECT loc_code, location_name, inactive FROM locations WHERE fixed_asset=0 ORDER BY location_name
+SELECT name, value FROM sys_prefs
+SELECT value FROM sys_prefs WHERE name='version_id'
+SELECT name, value FROM sys_prefs
+SELECT stock_id FROM stock_master WHERE stock_id='102' AND mb_flag <> 'D'
+SELECT material_cost FROM stock_master WHERE stock_id='102'
+SELECT DISTINCT kit.*, item.units, comp.description as comp_name FROM item_codes kit,item_codes comp LEFT JOIN stock_master item ON item.stock_id=comp.item_code WHERE kit.stock_id=comp.item_code AND kit.item_code='102'
+SELECT price, curr_abrev, sales_type_id FROM prices WHERE stock_id = '102' AND (curr_abrev = 'USD' OR curr_abrev = 'USD')
+SELECT DISTINCT kit.*, item.units, comp.description as comp_name FROM item_codes kit,item_codes comp LEFT JOIN stock_master item ON item.stock_id=comp.item_code WHERE kit.stock_id=comp.item_code AND kit.item_code='102'
+SELECT DISTINCT kit.*, item.units, comp.description as comp_name FROM item_codes kit,item_codes comp LEFT JOIN stock_master item ON item.stock_id=comp.item_code WHERE kit.stock_id=comp.item_code AND kit.item_code='102'
+SELECT price, curr_abrev, sales_type_id FROM prices WHERE stock_id = '102' AND (curr_abrev = 'USD' OR curr_abrev = 'USD')
+SELECT item.*, taxtype.name AS tax_type_name FROM stock_master item,item_tax_types taxtype WHERE taxtype.id=item.tax_type_id AND stock_id='102'
+SELECT COUNT(*) FROM stock_master WHERE mb_flag!='F'
+SELECT COUNT(*) FROM cust_branch WHERE inactive='0'
+SELECT debtor_no, debtor_ref, curr_code, inactive FROM debtors_master ORDER BY debtor_ref
+SELECT branch_code, branch_ref FROM cust_branch WHERE debtor_no='1' AND (inactive = 0) ORDER BY branch_ref
+SELECT cust.name, cust.address, credit_status.dissallow_invoices, cust.sales_type AS salestype, cust.dimension_id, cust.dimension2_id, stype.sales_type, stype.tax_included, stype.factor, cust.curr_code, cust.discount, cust.payment_terms, cust.pymt_discount, cust.credit_limit as cur_credit FROM debtors_master as cust LEFT JOIN debtor_trans trans ON trans.type!=13 AND trans.debtor_no = cust.debtor_no LEFT JOIN credit_status as credit_status ON 1 = 1 LEFT JOIN sales_types as stype ON 1 = 1 WHERE cust.sales_type=stype.id AND cust.credit_status=credit_status.id AND cust.debtor_no='1' GROUP by cust.debtor_no
+SELECT * FROM reflines WHERE trans_type='30' AND CHAR_LENGTH(`prefix`) AND LEFT('001/2019', CHAR_LENGTH(`prefix`)) = `prefix` UNION SELECT * FROM reflines WHERE trans_type='30' AND `prefix`=''
+SELECT count(*) FROM reflines WHERE trans_type='30' AND inactive='0'
+SELECT terms_indicator, terms, inactive FROM payment_terms ORDER BY terms
+SELECT id, sales_type, inactive FROM sales_types ORDER BY sales_type
+SELECT decimals FROM item_units, stock_master WHERE item_units.abbr=units AND stock_master.stock_id='102' LIMIT 1
+SELECT stk_code FROM sales_order_details d WHERE order_no = (SELECT order_no FROM sales_orders o WHERE debtor_no='1' ORDER BY order_no DESC LIMIT 1) ORDER BY d.id DESC LIMIT 1
+SELECT i.item_code, i.description, c.description, count(*)>1 as kit, i.inactive, if(count(*)>1, '0', s.editable) as editable FROM stock_master s,item_codes i LEFT JOIN stock_category c ON i.category_id=c.category_id WHERE i.stock_id=s.stock_id AND mb_flag != 'F' AND i.inactive='0' AND s.inactive='0' AND s.no_sale='0' GROUP BY i.item_code ORDER BY c.description,i.item_code
+SELECT item.material_cost, item.units, unit.decimals FROM stock_master item,item_units unit WHERE item.stock_id='102' AND item.units=unit.abbr
+SELECT price, curr_abrev, sales_type_id FROM prices WHERE stock_id = '102' AND (curr_abrev = 'USD' OR curr_abrev = 'USD')
+SELECT item_tax_type.* FROM item_tax_types item_tax_type,stock_master item WHERE item.stock_id='102' AND item_tax_type.id=item.tax_type_id
+SELECT * FROM item_tax_type_exemptions WHERE item_tax_type_id='1'
+SELECT loc_code, location_name, inactive FROM locations WHERE fixed_asset=0 ORDER BY location_name
+SELECT name, value FROM sys_prefs
+SELECT value FROM sys_prefs WHERE name='version_id'
+SELECT name, value FROM sys_prefs
+SELECT COUNT(*) FROM stock_master WHERE mb_flag!='F'
+SELECT COUNT(*) FROM cust_branch WHERE inactive='0'
+SELECT debtor_no, debtor_ref, curr_code, inactive FROM debtors_master ORDER BY debtor_ref
+SELECT branch_code, branch_ref FROM cust_branch WHERE debtor_no='1' AND (inactive = 0) ORDER BY branch_ref
+SELECT cust.name, cust.address, credit_status.dissallow_invoices, cust.sales_type AS salestype, cust.dimension_id, cust.dimension2_id, stype.sales_type, stype.tax_included, stype.factor, cust.curr_code, cust.discount, cust.payment_terms, cust.pymt_discount, cust.credit_limit as cur_credit FROM debtors_master as cust LEFT JOIN debtor_trans trans ON trans.type!=13 AND trans.debtor_no = cust.debtor_no LEFT JOIN credit_status as credit_status ON 1 = 1 LEFT JOIN sales_types as stype ON 1 = 1 WHERE cust.sales_type=stype.id AND cust.credit_status=credit_status.id AND cust.debtor_no='1' GROUP by cust.debtor_no
+SELECT * FROM reflines WHERE trans_type='30' AND CHAR_LENGTH(`prefix`) AND LEFT('001/2019', CHAR_LENGTH(`prefix`)) = `prefix` UNION SELECT * FROM reflines WHERE trans_type='30' AND `prefix`=''
+SELECT count(*) FROM reflines WHERE trans_type='30' AND inactive='0'
+SELECT terms_indicator, terms, inactive FROM payment_terms ORDER BY terms
+SELECT id, sales_type, inactive FROM sales_types ORDER BY sales_type
+SELECT decimals FROM item_units, stock_master WHERE item_units.abbr=units AND stock_master.stock_id='102' LIMIT 1
+SELECT i.item_code, i.description, c.description, count(*)>1 as kit, i.inactive, if(count(*)>1, '0', s.editable) as editable FROM stock_master s,item_codes i LEFT JOIN stock_category c ON i.category_id=c.category_id WHERE i.stock_id=s.stock_id AND mb_flag != 'F' AND i.inactive='0' AND s.inactive='0' AND s.no_sale='0' GROUP BY i.item_code ORDER BY c.description,i.item_code
+SELECT item.material_cost, item.units, unit.decimals FROM stock_master item,item_units unit WHERE item.stock_id='102' AND item.units=unit.abbr
+SELECT price, curr_abrev, sales_type_id FROM prices WHERE stock_id = '102' AND (curr_abrev = 'USD' OR curr_abrev = 'USD')
+SELECT item_tax_type.* FROM item_tax_types item_tax_type,stock_master item WHERE item.stock_id='102' AND item_tax_type.id=item.tax_type_id
+SELECT * FROM item_tax_type_exemptions WHERE item_tax_type_id='1'
+SELECT loc_code, location_name, inactive FROM locations WHERE fixed_asset=0 ORDER BY location_name
+SELECT name, value FROM sys_prefs
+SELECT value FROM sys_prefs WHERE name='version_id'
+SELECT name, value FROM sys_prefs
+SELECT COUNT(*) FROM bank_accounts WHERE account_type=3
+SELECT * FROM reflines WHERE trans_type='30' AND CHAR_LENGTH(`prefix`) AND LEFT('001/2019', CHAR_LENGTH(`prefix`)) = `prefix` UNION SELECT * FROM reflines WHERE trans_type='30' AND `prefix`=''
+SELECT * FROM reflines WHERE `id`='19'
+BEGIN
+SELECT `reference` FROM `sales_orders` tbl LEFT JOIN voided v ON tbl.`order_no`=v.id AND v.type='30' WHERE ISNULL(v.id) AND tbl.`trans_type`='30' AND tbl.`reference`='001/2019'
+SELECT max(last_no) last_no FROM (SELECT MAX(`order_no`) as last_no FROM sales_orders WHERE `trans_type`='30' UNION SELECT MAX(`id`) as last_no FROM voided WHERE `type`='30') a
+INSERT INTO sales_orders (order_no, type, debtor_no, trans_type, branch_code, customer_ref, reference, comments, ord_date, order_type, ship_via, deliver_to, delivery_address, contact_phone, freight_cost, from_stk_loc, delivery_date, payment_terms, total, prep_amount) VALUES ('9','0','1', '30','1', '','001/2019','','2019-08-01', '1', '1','Donald Easter LLC','N/A', '', '0', 'DEF', '2019-08-02','4','250','0')
+INSERT INTO sales_order_details (order_no, trans_type, stk_code, description, unit_price, quantity, discount_percent) VALUES (9,30,'102', 'iPhone 6 64GB', 250, 1, 0)
+INSERT INTO audit_trail (type, trans_no, user, gl_date, description, stamp) VALUES ('30', '9',1,'2019-08-01','', CURRENT_TIMESTAMP)
+UPDATE audit_trail SET audit_trail.gl_seq = 0, audit_trail.fiscal_year=(SELECT fiscal_year.id FROM fiscal_year WHERE fiscal_year.begin<='2019-08-01' AND fiscal_year.end>='2019-08-01') WHERE audit_trail.type = '30' AND audit_trail.trans_no='9'
+SELECT * FROM reflines WHERE trans_type='30' AND CHAR_LENGTH(`prefix`) AND LEFT('001/2019', CHAR_LENGTH(`prefix`)) = `prefix` UNION SELECT * FROM reflines WHERE trans_type='30' AND `prefix`=''
+SELECT * FROM reflines WHERE `id`='19'
+COMMIT
+SELECT name, value FROM sys_prefs
+SELECT value FROM sys_prefs WHERE name='version_id'
+SELECT name, value FROM sys_prefs
+SELECT name, value FROM sys_prefs
+SELECT value FROM sys_prefs WHERE name='version_id'
+SELECT name, value FROM sys_prefs
+SELECT pos.*, loc.location_name, acc.bank_account_name FROM sales_pos as pos LEFT JOIN locations as loc on pos.pos_location=loc.loc_code LEFT JOIN bank_accounts as acc on pos.pos_account=acc.id WHERE pos.id='1'
+SELECT *, (t.days_before_due=0) AND (t.day_in_following_month=0) as cash_sale FROM payment_terms t WHERE terms_indicator='4'
+SELECT debtor.name, debtor.curr_code, terms.terms, debtor.credit_limit, credit_status.dissallow_invoices, credit_status.reason_description, Sum(IFNULL(IF(`type` IN(11,12,2), -1, 1)*(trans.ov_amount + trans.ov_gst + trans.ov_freight + trans.ov_freight_tax + trans.ov_discount),0)) AS Balance, Sum(IF ((TO_DAYS('2019-08-01') - TO_DAYS(IF (trans.type=10, trans.due_date, trans.tran_date))) > 0,IFNULL(IF(`type` IN(11,12,2), -1, 1)*(trans.ov_amount + trans.ov_gst + trans.ov_freight + trans.ov_freight_tax + trans.ov_discount),0),0)) AS Due, Sum(IF ((TO_DAYS('2019-08-01') - TO_DAYS(IF (trans.type=10, trans.due_date, trans.tran_date))) > 30,IFNULL(IF(`type` IN(11,12,2), -1, 1)*(trans.ov_amount + trans.ov_gst + trans.ov_freight + trans.ov_freight_tax + trans.ov_discount),0),0)) AS Overdue1, Sum(IF ((TO_DAYS('2019-08-01') - TO_DAYS(IF (trans.type=10, trans.due_date, trans.tran_date))) > 60,IFNULL(IF(`type` IN(11,12,2), -1, 1)*(trans.ov_amount + trans.ov_gst + trans.ov_freight + trans.ov_freight_tax + trans.ov_discount),0),0)) AS Overdue2 FROM debtors_master debtor LEFT JOIN debtor_trans trans ON trans.tran_date <= '2019-08-01' AND debtor.debtor_no = trans.debtor_no AND trans.type <> 13 LEFT JOIN payment_terms terms ON 1 = 1 LEFT JOIN credit_status as credit_status ON 1 = 1 WHERE debtor.payment_terms = terms.terms_indicator AND debtor.credit_status = credit_status.id AND debtor.debtor_no = '1' GROUP BY debtor.name, terms.terms, terms.days_before_due, terms.day_in_following_month, debtor.credit_limit, credit_status.dissallow_invoices, credit_status.reason_description
+SELECT t.id as tax_type_id,CONCAT(t.name, ' (', t.rate, '%)') as tax_type_name,t.sales_gl_code, t.purchasing_gl_code, IF(g.tax_type_id, t.rate, NULL) as rate, g.tax_shipping FROM tax_types t LEFT JOIN tax_group_items g ON t.id=g.tax_type_id AND g.tax_group_id='1' WHERE t.inactive='0'
+SELECT id, stk_code, unit_price, line.description, line.quantity, discount_percent, qty_sent as qty_done, item.units, item.mb_flag, item.material_cost FROM sales_order_details line,stock_master item WHERE line.stk_code = item.stock_id AND order_no ='9' AND trans_type = '30' ORDER BY id
+SELECT item.*, taxtype.name AS tax_type_name FROM stock_master item,item_tax_types taxtype WHERE taxtype.id=item.tax_type_id AND stock_id='102'
+SELECT debtor.name, debtor.curr_code, terms.terms, debtor.credit_limit, credit_status.dissallow_invoices, credit_status.reason_description, Sum(IFNULL(IF(`type` IN(11,12,2), -1, 1)*(trans.ov_amount + trans.ov_gst + trans.ov_freight + trans.ov_freight_tax + trans.ov_discount),0)) AS Balance, Sum(IF ((TO_DAYS('2019-08-01') - TO_DAYS(IF (trans.type=10, trans.due_date, trans.tran_date))) > 0,IFNULL(IF(`type` IN(11,12,2), -1, 1)*(trans.ov_amount + trans.ov_gst + trans.ov_freight + trans.ov_freight_tax + trans.ov_discount),0),0)) AS Due, Sum(IF ((TO_DAYS('2019-08-01') - TO_DAYS(IF (trans.type=10, trans.due_date, trans.tran_date))) > 30,IFNULL(IF(`type` IN(11,12,2), -1, 1)*(trans.ov_amount + trans.ov_gst + trans.ov_freight + trans.ov_freight_tax + trans.ov_discount),0),0)) AS Overdue1, Sum(IF ((TO_DAYS('2019-08-01') - TO_DAYS(IF (trans.type=10, trans.due_date, trans.tran_date))) > 60,IFNULL(IF(`type` IN(11,12,2), -1, 1)*(trans.ov_amount + trans.ov_gst + trans.ov_freight + trans.ov_freight_tax + trans.ov_discount),0),0)) AS Overdue2 FROM debtors_master debtor LEFT JOIN debtor_trans trans ON trans.tran_date <= '2019-08-01' AND debtor.debtor_no = trans.debtor_no AND trans.type <> 13 LEFT JOIN payment_terms terms ON 1 = 1 LEFT JOIN credit_status as credit_status ON 1 = 1 WHERE debtor.payment_terms = terms.terms_indicator AND debtor.credit_status = credit_status.id AND debtor.debtor_no = '1' GROUP BY debtor.name, terms.terms, terms.days_before_due, terms.day_in_following_month, debtor.credit_limit, credit_status.dissallow_invoices, credit_status.reason_description
+SELECT child.* FROM debtor_trans_details child LEFT JOIN sales_order_details trans ON child.src_id=trans.id AND child.debtor_trans_type=13 WHERE trans.order_no IN('9') GROUP BY child.debtor_trans_no ORDER BY child.debtor_trans_no
+SELECT decimals FROM item_units, stock_master WHERE item_units.abbr=units AND stock_master.stock_id='102' LIMIT 1
+SELECT item_tax_type.* FROM item_tax_types item_tax_type,stock_master item WHERE item.stock_id='102' AND item_tax_type.id=item.tax_type_id
+SELECT * FROM item_tax_type_exemptions WHERE item_tax_type_id='1'
+SELECT trans.type, trans.trans_no, trans.reference, trans.tran_date, debtor.name AS DebtorName, debtor.curr_code, ov_amount+ov_gst+ov_freight+ov_freight_tax+ov_discount AS Total, trans.alloc, trans.due_date, debtor.address, trans.version, amt, trans.debtor_no FROM debtor_trans as trans,debtors_master as debtor,cust_allocations as alloc WHERE trans.debtor_no=debtor.debtor_no AND trans.trans_no = alloc.trans_no_from AND trans.type = alloc.trans_type_from AND trans.debtor_no = alloc.person_id AND alloc.trans_no_to='9' AND alloc.trans_type_to='30' AND trans.debtor_no='1' ORDER BY trans_no
+SELECT DISTINCT * FROM attachments WHERE type_no='30' AND trans_no='9'
+SELECT * FROM attachments WHERE type_no='30' AND trans_no='9' ORDER BY trans_no
+SELECT name, value FROM sys_prefs
+SELECT value FROM sys_prefs WHERE name='version_id'
+SELECT name, value FROM sys_prefs
+SELECT pos.*, loc.location_name, acc.bank_account_name FROM sales_pos as pos LEFT JOIN locations as loc on pos.pos_location=loc.loc_code LEFT JOIN bank_accounts as acc on pos.pos_account=acc.id WHERE pos.id='1'
+SELECT * FROM fiscal_year WHERE id='2'
+SELECT `trans_type`,`prefix`,`description`,`default`,`pattern`,`id`,`inactive` FROM reflines WHERE trans_type='10' AND `default`
+SELECT MAX(CAST(SUBSTR(reference, 1,LENGTH(reference)-5) AS UNSIGNED)) FROM `debtor_trans` tbl LEFT JOIN voided v ON tbl.`trans_no`=v.id AND v.type='10' WHERE ISNULL(v.id) AND tbl.`type`='10' AND `reference` REGEXP '^[0-9]*/2019$'
+SELECT * FROM debtors_master WHERE debtor_no='1'
+SELECT *, (t.days_before_due=0) AND (t.day_in_following_month=0) as cash_sale FROM payment_terms t WHERE terms_indicator='4'
+SELECT debtor.name, debtor.curr_code, terms.terms, debtor.credit_limit, credit_status.dissallow_invoices, credit_status.reason_description, Sum(IFNULL(IF(`type` IN(11,12,2), -1, 1)*(trans.ov_amount + trans.ov_gst + trans.ov_freight + trans.ov_freight_tax + trans.ov_discount),0)) AS Balance, Sum(IF ((TO_DAYS('2019-08-01') - TO_DAYS(IF (trans.type=10, trans.due_date, trans.tran_date))) > 0,IFNULL(IF(`type` IN(11,12,2), -1, 1)*(trans.ov_amount + trans.ov_gst + trans.ov_freight + trans.ov_freight_tax + trans.ov_discount),0),0)) AS Due, Sum(IF ((TO_DAYS('2019-08-01') - TO_DAYS(IF (trans.type=10, trans.due_date, trans.tran_date))) > 30,IFNULL(IF(`type` IN(11,12,2), -1, 1)*(trans.ov_amount + trans.ov_gst + trans.ov_freight + trans.ov_freight_tax + trans.ov_discount),0),0)) AS Overdue1, Sum(IF ((TO_DAYS('2019-08-01') - TO_DAYS(IF (trans.type=10, trans.due_date, trans.tran_date))) > 60,IFNULL(IF(`type` IN(11,12,2), -1, 1)*(trans.ov_amount + trans.ov_gst + trans.ov_freight + trans.ov_freight_tax + trans.ov_discount),0),0)) AS Overdue2 FROM debtors_master debtor LEFT JOIN debtor_trans trans ON trans.tran_date <= '2019-08-01' AND debtor.debtor_no = trans.debtor_no AND trans.type <> 13 LEFT JOIN payment_terms terms ON 1 = 1 LEFT JOIN credit_status as credit_status ON 1 = 1 WHERE debtor.payment_terms = terms.terms_indicator AND debtor.credit_status = credit_status.id AND debtor.debtor_no = '1' GROUP BY debtor.name, terms.terms, terms.days_before_due, terms.day_in_following_month, debtor.credit_limit, credit_status.dissallow_invoices, credit_status.reason_description
+SELECT COUNT(*) FROM stock_master WHERE mb_flag!='F'
+SELECT COUNT(*) FROM cust_branch WHERE inactive='0'
+SELECT debtor_no, debtor_ref, curr_code, inactive FROM debtors_master ORDER BY debtor_ref
+SELECT branch_code, branch_ref FROM cust_branch WHERE debtor_no='1' AND (inactive = 0) ORDER BY branch_ref
+SELECT cust.name, cust.address, credit_status.dissallow_invoices, cust.sales_type AS salestype, cust.dimension_id, cust.dimension2_id, stype.sales_type, stype.tax_included, stype.factor, cust.curr_code, cust.discount, cust.payment_terms, cust.pymt_discount, cust.credit_limit as cur_credit FROM debtors_master as cust LEFT JOIN debtor_trans trans ON trans.type!=13 AND trans.debtor_no = cust.debtor_no LEFT JOIN credit_status as credit_status ON 1 = 1 LEFT JOIN sales_types as stype ON 1 = 1 WHERE cust.sales_type=stype.id AND cust.credit_status=credit_status.id AND cust.debtor_no='1' GROUP by cust.debtor_no
+SELECT *, (t.days_before_due=0) AND (t.day_in_following_month=0) as cash_sale FROM payment_terms t WHERE terms_indicator='4'
+SELECT debtor.name, debtor.curr_code, terms.terms, debtor.credit_limit, credit_status.dissallow_invoices, credit_status.reason_description, Sum(IFNULL(IF(`type` IN(11,12,2), -1, 1)*(trans.ov_amount + trans.ov_gst + trans.ov_freight + trans.ov_freight_tax + trans.ov_discount),0)) AS Balance, Sum(IF ((TO_DAYS('2019-08-01') - TO_DAYS(IF (trans.type=10, trans.due_date, trans.tran_date))) > 0,IFNULL(IF(`type` IN(11,12,2), -1, 1)*(trans.ov_amount + trans.ov_gst + trans.ov_freight + trans.ov_freight_tax + trans.ov_discount),0),0)) AS Due, Sum(IF ((TO_DAYS('2019-08-01') - TO_DAYS(IF (trans.type=10, trans.due_date, trans.tran_date))) > 30,IFNULL(IF(`type` IN(11,12,2), -1, 1)*(trans.ov_amount + trans.ov_gst + trans.ov_freight + trans.ov_freight_tax + trans.ov_discount),0),0)) AS Overdue1, Sum(IF ((TO_DAYS('2019-08-01') - TO_DAYS(IF (trans.type=10, trans.due_date, trans.tran_date))) > 60,IFNULL(IF(`type` IN(11,12,2), -1, 1)*(trans.ov_amount + trans.ov_gst + trans.ov_freight + trans.ov_freight_tax + trans.ov_discount),0),0)) AS Overdue2 FROM debtors_master debtor LEFT JOIN debtor_trans trans ON trans.tran_date <= '2019-08-01' AND debtor.debtor_no = trans.debtor_no AND trans.type <> 13 LEFT JOIN payment_terms terms ON 1 = 1 LEFT JOIN credit_status as credit_status ON 1 = 1 WHERE debtor.payment_terms = terms.terms_indicator AND debtor.credit_status = credit_status.id AND debtor.debtor_no = '1' GROUP BY debtor.name, terms.terms, terms.days_before_due, terms.day_in_following_month, debtor.credit_limit, credit_status.dissallow_invoices, credit_status.reason_description
+SELECT branch.br_name, branch.br_address, branch.br_post_address, default_location, location_name, default_ship_via, tax_group.name AS tax_group_name, tax_group.id AS tax_group_id FROM cust_branch branch,tax_groups tax_group,locations as location WHERE branch.tax_group_id = tax_group.id AND location.loc_code=default_location AND branch.branch_code='1' AND branch.debtor_no='1'
+SELECT p.*, r.action, r.type, CONCAT(r.type,'.',r.action) as ext_type FROM crm_persons p,crm_contacts r WHERE r.person_id=p.id AND ((r.type='cust_branch' AND r.entity_id='1') OR (r.type='customer' AND r.entity_id='1')) AND (r.action='order' OR r.action='general')
+SELECT t.id as tax_type_id,CONCAT(t.name, ' (', t.rate, '%)') as tax_type_name,t.sales_gl_code, t.purchasing_gl_code, IF(g.tax_type_id, t.rate, NULL) as rate, g.tax_shipping FROM tax_types t LEFT JOIN tax_group_items g ON t.id=g.tax_type_id AND g.tax_group_id='1' WHERE t.inactive='0'
+SELECT *, (t.days_before_due=0) AND (t.day_in_following_month=0) as cash_sale FROM payment_terms t WHERE terms_indicator='4'
+SELECT * FROM reflines WHERE trans_type='10' AND CHAR_LENGTH(`prefix`) AND LEFT('002/2019', CHAR_LENGTH(`prefix`)) = `prefix` UNION SELECT * FROM reflines WHERE trans_type='10' AND `prefix`=''
+SELECT * FROM reflines WHERE `id`='5'
+SELECT begin FROM fiscal_year WHERE end >= '2019-08-01' AND begin <= '2019-08-01'
+SELECT count(*) FROM reflines WHERE trans_type='10' AND inactive='0'
+SELECT terms_indicator, terms, inactive FROM payment_terms WHERE days_before_due>=0 ORDER BY terms
+SELECT id, sales_type, inactive FROM sales_types ORDER BY sales_type
+SELECT id, CONCAT(reference,' ',name) as ref FROM dimensions WHERE (closed=0 AND type_='1') ORDER BY reference
+SELECT stk_code FROM sales_order_details d WHERE order_no = (SELECT order_no FROM sales_orders o WHERE debtor_no='1' ORDER BY order_no DESC LIMIT 1) ORDER BY d.id DESC LIMIT 1
+SELECT i.item_code, i.description, c.description, count(*)>1 as kit, i.inactive, if(count(*)>1, '0', s.editable) as editable FROM stock_master s,item_codes i LEFT JOIN stock_category c ON i.category_id=c.category_id WHERE i.stock_id=s.stock_id AND mb_flag != 'F' AND i.inactive='0' AND s.inactive='0' AND s.no_sale='0' GROUP BY i.item_code ORDER BY c.description,i.item_code
+SELECT item.material_cost, item.units, unit.decimals FROM stock_master item,item_units unit WHERE item.stock_id='102' AND item.units=unit.abbr
+SELECT price, curr_abrev, sales_type_id FROM prices WHERE stock_id = '102' AND (curr_abrev = 'USD' OR curr_abrev = 'USD')
+SELECT loc_code, location_name, inactive FROM locations WHERE fixed_asset=0 ORDER BY location_name
+SELECT name, value FROM sys_prefs
+SELECT value FROM sys_prefs WHERE name='version_id'
+SELECT name, value FROM sys_prefs
+SELECT pos.*, loc.location_name, acc.bank_account_name FROM sales_pos as pos LEFT JOIN locations as loc on pos.pos_location=loc.loc_code LEFT JOIN bank_accounts as acc on pos.pos_account=acc.id WHERE pos.id='1'
+SELECT * FROM fiscal_year WHERE id='2'
+SELECT `trans_type`,`prefix`,`description`,`default`,`pattern`,`id`,`inactive` FROM reflines WHERE trans_type='11' AND `default`
+SELECT MAX(CAST(SUBSTR(reference, 1,LENGTH(reference)-5) AS UNSIGNED)) FROM `debtor_trans` tbl LEFT JOIN voided v ON tbl.`trans_no`=v.id AND v.type='11' WHERE ISNULL(v.id) AND tbl.`type`='11' AND `reference` REGEXP '^[0-9]*/2019$'
+SELECT * FROM debtors_master WHERE debtor_no='1'
+SELECT debtor.name, debtor.curr_code, terms.terms, debtor.credit_limit, credit_status.dissallow_invoices, credit_status.reason_description, Sum(IFNULL(IF(`type` IN(11,12,2), -1, 1)*(trans.ov_amount + trans.ov_gst + trans.ov_freight + trans.ov_freight_tax + trans.ov_discount),0)) AS Balance, Sum(IF ((TO_DAYS('2019-08-01') - TO_DAYS(IF (trans.type=10, trans.due_date, trans.tran_date))) > 0,IFNULL(IF(`type` IN(11,12,2), -1, 1)*(trans.ov_amount + trans.ov_gst + trans.ov_freight + trans.ov_freight_tax + trans.ov_discount),0),0)) AS Due, Sum(IF ((TO_DAYS('2019-08-01') - TO_DAYS(IF (trans.type=10, trans.due_date, trans.tran_date))) > 30,IFNULL(IF(`type` IN(11,12,2), -1, 1)*(trans.ov_amount + trans.ov_gst + trans.ov_freight + trans.ov_freight_tax + trans.ov_discount),0),0)) AS Overdue1, Sum(IF ((TO_DAYS('2019-08-01') - TO_DAYS(IF (trans.type=10, trans.due_date, trans.tran_date))) > 60,IFNULL(IF(`type` IN(11,12,2), -1, 1)*(trans.ov_amount + trans.ov_gst + trans.ov_freight + trans.ov_freight_tax + trans.ov_discount),0),0)) AS Overdue2 FROM debtors_master debtor LEFT JOIN debtor_trans trans ON trans.tran_date <= '2019-08-01' AND debtor.debtor_no = trans.debtor_no AND trans.type <> 13 LEFT JOIN payment_terms terms ON 1 = 1 LEFT JOIN credit_status as credit_status ON 1 = 1 WHERE debtor.payment_terms = terms.terms_indicator AND debtor.credit_status = credit_status.id AND debtor.debtor_no = '1' GROUP BY debtor.name, terms.terms, terms.days_before_due, terms.day_in_following_month, debtor.credit_limit, credit_status.dissallow_invoices, credit_status.reason_description
+SELECT COUNT(*) FROM stock_master WHERE mb_flag!='F'
+SELECT COUNT(*) FROM cust_branch WHERE inactive='0'
+SELECT debtor_no, debtor_ref, curr_code, inactive FROM debtors_master ORDER BY debtor_ref
+SELECT branch_code, branch_ref FROM cust_branch WHERE debtor_no='1' AND (inactive = 0) ORDER BY branch_ref
+SELECT cust.name, cust.address, credit_status.dissallow_invoices, cust.sales_type AS salestype, cust.dimension_id, cust.dimension2_id, stype.sales_type, stype.tax_included, stype.factor, cust.curr_code, cust.discount, cust.payment_terms, cust.pymt_discount, cust.credit_limit as cur_credit FROM debtors_master as cust LEFT JOIN debtor_trans trans ON trans.type!=13 AND trans.debtor_no = cust.debtor_no LEFT JOIN credit_status as credit_status ON 1 = 1 LEFT JOIN sales_types as stype ON 1 = 1 WHERE cust.sales_type=stype.id AND cust.credit_status=credit_status.id AND cust.debtor_no='1' GROUP by cust.debtor_no
+SELECT *, (t.days_before_due=0) AND (t.day_in_following_month=0) as cash_sale FROM payment_terms t WHERE terms_indicator='4'
+SELECT debtor.name, debtor.curr_code, terms.terms, debtor.credit_limit, credit_status.dissallow_invoices, credit_status.reason_description, Sum(IFNULL(IF(`type` IN(11,12,2), -1, 1)*(trans.ov_amount + trans.ov_gst + trans.ov_freight + trans.ov_freight_tax + trans.ov_discount),0)) AS Balance, Sum(IF ((TO_DAYS('2019-08-01') - TO_DAYS(IF (trans.type=10, trans.due_date, trans.tran_date))) > 0,IFNULL(IF(`type` IN(11,12,2), -1, 1)*(trans.ov_amount + trans.ov_gst + trans.ov_freight + trans.ov_freight_tax + trans.ov_discount),0),0)) AS Due, Sum(IF ((TO_DAYS('2019-08-01') - TO_DAYS(IF (trans.type=10, trans.due_date, trans.tran_date))) > 30,IFNULL(IF(`type` IN(11,12,2), -1, 1)*(trans.ov_amount + trans.ov_gst + trans.ov_freight + trans.ov_freight_tax + trans.ov_discount),0),0)) AS Overdue1, Sum(IF ((TO_DAYS('2019-08-01') - TO_DAYS(IF (trans.type=10, trans.due_date, trans.tran_date))) > 60,IFNULL(IF(`type` IN(11,12,2), -1, 1)*(trans.ov_amount + trans.ov_gst + trans.ov_freight + trans.ov_freight_tax + trans.ov_discount),0),0)) AS Overdue2 FROM debtors_master debtor LEFT JOIN debtor_trans trans ON trans.tran_date <= '2019-08-01' AND debtor.debtor_no = trans.debtor_no AND trans.type <> 13 LEFT JOIN payment_terms terms ON 1 = 1 LEFT JOIN credit_status as credit_status ON 1 = 1 WHERE debtor.payment_terms = terms.terms_indicator AND debtor.credit_status = credit_status.id AND debtor.debtor_no = '1' GROUP BY debtor.name, terms.terms, terms.days_before_due, terms.day_in_following_month, debtor.credit_limit, credit_status.dissallow_invoices, credit_status.reason_description
+SELECT branch.br_name, branch.br_address, branch.br_post_address, default_location, location_name, default_ship_via, tax_group.name AS tax_group_name, tax_group.id AS tax_group_id FROM cust_branch branch,tax_groups tax_group,locations as location WHERE branch.tax_group_id = tax_group.id AND location.loc_code=default_location AND branch.branch_code='1' AND branch.debtor_no='1'
+SELECT p.*, r.action, r.type, CONCAT(r.type,'.',r.action) as ext_type FROM crm_persons p,crm_contacts r WHERE r.person_id=p.id AND ((r.type='cust_branch' AND r.entity_id='1') OR (r.type='customer' AND r.entity_id='1')) AND (r.action='order' OR r.action='general')
+SELECT t.id as tax_type_id,CONCAT(t.name, ' (', t.rate, '%)') as tax_type_name,t.sales_gl_code, t.purchasing_gl_code, IF(g.tax_type_id, t.rate, NULL) as rate, g.tax_shipping FROM tax_types t LEFT JOIN tax_group_items g ON t.id=g.tax_type_id AND g.tax_group_id='1' WHERE t.inactive='0'
+SELECT id, sales_type, inactive FROM sales_types ORDER BY sales_type
+SELECT shipper_id, shipper_name, inactive FROM shippers ORDER BY shipper_name
+SELECT id, CONCAT(reference,' ',name) as ref FROM dimensions WHERE (closed=0 AND type_='1') ORDER BY reference
+SELECT stock_id, s.description, c.description, s.inactive, s.editable FROM stock_master s,stock_category c WHERE s.category_id=c.category_id AND mb_flag!='F' ORDER BY c.description,stock_id
+SELECT item.material_cost, item.units, unit.decimals FROM stock_master item,item_units unit WHERE stock_id='101' AND item.units=unit.abbr
+SELECT price, curr_abrev, sales_type_id FROM prices WHERE stock_id = '101' AND (curr_abrev = 'USD' OR curr_abrev = 'USD')
+SELECT loc_code, location_name, inactive FROM locations WHERE fixed_asset=0 ORDER BY location_name
+SELECT name, value FROM sys_prefs
+SELECT value FROM sys_prefs WHERE name='version_id'
+SELECT name, value FROM sys_prefs
+SELECT name, value FROM sys_prefs
+SELECT value FROM sys_prefs WHERE name='version_id'
+SELECT name, value FROM sys_prefs
+SELECT name, value FROM sys_prefs
+SELECT value FROM sys_prefs WHERE name='version_id'
+SELECT name, value FROM sys_prefs
+SELECT COUNT(*) FROM stock_master WHERE mb_flag!='D'
+SELECT * FROM fiscal_year WHERE id='2'
+SELECT loc_code, location_name, inactive FROM locations WHERE fixed_asset=0 ORDER BY location_name
+SELECT `trans_type`,`prefix`,`description`,`default`,`pattern`,`id`,`inactive` FROM reflines WHERE trans_type='17' AND `default`
+SELECT MAX(CAST(SUBSTR(reference, 1,LENGTH(reference)-5) AS UNSIGNED)) FROM `stock_moves` tbl LEFT JOIN voided v ON tbl.`trans_no`=v.id AND v.type='17' WHERE ISNULL(v.id) AND tbl.`type`='17' AND `reference` REGEXP '^[0-9]*/2019$'
+SELECT * FROM reflines WHERE trans_type='17' AND CHAR_LENGTH(`prefix`) AND LEFT('001/2019', CHAR_LENGTH(`prefix`)) = `prefix` UNION SELECT * FROM reflines WHERE trans_type='17' AND `prefix`=''
+SELECT * FROM reflines WHERE `id`='10'
+SELECT count(*) FROM reflines WHERE trans_type='17' AND inactive='0'
+SELECT stock_id, s.description, c.description, s.inactive, s.editable FROM stock_master s,stock_category c WHERE s.category_id=c.category_id AND mb_flag!='F' AND (mb_flag!='D') ORDER BY c.description,stock_id
+SELECT item.material_cost, item.units, unit.decimals FROM stock_master item,item_units unit WHERE stock_id='101' AND item.units=unit.abbr
+SELECT name, value FROM sys_prefs
+SELECT value FROM sys_prefs WHERE name='version_id'
+SELECT name, value FROM sys_prefs
+SELECT loc_code, location_name, inactive FROM locations WHERE fixed_asset=0 ORDER BY location_name
+SELECT `trans_type`,`prefix`,`description`,`default`,`pattern`,`id`,`inactive` FROM reflines WHERE trans_type='17' AND `default`
+SELECT MAX(CAST(SUBSTR(reference, 1,LENGTH(reference)-5) AS UNSIGNED)) FROM `stock_moves` tbl LEFT JOIN voided v ON tbl.`trans_no`=v.id AND v.type='17' WHERE ISNULL(v.id) AND tbl.`type`='17' AND `reference` REGEXP '^[0-9]*/2019$'
+SELECT * FROM reflines WHERE trans_type='17' AND CHAR_LENGTH(`prefix`) AND LEFT('001/2019', CHAR_LENGTH(`prefix`)) = `prefix` UNION SELECT * FROM reflines WHERE trans_type='17' AND `prefix`=''
+SELECT count(*) FROM reflines WHERE trans_type='17' AND inactive='0'
+SELECT stock_id, s.description, c.description, s.inactive, s.editable FROM stock_master s,stock_category c WHERE s.category_id=c.category_id AND mb_flag!='F' AND (mb_flag!='D') ORDER BY c.description,stock_id
+SELECT item.material_cost, item.units, unit.decimals FROM stock_master item,item_units unit WHERE stock_id='101' AND item.units=unit.abbr
+SELECT name, value FROM sys_prefs
+SELECT value FROM sys_prefs WHERE name='version_id'
+SELECT name, value FROM sys_prefs
+SELECT loc_code, location_name, inactive FROM locations WHERE fixed_asset=0 ORDER BY location_name
+SELECT `trans_type`,`prefix`,`description`,`default`,`pattern`,`id`,`inactive` FROM reflines WHERE trans_type='17' AND `default`
+SELECT MAX(CAST(SUBSTR(reference, 1,LENGTH(reference)-5) AS UNSIGNED)) FROM `stock_moves` tbl LEFT JOIN voided v ON tbl.`trans_no`=v.id AND v.type='17' WHERE ISNULL(v.id) AND tbl.`type`='17' AND `reference` REGEXP '^[0-9]*/2019$'
+SELECT * FROM reflines WHERE trans_type='17' AND CHAR_LENGTH(`prefix`) AND LEFT('001/2019', CHAR_LENGTH(`prefix`)) = `prefix` UNION SELECT * FROM reflines WHERE trans_type='17' AND `prefix`=''
+SELECT count(*) FROM reflines WHERE trans_type='17' AND inactive='0'
+SELECT stock_id, s.description, c.description, s.inactive, s.editable FROM stock_master s,stock_category c WHERE s.category_id=c.category_id AND mb_flag!='F' AND (mb_flag!='D') ORDER BY c.description,stock_id
+SELECT item.material_cost, item.units, unit.decimals FROM stock_master item,item_units unit WHERE stock_id='101' AND item.units=unit.abbr
+SELECT name, value FROM sys_prefs
+SELECT value FROM sys_prefs WHERE name='version_id'
+SELECT name, value FROM sys_prefs
+SELECT item.*, taxtype.name AS tax_type_name FROM stock_master item,item_tax_types taxtype WHERE taxtype.id=item.tax_type_id AND stock_id='101'
+SELECT loc_code, location_name, inactive FROM locations WHERE fixed_asset=0 ORDER BY location_name
+SELECT `trans_type`,`prefix`,`description`,`default`,`pattern`,`id`,`inactive` FROM reflines WHERE trans_type='17' AND `default`
+SELECT MAX(CAST(SUBSTR(reference, 1,LENGTH(reference)-5) AS UNSIGNED)) FROM `stock_moves` tbl LEFT JOIN voided v ON tbl.`trans_no`=v.id AND v.type='17' WHERE ISNULL(v.id) AND tbl.`type`='17' AND `reference` REGEXP '^[0-9]*/2019$'
+SELECT * FROM reflines WHERE trans_type='17' AND CHAR_LENGTH(`prefix`) AND LEFT('001/2019', CHAR_LENGTH(`prefix`)) = `prefix` UNION SELECT * FROM reflines WHERE trans_type='17' AND `prefix`=''
+SELECT count(*) FROM reflines WHERE trans_type='17' AND inactive='0'
+SELECT decimals FROM item_units, stock_master WHERE item_units.abbr=units AND stock_master.stock_id='101' LIMIT 1
+SELECT stock_id, s.description, c.description, s.inactive, s.editable FROM stock_master s,stock_category c WHERE s.category_id=c.category_id AND mb_flag!='F' AND (mb_flag!='D') ORDER BY c.description,stock_id
+SELECT item.material_cost, item.units, unit.decimals FROM stock_master item,item_units unit WHERE stock_id='101' AND item.units=unit.abbr
+SELECT name, value FROM sys_prefs
+SELECT value FROM sys_prefs WHERE name='version_id'
+SELECT name, value FROM sys_prefs
+SELECT * FROM reflines WHERE trans_type='17' AND CHAR_LENGTH(`prefix`) AND LEFT('001/2019', CHAR_LENGTH(`prefix`)) = `prefix` UNION SELECT * FROM reflines WHERE trans_type='17' AND `prefix`=''
+SELECT * FROM reflines WHERE `id`='10'
+SELECT `reference` FROM `stock_moves` tbl LEFT JOIN voided v ON tbl.`trans_no`=v.id AND v.type='17' WHERE ISNULL(v.id) AND tbl.`type`='17' AND tbl.`reference`='001/2019'
+SELECT * FROM fiscal_year WHERE id='2'
+BEGIN
+SELECT max(last_no) last_no FROM (SELECT MAX(`trans_no`) as last_no FROM stock_moves WHERE `type`='17' UNION SELECT MAX(`id`) as last_no FROM voided WHERE `type`='17') a
+SELECT mb_flag FROM stock_master WHERE stock_id = '101'
+SELECT * FROM suppliers WHERE supplier_id='4'
+SELECT stock_id FROM stock_master WHERE stock_id='101' AND mb_flag <> 'D'
+SELECT SUM(qty) FROM stock_moves st LEFT JOIN voided v ON st.type=v.type AND st.trans_no=v.id WHERE ISNULL(v.id) AND stock_id='101' AND tran_date <= '2019-08-01'
+SELECT mb_flag, material_cost FROM stock_master WHERE stock_id='101'
+SELECT SUM(qty) FROM stock_moves st LEFT JOIN voided v ON st.type=v.type AND st.trans_no=v.id WHERE ISNULL(v.id) AND stock_id='101' AND tran_date <= '2019-08-01'
+UPDATE stock_master SET material_cost='200' WHERE stock_id='101'
+INSERT INTO stock_moves (stock_id, trans_no, type, loc_code, tran_date, reference, qty, standard_cost, price) VALUES ('101', '1', '17', 'DEF', '2019-08-01', '001/2019', '320', '200','0')
+SELECT mb_flag, inventory_account, cogs_account, adjustment_account, sales_account, wip_account, dimension_id, dimension2_id FROM stock_master WHERE stock_id = '101'
+SELECT 1 FROM cust_branch WHERE receivables_account='5040' UNION SELECT -1 FROM suppliers WHERE payable_account='5040'
+INSERT INTO gl_trans ( type, type_no, tran_date, account, dimension_id, dimension2_id, memo_, amount) VALUES ('17', '1', '2019-08-01', '5040', '0', '0', '', '-64000')
+SELECT 1 FROM cust_branch WHERE receivables_account='1510' UNION SELECT -1 FROM suppliers WHERE payable_account='1510'
+INSERT INTO gl_trans ( type, type_no, tran_date, account, dimension_id, dimension2_id, memo_, amount) VALUES ('17', '1', '2019-08-01', '1510', '0', '0', '', '64000')
+SELECT * FROM reflines WHERE trans_type='17' AND CHAR_LENGTH(`prefix`) AND LEFT('001/2019', CHAR_LENGTH(`prefix`)) = `prefix` UNION SELECT * FROM reflines WHERE trans_type='17' AND `prefix`=''
+SELECT * FROM reflines WHERE `id`='10'
+INSERT INTO audit_trail (type, trans_no, user, gl_date, description, stamp) VALUES ('17', '1',1,'2019-08-01','', CURRENT_TIMESTAMP)
+UPDATE audit_trail SET audit_trail.gl_seq = 0, audit_trail.fiscal_year=(SELECT fiscal_year.id FROM fiscal_year WHERE fiscal_year.begin<='2019-08-01' AND fiscal_year.end>='2019-08-01') WHERE audit_trail.type = '17' AND audit_trail.trans_no='1'
+COMMIT
+SELECT name, value FROM sys_prefs
+SELECT value FROM sys_prefs WHERE name='version_id'
+SELECT name, value FROM sys_prefs
+SELECT move.*, item.description, item.mb_flag, item.units, stock.location_name FROM stock_moves as move,locations as stock,stock_master as item WHERE move.stock_id = item.stock_id AND stock.loc_code=move.loc_code AND type='17' AND trans_no='1' ORDER BY trans_id
+SELECT name, value FROM sys_prefs
+SELECT value FROM sys_prefs WHERE name='version_id'
+SELECT name, value FROM sys_prefs
+SELECT name, value FROM sys_prefs
+SELECT value FROM sys_prefs WHERE name='version_id'
+SELECT name, value FROM sys_prefs
+SELECT name, value FROM sys_prefs
+SELECT value FROM sys_prefs WHERE name='version_id'
+SELECT name, value FROM sys_prefs
+SELECT name, value FROM sys_prefs
+SELECT value FROM sys_prefs WHERE name='version_id'
+SELECT name, value FROM sys_prefs
+SELECT `trans_type`,`prefix`,`description`,`default`,`pattern`,`id`,`inactive` FROM reflines WHERE trans_type='1' AND `default`
+SELECT MAX(CAST(SUBSTR(ref, 1,LENGTH(ref)-5) AS UNSIGNED)) FROM `bank_trans` tbl LEFT JOIN voided v ON tbl.`trans_no`=v.id AND v.type='1' WHERE ISNULL(v.id) AND tbl.`type`='1' AND `ref` REGEXP '^[0-9]*/2019$'
+SELECT * FROM fiscal_year WHERE id='2'
+SELECT COUNT(*) FROM bank_accounts
+SELECT * FROM reflines WHERE trans_type='1' AND CHAR_LENGTH(`prefix`) AND LEFT('001/2019', CHAR_LENGTH(`prefix`)) = `prefix` UNION SELECT * FROM reflines WHERE trans_type='1' AND `prefix`=''
+SELECT * FROM reflines WHERE `id`='2'
+SELECT begin FROM fiscal_year WHERE end >= '2019-08-01' AND begin <= '2019-08-01'
+SELECT count(*) FROM reflines WHERE trans_type='1' AND inactive='0'
+SELECT id, bank_account_name, bank_curr_code, inactive FROM bank_accounts ORDER BY bank_account_name
+SELECT SUM(amount) FROM bank_trans WHERE bank_act='1' AND trans_date < '2019-08-02'
+SELECT bank_curr_code FROM bank_accounts WHERE id='1'
+SELECT chart.account_code, chart.account_name, type.name, chart.inactive, type.id FROM chart_master as chart,chart_types as type LEFT JOIN bank_accounts as acc ON chart.account_code=acc.account_code WHERE acc.account_code IS NULL AND chart.account_type=type.id ORDER BY type.class_id,type.id,account_code
+SELECT id, CONCAT(reference,' ',name) as ref FROM dimensions WHERE (closed=0 AND type_='1') ORDER BY reference
+SELECT bank_curr_code FROM bank_accounts WHERE id='1'
+SELECT name, value FROM sys_prefs
+SELECT value FROM sys_prefs WHERE name='version_id'
+SELECT name, value FROM sys_prefs
+SELECT `trans_type`,`prefix`,`description`,`default`,`pattern`,`id`,`inactive` FROM reflines WHERE trans_type='2' AND `default`
+SELECT MAX(CAST(SUBSTR(ref, 1,LENGTH(ref)-5) AS UNSIGNED)) FROM `bank_trans` tbl LEFT JOIN voided v ON tbl.`trans_no`=v.id AND v.type='2' WHERE ISNULL(v.id) AND tbl.`type`='2' AND `ref` REGEXP '^[0-9]*/2019$'
+SELECT * FROM fiscal_year WHERE id='2'
+SELECT COUNT(*) FROM bank_accounts
+SELECT * FROM reflines WHERE trans_type='2' AND CHAR_LENGTH(`prefix`) AND LEFT('001/2019', CHAR_LENGTH(`prefix`)) = `prefix` UNION SELECT * FROM reflines WHERE trans_type='2' AND `prefix`=''
+SELECT * FROM reflines WHERE `id`='3'
+SELECT begin FROM fiscal_year WHERE end >= '2019-08-01' AND begin <= '2019-08-01'
+SELECT count(*) FROM reflines WHERE trans_type='2' AND inactive='0'
+SELECT id, bank_account_name, bank_curr_code, inactive FROM bank_accounts ORDER BY bank_account_name
+SELECT bank_curr_code FROM bank_accounts WHERE id='1'
+SELECT chart.account_code, chart.account_name, type.name, chart.inactive, type.id FROM chart_master as chart,chart_types as type LEFT JOIN bank_accounts as acc ON chart.account_code=acc.account_code WHERE acc.account_code IS NULL AND chart.account_type=type.id ORDER BY type.class_id,type.id,account_code
+SELECT id, CONCAT(reference,' ',name) as ref FROM dimensions WHERE (closed=0 AND type_='1') ORDER BY reference
+SELECT bank_curr_code FROM bank_accounts WHERE id='1'
+SELECT name, value FROM sys_prefs
+SELECT value FROM sys_prefs WHERE name='version_id'
+SELECT name, value FROM sys_prefs
+SELECT `trans_type`,`prefix`,`description`,`default`,`pattern`,`id`,`inactive` FROM reflines WHERE trans_type='1' AND `default`
+SELECT MAX(CAST(SUBSTR(ref, 1,LENGTH(ref)-5) AS UNSIGNED)) FROM `bank_trans` tbl LEFT JOIN voided v ON tbl.`trans_no`=v.id AND v.type='1' WHERE ISNULL(v.id) AND tbl.`type`='1' AND `ref` REGEXP '^[0-9]*/2019$'
+SELECT * FROM fiscal_year WHERE id='2'
+SELECT COUNT(*) FROM bank_accounts
+SELECT * FROM reflines WHERE trans_type='1' AND CHAR_LENGTH(`prefix`) AND LEFT('001/2019', CHAR_LENGTH(`prefix`)) = `prefix` UNION SELECT * FROM reflines WHERE trans_type='1' AND `prefix`=''
+SELECT * FROM reflines WHERE `id`='2'
+SELECT begin FROM fiscal_year WHERE end >= '2019-08-01' AND begin <= '2019-08-01'
+SELECT count(*) FROM reflines WHERE trans_type='1' AND inactive='0'
+SELECT id, bank_account_name, bank_curr_code, inactive FROM bank_accounts ORDER BY bank_account_name
+SELECT SUM(amount) FROM bank_trans WHERE bank_act='1' AND trans_date < '2019-08-02'
+SELECT bank_curr_code FROM bank_accounts WHERE id='1'
+SELECT chart.account_code, chart.account_name, type.name, chart.inactive, type.id FROM chart_master as chart,chart_types as type LEFT JOIN bank_accounts as acc ON chart.account_code=acc.account_code WHERE acc.account_code IS NULL AND chart.account_type=type.id ORDER BY type.class_id,type.id,account_code
+SELECT id, CONCAT(reference,' ',name) as ref FROM dimensions WHERE (closed=0 AND type_='1') ORDER BY reference
+SELECT bank_curr_code FROM bank_accounts WHERE id='1'
+SELECT name, value FROM sys_prefs
+SELECT value FROM sys_prefs WHERE name='version_id'
+SELECT name, value FROM sys_prefs
+SELECT COUNT(*) FROM bank_accounts
+SELECT * FROM reflines WHERE trans_type='1' AND CHAR_LENGTH(`prefix`) AND LEFT('001/2019', CHAR_LENGTH(`prefix`)) = `prefix` UNION SELECT * FROM reflines WHERE trans_type='1' AND `prefix`=''
+SELECT count(*) FROM reflines WHERE trans_type='1' AND inactive='0'
+SELECT id, bank_account_name, bank_curr_code, inactive FROM bank_accounts ORDER BY bank_account_name
+SELECT SUM(amount) FROM bank_trans WHERE bank_act='2' AND trans_date < '2019-08-02'
+SELECT bank_curr_code FROM bank_accounts WHERE id='2'
+SELECT chart.account_code, chart.account_name, type.name, chart.inactive, type.id FROM chart_master as chart,chart_types as type LEFT JOIN bank_accounts as acc ON chart.account_code=acc.account_code WHERE acc.account_code IS NULL AND chart.account_type=type.id ORDER BY type.class_id,type.id,account_code
+SELECT id, CONCAT(reference,' ',name) as ref FROM dimensions WHERE (closed=0 AND type_='1') ORDER BY reference
+SELECT bank_curr_code FROM bank_accounts WHERE id='2'
+SELECT name, value FROM sys_prefs
+SELECT value FROM sys_prefs WHERE name='version_id'
+SELECT name, value FROM sys_prefs
+SELECT COUNT(*) FROM bank_accounts
+SELECT * FROM reflines WHERE trans_type='1' AND CHAR_LENGTH(`prefix`) AND LEFT('001/2019', CHAR_LENGTH(`prefix`)) = `prefix` UNION SELECT * FROM reflines WHERE trans_type='1' AND `prefix`=''
+SELECT count(*) FROM reflines WHERE trans_type='1' AND inactive='0'
+SELECT id, bank_account_name, bank_curr_code, inactive FROM bank_accounts ORDER BY bank_account_name
+SELECT SUM(amount) FROM bank_trans WHERE bank_act='1' AND trans_date < '2019-08-02'
+SELECT bank_curr_code FROM bank_accounts WHERE id='1'
+SELECT chart.account_code, chart.account_name, type.name, chart.inactive, type.id FROM chart_master as chart,chart_types as type LEFT JOIN bank_accounts as acc ON chart.account_code=acc.account_code WHERE acc.account_code IS NULL AND chart.account_type=type.id ORDER BY type.class_id,type.id,account_code
+SELECT id, CONCAT(reference,' ',name) as ref FROM dimensions WHERE (closed=0 AND type_='1') ORDER BY reference
+SELECT bank_curr_code FROM bank_accounts WHERE id='1'
+SELECT name, value FROM sys_prefs
+SELECT value FROM sys_prefs WHERE name='version_id'
+SELECT name, value FROM sys_prefs
+SELECT COUNT(*) FROM bank_accounts
+SELECT * FROM reflines WHERE trans_type='1' AND CHAR_LENGTH(`prefix`) AND LEFT('001/2019', CHAR_LENGTH(`prefix`)) = `prefix` UNION SELECT * FROM reflines WHERE trans_type='1' AND `prefix`=''
+SELECT count(*) FROM reflines WHERE trans_type='1' AND inactive='0'
+SELECT id, bank_account_name, bank_curr_code, inactive FROM bank_accounts ORDER BY bank_account_name
+SELECT SUM(amount) FROM bank_trans WHERE bank_act='2' AND trans_date < '2019-08-02'
+SELECT bank_curr_code FROM bank_accounts WHERE id='2'
+SELECT chart.account_code, chart.account_name, type.name, chart.inactive, type.id FROM chart_master as chart,chart_types as type LEFT JOIN bank_accounts as acc ON chart.account_code=acc.account_code WHERE acc.account_code IS NULL AND chart.account_type=type.id ORDER BY type.class_id,type.id,account_code
+SELECT id, CONCAT(reference,' ',name) as ref FROM dimensions WHERE (closed=0 AND type_='1') ORDER BY reference
+SELECT bank_curr_code FROM bank_accounts WHERE id='2'
+SELECT name, value FROM sys_prefs
+SELECT value FROM sys_prefs WHERE name='version_id'
+SELECT name, value FROM sys_prefs
+SELECT COUNT(*) FROM bank_accounts
+SELECT account_name from chart_master WHERE account_code='1200'
+SELECT 1 FROM cust_branch WHERE receivables_account='1200' UNION SELECT -1 FROM suppliers WHERE payable_account='1200'
+SELECT debtor_ref as name, branch_code as id FROM cust_branch branch LEFT JOIN debtors_master d ON branch.debtor_no = d.debtor_no WHERE branch.receivables_account='1200' AND d.debtor_no='' UNION SELECT supp_ref as name, '' as id FROM suppliers supp WHERE supplier_id='0' AND payable_account='1200'
+SELECT * FROM reflines WHERE trans_type='1' AND CHAR_LENGTH(`prefix`) AND LEFT('001/2019', CHAR_LENGTH(`prefix`)) = `prefix` UNION SELECT * FROM reflines WHERE trans_type='1' AND `prefix`=''
+SELECT count(*) FROM reflines WHERE trans_type='1' AND inactive='0'
+SELECT id, bank_account_name, bank_curr_code, inactive FROM bank_accounts ORDER BY bank_account_name
+SELECT SUM(amount) FROM bank_trans WHERE bank_act='2' AND trans_date < '2019-08-02'
+SELECT bank_curr_code FROM bank_accounts WHERE id='2'
+SELECT * FROM dimensions WHERE id='1'
+SELECT chart.account_code, chart.account_name, type.name, chart.inactive, type.id FROM chart_master as chart,chart_types as type LEFT JOIN bank_accounts as acc ON chart.account_code=acc.account_code WHERE acc.account_code IS NULL AND chart.account_type=type.id ORDER BY type.class_id,type.id,account_code
+SELECT id, CONCAT(reference,' ',name) as ref FROM dimensions WHERE (closed=0 AND type_='1') ORDER BY reference
+SELECT bank_curr_code FROM bank_accounts WHERE id='2'
+SELECT name, value FROM sys_prefs
+SELECT value FROM sys_prefs WHERE name='version_id'
+SELECT name, value FROM sys_prefs
+SELECT COUNT(*) FROM bank_accounts
+SELECT * FROM bank_accounts WHERE id='2'
+SELECT SUM(amount) FROM bank_trans WHERE bank_act='2' AND trans_date < '2019-08-02'
+SELECT * FROM bank_accounts WHERE id='2'
+SELECT SUM(amount) FROM bank_trans WHERE bank_act='2' AND trans_date < '2019-08-02'
+SELECT sum(amount) as amount, trans_date, trans_no, type FROM bank_trans WHERE bank_act='2' AND trans_date > '2019-08-01' GROUP BY trans_date ORDER BY trans_date ASC
+SELECT * FROM reflines WHERE trans_type='1' AND CHAR_LENGTH(`prefix`) AND LEFT('001/2019', CHAR_LENGTH(`prefix`)) = `prefix` UNION SELECT * FROM reflines WHERE trans_type='1' AND `prefix`=''
+SELECT * FROM reflines WHERE `id`='2'
+SELECT `ref` FROM `bank_trans` tbl LEFT JOIN voided v ON tbl.`trans_no`=v.id AND v.type='1' WHERE ISNULL(v.id) AND tbl.`type`='1' AND tbl.`ref`='001/2019'
+SELECT * FROM fiscal_year WHERE id='2'
+SELECT bank_curr_code FROM bank_accounts WHERE id='2'
+BEGIN
+SELECT bank_curr_code FROM bank_accounts WHERE id='2'
+SELECT bank_curr_code FROM bank_accounts WHERE id='2'
+SELECT account_code FROM bank_accounts WHERE id='2'
+SELECT max(last_no) last_no FROM (SELECT MAX(`trans_no`) as last_no FROM bank_trans WHERE `type`='1' UNION SELECT MAX(`id`) as last_no FROM voided WHERE `type`='1') a
+SELECT max(last_no) last_no FROM (SELECT MAX(`trans_no`) as last_no FROM journal WHERE `type`='0' UNION SELECT MAX(`id`) as last_no FROM voided WHERE `type`='0') a
+SELECT bank_curr_code FROM bank_accounts WHERE id='2'
+INSERT INTO bank_trans (type, trans_no, bank_act, ref, trans_date, amount, person_type_id, person_id) VALUES (1, 2, '2', '001/2019', '2019-08-01', '-565', '0', '')
+SELECT id FROM bank_accounts WHERE account_code='1200'
+SELECT 1 FROM cust_branch WHERE receivables_account='1200' UNION SELECT -1 FROM suppliers WHERE payable_account='1200'
+INSERT INTO gl_trans ( type, type_no, tran_date, account, dimension_id, dimension2_id, memo_, amount, person_type_id, person_id) VALUES ('1', '2', '2019-08-01', '1200', '1', '0', '', '565', '0', '')
+SELECT id FROM tax_types WHERE sales_gl_code='1200' OR purchasing_gl_code='1200'
+SELECT 1 FROM cust_branch WHERE receivables_account='1065' UNION SELECT -1 FROM suppliers WHERE payable_account='1065'
+INSERT INTO gl_trans ( type, type_no, tran_date, account, dimension_id, dimension2_id, memo_, amount) VALUES ('1', '2', '2019-08-01', '1065', '0', '0', '', '-565')
+SELECT * FROM reflines WHERE trans_type='1' AND CHAR_LENGTH(`prefix`) AND LEFT('001/2019', CHAR_LENGTH(`prefix`)) = `prefix` UNION SELECT * FROM reflines WHERE trans_type='1' AND `prefix`=''
+SELECT * FROM reflines WHERE `id`='2'
+INSERT INTO audit_trail (type, trans_no, user, gl_date, description, stamp) VALUES ('1', '2',1,'2019-08-01','', CURRENT_TIMESTAMP)
+UPDATE audit_trail SET audit_trail.gl_seq = 0, audit_trail.fiscal_year=(SELECT fiscal_year.id FROM fiscal_year WHERE fiscal_year.begin<='2019-08-01' AND fiscal_year.end>='2019-08-01') WHERE audit_trail.type = '1' AND audit_trail.trans_no='2'
+COMMIT
+SELECT name, value FROM sys_prefs
+SELECT value FROM sys_prefs WHERE name='version_id'
+SELECT name, value FROM sys_prefs
+SELECT COUNT(*) FROM bank_accounts
+SELECT name, value FROM sys_prefs
+SELECT value FROM sys_prefs WHERE name='version_id'
+SELECT name, value FROM sys_prefs
+SELECT name, value FROM sys_prefs
+SELECT value FROM sys_prefs WHERE name='version_id'
+SELECT name, value FROM sys_prefs
+SELECT name, value FROM sys_prefs
+SELECT value FROM sys_prefs WHERE name='version_id'
+SELECT name, value FROM sys_prefs
+SELECT name, value FROM sys_prefs
+SELECT value FROM sys_prefs WHERE name='version_id'
+SELECT name, value FROM sys_prefs
+SELECT * FROM fiscal_year WHERE id='2'
+SELECT * FROM chart_class WHERE inactive='0' ORDER BY ctype, cid
+SELECT * FROM chart_types WHERE inactive='0' AND class_id='1' AND (parent = '' OR parent = '-1') ORDER BY class_id, id, parent
+SELECT coa.*, act_type.name AS AccountTypeName FROM chart_master coa,chart_types act_type WHERE coa.account_type=act_type.id AND account_type='1' ORDER BY account_code
+SELECT * FROM chart_types WHERE inactive='0' AND parent='1' ORDER BY class_id, id, parent
+SELECT coa.*, act_type.name AS AccountTypeName FROM chart_master coa,chart_types act_type WHERE coa.account_type=act_type.id AND account_type='2' ORDER BY account_code
+SELECT * FROM chart_types WHERE inactive='0' AND parent='2' ORDER BY class_id, id, parent
+SELECT coa.*, act_type.name AS AccountTypeName FROM chart_master coa,chart_types act_type WHERE coa.account_type=act_type.id AND account_type='3' ORDER BY account_code
+SELECT * FROM chart_types WHERE inactive='0' AND parent='3' ORDER BY class_id, id, parent
+SELECT * FROM chart_types WHERE inactive='0' AND class_id='2' AND (parent = '' OR parent = '-1') ORDER BY class_id, id, parent
+SELECT coa.*, act_type.name AS AccountTypeName FROM chart_master coa,chart_types act_type WHERE coa.account_type=act_type.id AND account_type='4' ORDER BY account_code
+SELECT * FROM chart_types WHERE inactive='0' AND parent='4' ORDER BY class_id, id, parent
+SELECT coa.*, act_type.name AS AccountTypeName FROM chart_master coa,chart_types act_type WHERE coa.account_type=act_type.id AND account_type='5' ORDER BY account_code
+SELECT * FROM chart_types WHERE inactive='0' AND parent='5' ORDER BY class_id, id, parent
+SELECT coa.*, act_type.name AS AccountTypeName FROM chart_master coa,chart_types act_type WHERE coa.account_type=act_type.id AND account_type='6' ORDER BY account_code
+SELECT * FROM chart_types WHERE inactive='0' AND parent='6' ORDER BY class_id, id, parent
+SELECT coa.*, act_type.name AS AccountTypeName FROM chart_master coa,chart_types act_type WHERE coa.account_type=act_type.id AND account_type='7' ORDER BY account_code
+SELECT * FROM chart_types WHERE inactive='0' AND parent='7' ORDER BY class_id, id, parent
+SELECT * FROM chart_types WHERE inactive='0' AND class_id='3' AND (parent = '' OR parent = '-1') ORDER BY class_id, id, parent
+SELECT coa.*, act_type.name AS AccountTypeName FROM chart_master coa,chart_types act_type WHERE coa.account_type=act_type.id AND account_type='8' ORDER BY account_code
+SELECT * FROM chart_types WHERE inactive='0' AND parent='8' ORDER BY class_id, id, parent
+SELECT coa.*, act_type.name AS AccountTypeName FROM chart_master coa,chart_types act_type WHERE coa.account_type=act_type.id AND account_type='9' ORDER BY account_code
+SELECT * FROM chart_types WHERE inactive='0' AND parent='9' ORDER BY class_id, id, parent
+SELECT * FROM chart_types WHERE inactive='0' AND class_id='4' AND (parent = '' OR parent = '-1') ORDER BY class_id, id, parent
+SELECT coa.*, act_type.name AS AccountTypeName FROM chart_master coa,chart_types act_type WHERE coa.account_type=act_type.id AND account_type='10' ORDER BY account_code
+SELECT * FROM chart_types WHERE inactive='0' AND parent='10' ORDER BY class_id, id, parent
+SELECT coa.*, act_type.name AS AccountTypeName FROM chart_master coa,chart_types act_type WHERE coa.account_type=act_type.id AND account_type='11' ORDER BY account_code
+SELECT * FROM chart_types WHERE inactive='0' AND parent='11' ORDER BY class_id, id, parent
+SELECT coa.*, act_type.name AS AccountTypeName FROM chart_master coa,chart_types act_type WHERE coa.account_type=act_type.id AND account_type='12' ORDER BY account_code
+SELECT * FROM chart_types WHERE inactive='0' AND parent='12' ORDER BY class_id, id, parent
+SELECT printer FROM print_profiles WHERE profile='1' AND report='701'
+SELECT printer FROM print_profiles WHERE profile='1' AND report=''
+SELECT name, value FROM sys_prefs
+SELECT value FROM sys_prefs WHERE name='version_id'
+SELECT name, value FROM sys_prefs
+SELECT name, value FROM sys_prefs
+SELECT value FROM sys_prefs WHERE name='version_id'
+SELECT name, value FROM sys_prefs
+SELECT name, value FROM sys_prefs
+SELECT value FROM sys_prefs WHERE name='version_id'
+SELECT name, value FROM sys_prefs
+SELECT name, value FROM sys_prefs
+SELECT value FROM sys_prefs WHERE name='version_id'
+SELECT name, value FROM sys_prefs
+SELECT `trans_type`,`prefix`,`description`,`default`,`pattern`,`id`,`inactive` FROM reflines WHERE trans_type='2' AND `default`
+SELECT MAX(CAST(SUBSTR(ref, 1,LENGTH(ref)-5) AS UNSIGNED)) FROM `bank_trans` tbl LEFT JOIN voided v ON tbl.`trans_no`=v.id AND v.type='2' WHERE ISNULL(v.id) AND tbl.`type`='2' AND `ref` REGEXP '^[0-9]*/2019$'
+SELECT * FROM fiscal_year WHERE id='2'
+SELECT COUNT(*) FROM bank_accounts
+SELECT * FROM reflines WHERE trans_type='2' AND CHAR_LENGTH(`prefix`) AND LEFT('001/2019', CHAR_LENGTH(`prefix`)) = `prefix` UNION SELECT * FROM reflines WHERE trans_type='2' AND `prefix`=''
+SELECT * FROM reflines WHERE `id`='3'
+SELECT begin FROM fiscal_year WHERE end >= '2019-08-01' AND begin <= '2019-08-01'
+SELECT count(*) FROM reflines WHERE trans_type='2' AND inactive='0'
+SELECT id, bank_account_name, bank_curr_code, inactive FROM bank_accounts ORDER BY bank_account_name
+SELECT bank_curr_code FROM bank_accounts WHERE id='1'
+SELECT chart.account_code, chart.account_name, type.name, chart.inactive, type.id FROM chart_master as chart,chart_types as type LEFT JOIN bank_accounts as acc ON chart.account_code=acc.account_code WHERE acc.account_code IS NULL AND chart.account_type=type.id ORDER BY type.class_id,type.id,account_code
+SELECT id, CONCAT(reference,' ',name) as ref FROM dimensions WHERE (closed=0 AND type_='1') ORDER BY reference
+SELECT bank_curr_code FROM bank_accounts WHERE id='1'
+SELECT name, value FROM sys_prefs
+SELECT value FROM sys_prefs WHERE name='version_id'
+SELECT name, value FROM sys_prefs
+SELECT COUNT(*) FROM bank_accounts
+SELECT * FROM reflines WHERE trans_type='2' AND CHAR_LENGTH(`prefix`) AND LEFT('001/2019', CHAR_LENGTH(`prefix`)) = `prefix` UNION SELECT * FROM reflines WHERE trans_type='2' AND `prefix`=''
+SELECT count(*) FROM reflines WHERE trans_type='2' AND inactive='0'
+SELECT id, bank_account_name, bank_curr_code, inactive FROM bank_accounts ORDER BY bank_account_name
+SELECT bank_curr_code FROM bank_accounts WHERE id='2'
+SELECT chart.account_code, chart.account_name, type.name, chart.inactive, type.id FROM chart_master as chart,chart_types as type LEFT JOIN bank_accounts as acc ON chart.account_code=acc.account_code WHERE acc.account_code IS NULL AND chart.account_type=type.id ORDER BY type.class_id,type.id,account_code
+SELECT id, CONCAT(reference,' ',name) as ref FROM dimensions WHERE (closed=0 AND type_='1') ORDER BY reference
+SELECT bank_curr_code FROM bank_accounts WHERE id='2'
+SELECT name, value FROM sys_prefs
+SELECT value FROM sys_prefs WHERE name='version_id'
+SELECT name, value FROM sys_prefs
+SELECT COUNT(*) FROM bank_accounts
+SELECT * FROM reflines WHERE trans_type='2' AND CHAR_LENGTH(`prefix`) AND LEFT('001/2019', CHAR_LENGTH(`prefix`)) = `prefix` UNION SELECT * FROM reflines WHERE trans_type='2' AND `prefix`=''
+SELECT count(*) FROM reflines WHERE trans_type='2' AND inactive='0'
+SELECT id, bank_account_name, bank_curr_code, inactive FROM bank_accounts ORDER BY bank_account_name
+SELECT bank_curr_code FROM bank_accounts WHERE id='1'
+SELECT chart.account_code, chart.account_name, type.name, chart.inactive, type.id FROM chart_master as chart,chart_types as type LEFT JOIN bank_accounts as acc ON chart.account_code=acc.account_code WHERE acc.account_code IS NULL AND chart.account_type=type.id ORDER BY type.class_id,type.id,account_code
+SELECT id, CONCAT(reference,' ',name) as ref FROM dimensions WHERE (closed=0 AND type_='1') ORDER BY reference
+SELECT bank_curr_code FROM bank_accounts WHERE id='1'
+SELECT name, value FROM sys_prefs
+SELECT value FROM sys_prefs WHERE name='version_id'
+SELECT name, value FROM sys_prefs
+SELECT COUNT(*) FROM bank_accounts
+SELECT account_name from chart_master WHERE account_code='1200'
+SELECT 1 FROM cust_branch WHERE receivables_account='1200' UNION SELECT -1 FROM suppliers WHERE payable_account='1200'
+SELECT debtor_ref as name, branch_code as id FROM cust_branch branch LEFT JOIN debtors_master d ON branch.debtor_no = d.debtor_no WHERE branch.receivables_account='1200' AND d.debtor_no='' UNION SELECT supp_ref as name, '' as id FROM suppliers supp WHERE supplier_id='0' AND payable_account='1200'
+SELECT * FROM reflines WHERE trans_type='2' AND CHAR_LENGTH(`prefix`) AND LEFT('001/2019', CHAR_LENGTH(`prefix`)) = `prefix` UNION SELECT * FROM reflines WHERE trans_type='2' AND `prefix`=''
+SELECT count(*) FROM reflines WHERE trans_type='2' AND inactive='0'
+SELECT id, bank_account_name, bank_curr_code, inactive FROM bank_accounts ORDER BY bank_account_name
+SELECT bank_curr_code FROM bank_accounts WHERE id='1'
+SELECT chart.account_code, chart.account_name, type.name, chart.inactive, type.id FROM chart_master as chart,chart_types as type LEFT JOIN bank_accounts as acc ON chart.account_code=acc.account_code WHERE acc.account_code IS NULL AND chart.account_type=type.id ORDER BY type.class_id,type.id,account_code
+SELECT id, CONCAT(reference,' ',name) as ref FROM dimensions WHERE (closed=0 AND type_='1') ORDER BY reference
+SELECT bank_curr_code FROM bank_accounts WHERE id='1'
+SELECT name, value FROM sys_prefs
+SELECT value FROM sys_prefs WHERE name='version_id'
+SELECT name, value FROM sys_prefs
+SELECT COUNT(*) FROM bank_accounts
+SELECT * FROM bank_accounts WHERE id='1'
+SELECT * FROM reflines WHERE trans_type='2' AND CHAR_LENGTH(`prefix`) AND LEFT('001/2019', CHAR_LENGTH(`prefix`)) = `prefix` UNION SELECT * FROM reflines WHERE trans_type='2' AND `prefix`=''
+SELECT * FROM reflines WHERE `id`='3'
+SELECT `ref` FROM `bank_trans` tbl LEFT JOIN voided v ON tbl.`trans_no`=v.id AND v.type='2' WHERE ISNULL(v.id) AND tbl.`type`='2' AND tbl.`ref`='001/2019'
+SELECT * FROM fiscal_year WHERE id='2'
+SELECT bank_curr_code FROM bank_accounts WHERE id='1'
+BEGIN
+SELECT bank_curr_code FROM bank_accounts WHERE id='1'
+SELECT bank_curr_code FROM bank_accounts WHERE id='1'
+SELECT account_code FROM bank_accounts WHERE id='1'
+SELECT max(last_no) last_no FROM (SELECT MAX(`trans_no`) as last_no FROM bank_trans WHERE `type`='2' UNION SELECT MAX(`id`) as last_no FROM voided WHERE `type`='2') a
+SELECT max(last_no) last_no FROM (SELECT MAX(`trans_no`) as last_no FROM journal WHERE `type`='0' UNION SELECT MAX(`id`) as last_no FROM voided WHERE `type`='0') a
+SELECT bank_curr_code FROM bank_accounts WHERE id='1'
+INSERT INTO bank_trans (type, trans_no, bank_act, ref, trans_date, amount, person_type_id, person_id) VALUES (2, 1, '1', '001/2019', '2019-08-01', '2342', '0', '')
+SELECT id FROM bank_accounts WHERE account_code='1200'
+SELECT 1 FROM cust_branch WHERE receivables_account='1200' UNION SELECT -1 FROM suppliers WHERE payable_account='1200'
+INSERT INTO gl_trans ( type, type_no, tran_date, account, dimension_id, dimension2_id, memo_, amount, person_type_id, person_id) VALUES ('2', '1', '2019-08-01', '1200', '0', '0', '', '-2342', '0', '')
+SELECT id FROM tax_types WHERE sales_gl_code='1200' OR purchasing_gl_code='1200'
+SELECT 1 FROM cust_branch WHERE receivables_account='1060' UNION SELECT -1 FROM suppliers WHERE payable_account='1060'
+INSERT INTO gl_trans ( type, type_no, tran_date, account, dimension_id, dimension2_id, memo_, amount) VALUES ('2', '1', '2019-08-01', '1060', '0', '0', '', '2342')
+SELECT * FROM reflines WHERE trans_type='2' AND CHAR_LENGTH(`prefix`) AND LEFT('001/2019', CHAR_LENGTH(`prefix`)) = `prefix` UNION SELECT * FROM reflines WHERE trans_type='2' AND `prefix`=''
+SELECT * FROM reflines WHERE `id`='3'
+INSERT INTO audit_trail (type, trans_no, user, gl_date, description, stamp) VALUES ('2', '1',1,'2019-08-01','', CURRENT_TIMESTAMP)
+UPDATE audit_trail SET audit_trail.gl_seq = 0, audit_trail.fiscal_year=(SELECT fiscal_year.id FROM fiscal_year WHERE fiscal_year.begin<='2019-08-01' AND fiscal_year.end>='2019-08-01') WHERE audit_trail.type = '2' AND audit_trail.trans_no='1'
+COMMIT
+SELECT name, value FROM sys_prefs
+SELECT value FROM sys_prefs WHERE name='version_id'
+SELECT name, value FROM sys_prefs
+SELECT COUNT(*) FROM bank_accounts
+SELECT name, value FROM sys_prefs
+SELECT value FROM sys_prefs WHERE name='version_id'
+SELECT name, value FROM sys_prefs
+SELECT gl.*, cm.account_name, IFNULL(refs.reference, '') AS reference, user.real_name, COALESCE(st.tran_date, dt.tran_date, bt.trans_date, grn.delivery_date, gl.tran_date) as doc_date, IF(ISNULL(st.supp_reference), '', st.supp_reference) AS supp_reference FROM gl_trans as gl LEFT JOIN chart_master as cm ON gl.account = cm.account_code LEFT JOIN refs as refs ON (gl.type=refs.type AND gl.type_no=refs.id) LEFT JOIN audit_trail as audit ON (gl.type=audit.type AND gl.type_no=audit.trans_no AND NOT ISNULL(gl_seq)) LEFT JOIN users as user ON (audit.user=user.id) LEFT JOIN supp_trans st ON gl.type_no=st.trans_no AND st.type=gl.type AND (gl.type!=0 OR gl.person_id=st.supplier_id) LEFT JOIN grn_batch grn ON grn.id=gl.type_no AND gl.type=25 AND gl.person_id=grn.supplier_id LEFT JOIN debtor_trans dt ON gl.type_no=dt.trans_no AND dt.type=gl.type AND (gl.type!=0 OR gl.person_id=dt.debtor_no) LEFT JOIN bank_trans bt ON bt.type=gl.type AND bt.trans_no=gl.type_no AND bt.amount!=0 AND bt.person_type_id=gl.person_type_id AND bt.person_id=gl.person_id LEFT JOIN journal j ON j.type=gl.type AND j.trans_no=gl.type_no WHERE gl.type= '2' AND gl.type_no = '1' AND gl.amount <> 0 ORDER BY tran_date, counter
+SELECT trans.debtor_no as person_id, debtor.name as name FROM debtor_trans trans, debtors_master debtor WHERE trans_no='1' AND type='2' AND trans.debtor_no=debtor.debtor_no UNION SELECT trans.supplier_id as person_id, supp.supp_name as name FROM supp_trans trans, suppliers supp WHERE trans_no='1' AND type='2' AND trans.supplier_id=supp.supplier_id
+SELECT * FROM comments WHERE type='2' AND id='1'
+SELECT debtor_ref as ref FROM cust_branch branch LEFT JOIN debtors_master d ON branch.debtor_no = d.debtor_no WHERE branch.receivables_account='1200' AND d.debtor_no='' UNION SELECT supp_ref as ref FROM suppliers supp WHERE payable_account='1200' AND supplier_id='0'
+SELECT debtor_ref as ref FROM cust_branch branch LEFT JOIN debtors_master d ON branch.debtor_no = d.debtor_no WHERE branch.receivables_account='1060' AND d.debtor_no='' UNION SELECT supp_ref as ref FROM suppliers supp WHERE payable_account='1060' AND supplier_id='0'
+SELECT * FROM voided WHERE type='2' AND id='1'
+SELECT DISTINCT * FROM attachments WHERE type_no='2' AND trans_no='1'
+SELECT * FROM attachments WHERE type_no='2' AND trans_no='1' ORDER BY trans_no
+SELECT name, value FROM sys_prefs
+SELECT value FROM sys_prefs WHERE name='version_id'
+SELECT name, value FROM sys_prefs
+This A_Const has no column ref.
+No column refs in this expression(A_Const =/</> A_Const).
+
+No column refs in this expression(A_Const =/</> A_Const).
+
+This list has no column ref.
+This A_Const has no column ref.
+This A_Const has no column ref.
+This list has no column ref.
+This A_Const has no column ref.
+This A_Const has no column ref.
+This list has no column ref.
+This A_Const has no column ref.
+This A_Const has no column ref.
+This list has no column ref.
+No column refs in this expression(A_Const =/</> A_Const).
+
+No column refs in this expression(A_Const =/</> A_Const).
+
+No column refs in this expression(A_Const =/</> A_Const).
+
+No column refs in this expression(A_Const =/</> A_Const).
+
+This list has no column ref.
+This A_Const has no column ref.
+This A_Const has no column ref.
+This list has no column ref.
+This A_Const has no column ref.
+This A_Const has no column ref.
+This list has no column ref.
+This A_Const has no column ref.
+This A_Const has no column ref.
+This list has no column ref.
+Traceback (most recent call last):
+  File "/home/drew/isodiffgui/guiserver/jobs/7ccfb94f8a395f6a/pglast_sqlparser.py", line 1933, in <module>
+    parseResult = generateOpsList(txnlist, dbSchema)
+  File "/home/drew/isodiffgui/guiserver/jobs/7ccfb94f8a395f6a/pglast_sqlparser.py", line 1597, in generateOpsList
+    root = Node(parse_sql(stmt))
+  File "pglast/parser.pyx", line 84, in pglast.parser.parse_sql
+pglast.parser.ParseError: syntax error at or near "end", at location 37

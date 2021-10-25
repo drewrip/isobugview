@@ -15,11 +15,17 @@
 
 		<!-- Feather icons CSS -->
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+
+		<!-- Syntax Highlighting CSS -->
+		<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/styles/default.min.css">
 		
 		<title>IsoDiff</title>
 	</head>
 	<body>
 
+		<!-- Syntax Highlighting JS -->
+		<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/highlight.min.js"></script>
+		
 		<!-- Boostrap JS and Popper plugin-->
 		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
@@ -44,7 +50,7 @@
 
 				<main class="col offset-3">
 					<div class="d-flex justify-content-center flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-						<h1 class="h2">{{job.key}}</h1>
+						<h1 class="h2" contentEditable="true" id="session_title">{{job.key}}</h1>
 					</div>
 					<div id="graph_area"></div>
 					<div id="sql_area" style="visibility: hidden;">
@@ -59,7 +65,9 @@
 <script src="{% static '/parser.js'%}"></script>
 <script>
  let job_id = "{{job.key}}";
- let current_state = JSON.parse(`{% autoescape off %}{{job.state}}{% endautoescape %}`);
+ let session_name = "IsoDiff Analysis";
+ 
+ let current_state = {% autoescape off %}{{job.state}}{% endautoescape %};
  let incoming_json = {% autoescape off %}{{job.result}}{% endautoescape %};
 
  let SQLJSON = incoming_json.SQL_Examples;
@@ -92,7 +100,9 @@
 
  
  function visualize(log){
-
+	 // Ensure the edits made with past graphs are saved
+	 updateState()
+	 
      // Remove any existing graph
      let curr_graphs = document.getElementsByTagName("svg");
      for(let i = 0; i < curr_graphs.length; i++){
@@ -121,7 +131,6 @@
 	 
      let adj_list = genGraph(log);
      let g = getGraphLayout(adj_list, edge_attrs);
-
      var svg = d3.select("#graph_area")
 				 .append("svg")
 				 .attr("height", "60vh")
@@ -172,10 +181,7 @@
      let transactions = svg.selectAll(".txn_label")
 						   .data(g.txns)
 						   .enter()
-						   .append("text")
-						   .text(function(d){
-							   return d.txn;
-						   })
+						   .append("foreignObject")
 						   .attr("class", "txn_label")
 						   .attr("x", function(d){
 							   return d.x;
@@ -183,24 +189,41 @@
 						   .attr("y", function(d){
 							   return d.y;
 						   })
-	 					   .on("click", function(d, i){	   
-							   d3.select("#el"+i).attr("visibility", "visible");
-
-							   d3.select("p").attr("visibility", "visible");
-
-							   document.getElementById("sql_area").style.visibility = "visible";
-
-							   let statement_list = txn_sql_map.get(d.txn);
-							   
-							   let detail_box = "<b>Statements for " + d.txn + "</b>: <br><br>";
-
-							   for(let i = 0; i < statement_list.length; i++){
-								   detail_box += "<b>" + statement_list[i].index + "</b>: " + statement_list[i].statement + "<br><br>";
+						   .attr("width", y_axis_graph_padding)
+						   .attr("height", "100%")
+						   .append("xhtml:div")
+						   .append("div")
+						   .attr("contentEditable", true)
+						   .attr("id", function(d){
+							   let pair = d.txn.slice(1,-1).split(",");
+							   return "txn"+pair[0]+"_"+pair[1];
+						   })
+	 					   .text(function(d){
+							   if(current_state.txn_names.hasOwnProperty(d.txn)){
+								   return current_state.txn_names[d.txn];
+							   } else {
+								   return d.txn;
 							   }
-							   
-							   document.getElementById("sql_area").innerHTML = detail_box;
 						   });
+	 /*
+	 	.on("click", function(d, i){	   
+		d3.select("#el"+i).attr("visibility", "visible");
 
+		d3.select("p").attr("visibility", "visible");
+
+		document.getElementById("sql_area").style.visibility = "visible";
+
+		let statement_list = txn_sql_map.get(d.txn);
+		
+		let detail_box = "<b>Statements for " + d.txn + "</b>: <br><br>";
+
+		for(let i = 0; i < statement_list.length; i++){
+		detail_box += "<b>" + statement_list[i].index + "</b>: " + statement_list[i].statement + "<br><br>";
+		}
+		
+		document.getElementById("sql_area").innerHTML = detail_box;
+		});
+	  */
      var link = svg.selectAll("line")
 				   .data(g.links)
 				   .enter()
@@ -251,13 +274,13 @@
 							   return "orange";
 						   }
 					   })
-					   .attr("marker-end", function(d){
-						   if(d.attrs.includes("original")){
-							   return "url(#arrow-black)";
-						   } else if(d.attrs.includes("correlated")){
-							   return "url(#arrow-orange)";
-						   }
-					   });
+						 .attr("marker-end", function(d){
+							 if(d.attrs.includes("original")){
+								 return "url(#arrow-black)";
+							 } else if(d.attrs.includes("correlated")){
+								 return "url(#arrow-orange)";
+							 }
+						 });
 
 					   // Needed to ensure all nodes return to original color
 					   d3.selectAll("rect").attr("stroke", "black")
@@ -389,23 +412,26 @@
  
  let DeltaCycles = incoming_json.DeltaCycles;
 
+ // Maps for state information
  let cycleFavs = new Map();
  let cycleTags = new Map();
+ let cycleNames = new Map();
  
  // Get a reference to the table
  let txnHTMLList = document.getElementById("txnList");
 
 
-
-
  function addTag(index){
-	 let liElement = "l"+index;
-	 let listElement = document.getElementById(liElement);
-	 let tagText = document.createElement("i");
-	 tagText.setAttribute("contenteditable", "true");
-	 tagText.innerHTML = "click to add edit tag...";
-	 listElement.appendChild(tagText);
-	 cycleTags.set(index, true);
+	 if(!cycleTags.has(index)){
+		 let liElement = "l"+index;
+		 let listElement = document.getElementById(liElement);
+		 let tagText = document.createElement("i");
+		 tagText.setAttribute("contenteditable", "true");
+		 tagText.setAttribute("id", "t"+index);
+		 tagText.innerHTML = "click to add edit tag...";
+		 listElement.appendChild(tagText);
+		 cycleTags.set(index, true);
+	 }
  }
 
  // This function toggles the favoriting of a cycle
@@ -419,7 +445,6 @@
 		 document.getElementById("fav"+index).setAttribute("class", "bi bi-star-fill");
 		 updateState();
 	 }
-	 
 	 
  }
 
@@ -483,25 +508,60 @@
 
 	 listElement.appendChild(textElement);
 	 txnHTMLList.appendChild(listElement);
-	 
+
  }
 
-  for(let i = 0; i < current_state.favorites.length; i++){
-	  favoriteCycle(current_state.favorites[i])
-  }
+ // Setting initial session name
+ document.getElementById("session_title").innerHTML = current_state.session_name;
+ 
+ // Setting initial favorites
+ for(let i = 0; i < current_state.favorites.length; i++){
+	 favoriteCycle(current_state.favorites[i])
+ }
+
+ // Setting initial tags
+ for(let i = 0; i < current_state.tags.length; i++){
+	 let index = current_state.tags[i].index;
+	 addTag(index);
+	 document.getElementById("t"+index).innerHTML = current_state.tags[i].content;
+ }
 
  function updateState(){
-	 let state = {
-		 "favorites": [],
-		 "tags": [],
-		 "txn_names": []
+
+	 // Updating session name
+	 session_name = document.getElementById("session_title").innerHTML;
+	 console.log(session_name);
+	 // Updating list of favorites
+	 let favorites = [...cycleFavs.entries()].map(x => x[0]);
+
+	 // Updating tags for cycles
+	 let tags = [];
+	 for(let i = 0; i < DeltaCycles.length; i++){
+		 let corr_tag = document.getElementById("t"+i);
+		 if(corr_tag != null){
+			 tags.push({"index": i, "content": corr_tag.innerHTML});
+		 }
 	 }
 
-	 let favorites = [...cycleFavs.entries()].map(x => x[0])
-	 console.log(favorites);
+	 // Updating txn names
+	 let new_txn_names = {};
+	 for(let i = 0; i < incoming_json.TransactionSqlMap.length; i++){
+		 let txn = incoming_json.TransactionSqlMap[i];
+		 let txn_elem = document.getElementById("txn"+txn.tid.txn_major+"_"+txn.tid.txn_minor);
+		 if(txn_elem != null){
+			 new_txn_names["("+txn.tid.txn_major+","+txn.tid.txn_minor+")"] = txn_elem.innerHTML;
+		 }
+	 }
+	 
+	 let state = {
+		 "session_name": session_name,
+		 "favorites": favorites,
+		 "tags": tags,
+		 "txn_names": new_txn_names,
+		 "cycle_names": []
+	 }
 
-	 state.favorites = favorites;
-
+	 
 	 postData("/update/"+job_id, data = state);
  }
 
@@ -522,8 +582,11 @@
 	 });
 
 	 return response.json();
+
  }
- 
+
+ // Save state every 5 seconds
+ window.setInterval(updateState, 5000);
 </script>
 
 {% endif %}
