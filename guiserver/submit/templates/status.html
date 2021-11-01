@@ -50,7 +50,7 @@
 
 				<main class="col offset-3">
 					<div class="d-flex justify-content-center flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-						<h1 class="h2" contentEditable="true" id="session_title">{{job.key}}</h1>
+						<h1 class="h2" contentEditable="true" id="session_title">IsoDiff Analysis</h1>
 					</div>
 					<div id="graph_area"></div>
 					<div id="sql_area" style="visibility: hidden;">
@@ -100,6 +100,7 @@
 
  
  function visualize(log){
+
 	 // Ensure the edits made with past graphs are saved
 	 updateState()
 	 
@@ -199,7 +200,7 @@
 							   return "txn"+pair[0]+"_"+pair[1];
 						   })
 	 					   .text(function(d){
-							   if(current_state.txn_names.hasOwnProperty(d.txn)){
+							   if(current_state.hasOwnProperty("txn_names") && current_state.txn_names.hasOwnProperty(d.txn)){
 								   return current_state.txn_names[d.txn];
 							   } else {
 								   return d.txn;
@@ -342,7 +343,7 @@
 					.attr("fill-width", 5)
 					.on("click", function(d, i){
 
-						console.log(d);
+
 						document.getElementById("sql_area").style.visibility = "visible";
 						let statement_list = txn_sql_map.get(d.label);
 						
@@ -448,20 +449,35 @@
 	 
  }
 
+ function drawCycle(index){
+	 updateState();
+	 visualize(DeltaCycles[index]);
+ }
+
  // Creating the list for the table on the left
  for(let i = 0; i < DeltaCycles.length; i++){
 
 
 	 let txnsText = "T: ";
-	 let labels = DeltaCycles[i].TxnDepGraph.TxnNodes.map(x => "("+x.tid.txn_major+","+x.tid.txn_minor+")");
-	 let noDupSet = new Set(labels);
-	 labels = Array.from(noDupSet);
-	 labels.sort((a, b) => {
+	 let txn_names = DeltaCycles[i].TxnDepGraph.TxnNodes.map(x => "("+x.tid.txn_major+","+x.tid.txn_minor+")");
+	 let noDupSet = new Set(txn_names);
+	 let txn_keys = Array.from(noDupSet);
+	 
+	 txn_keys.sort((a, b) => {
 		 return a.toString().localeCompare(b);
 	 });
-	 for(let j = 0; j < labels.length; j++){
-		 txnsText += labels[j]
+	 let labels = [];
+	 
+	 for(let j = 0; j < txn_keys.length; j++){
+		 let key = txn_keys[j];
+		 if(current_state.hasOwnProperty("txn_names") && current_state.txn_names.hasOwnProperty(key)){
+			 labels.push(current_state.txn_names[key]);
+		 } else {
+			 labels.push(key);
+		 }		 
 	 }
+	 
+	 txnsText += labels.join(", ");
 	 
 	 let listElement = document.createElement("li");
 	 listElement.classList.add("nav-item");
@@ -477,14 +493,21 @@
 	 
 	 
 	 let textElement = document.createElement("p");
-	 let textNode = document.createTextNode(txnsText);
-	 textElement.appendChild(textNode);
+	 textElement.setAttribute("contentEditable", "true");
+	 textElement.setAttribute("id", "c"+i);
+	 textElement.addEventListener("input", function(e){
+		 console.log(e);
+		 cycleNames.set(i, true);
+	 });
+	 //let textNode = document.createTextNode(txnsText);
+	 textElement.innerHTML = txnsText;
+	 listElement.appendChild(textElement);
 	 
 	 let drawElement = document.createElement("a");
 	 drawElement.setAttribute("class", "bi bi-eye")
-	 drawElement.setAttribute("href", "javascript:visualize(DeltaCycles["+i+"])");
+	 drawElement.setAttribute("href", "javascript:drawCycle("+i+")");
 
-	 textElement.appendChild(drawElement);
+	 listElement.appendChild(drawElement);
 
 	 
 	 
@@ -492,7 +515,7 @@
 	 tagElement.setAttribute("class", "bi bi-tag");
 	 tagElement.setAttribute("href", "javascript:addTag("+i+")");
 	 
-	 textElement.appendChild(tagElement);
+	 listElement.appendChild(tagElement);
 	 
 	 let favElement = document.createElement("a");
 	 favElement.id = "fav"+i;
@@ -504,26 +527,40 @@
 	 
 	 favElement.setAttribute("href", "javascript:favoriteCycle("+i+")");
 
-	 textElement.appendChild(favElement);
+	 listElement.appendChild(favElement);
 
-	 listElement.appendChild(textElement);
+	 //listElement.appendChild(textElement);
 	 txnHTMLList.appendChild(listElement);
 
  }
 
  // Setting initial session name
- document.getElementById("session_title").innerHTML = current_state.session_name;
+ if(!current_state.hasOwnProperty("session_name")){
+	 document.getElementById("session_title").innerHTML = session_name;
+ } else {
+	 document.getElementById("session_title").innerHTML = current_state.session_name;
+ }
  
  // Setting initial favorites
- for(let i = 0; i < current_state.favorites.length; i++){
-	 favoriteCycle(current_state.favorites[i])
+ if(current_state.hasOwnProperty("favorites")){
+	 for(let i = 0; i < current_state.favorites.length; i++){
+		 favoriteCycle(current_state.favorites[i])
+	 }
  }
-
  // Setting initial tags
- for(let i = 0; i < current_state.tags.length; i++){
-	 let index = current_state.tags[i].index;
-	 addTag(index);
-	 document.getElementById("t"+index).innerHTML = current_state.tags[i].content;
+ if(current_state.hasOwnProperty("tags")){
+	 for(let i = 0; i < current_state.tags.length; i++){
+		 let index = current_state.tags[i].index;
+		 addTag(index);
+		 document.getElementById("t"+index).innerHTML = current_state.tags[i].content;
+	 }
+ }
+ // Setting initial cycle names
+ if(current_state.hasOwnProperty("cycle_names")){
+	 for(let i = 0; i < current_state.cycle_names.length; i++){
+		 let index = current_state.cycle_names[i].index;
+		 document.getElementById("c"+index).innerHTML = current_state.cycle_names[i].content;
+	 }
  }
 
  function updateState(){
@@ -531,6 +568,7 @@
 	 // Updating session name
 	 session_name = document.getElementById("session_title").innerHTML;
 	 console.log(session_name);
+	 
 	 // Updating list of favorites
 	 let favorites = [...cycleFavs.entries()].map(x => x[0]);
 
@@ -540,11 +578,24 @@
 		 let corr_tag = document.getElementById("t"+i);
 		 if(corr_tag != null){
 			 tags.push({"index": i, "content": corr_tag.innerHTML});
+ 		 }
+	 }
+
+	 // Updating names for cycles
+	 let cycle_names = [];
+	 for(let i = 0; i < DeltaCycles.length; i++){
+		 let corr_name = document.getElementById("c"+i);
+		 if(corr_name != null && cycleNames.has(i)){
+			 cycle_names.push({"index": i, "content": corr_name.innerHTML});
 		 }
 	 }
 
 	 // Updating txn names
 	 let new_txn_names = {};
+	 if(current_state.hasOwnProperty("txn_names")){
+		 new_txn_names = current_state.txn_names; 
+	 }
+	 
 	 for(let i = 0; i < incoming_json.TransactionSqlMap.length; i++){
 		 let txn = incoming_json.TransactionSqlMap[i];
 		 let txn_elem = document.getElementById("txn"+txn.tid.txn_major+"_"+txn.tid.txn_minor);
@@ -558,7 +609,7 @@
 		 "favorites": favorites,
 		 "tags": tags,
 		 "txn_names": new_txn_names,
-		 "cycle_names": []
+		 "cycle_names": cycle_names
 	 }
 
 	 
@@ -584,7 +635,7 @@
 	 return response.json();
 
  }
-
+ 
  // Save state every 5 seconds
  window.setInterval(updateState, 5000);
 </script>
