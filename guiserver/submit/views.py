@@ -7,6 +7,8 @@ import hashlib, time, subprocess, json
 import os.path
 from os import path
 
+import json
+
 def salthash(input):
     return hashlib.sha256((input+str(time.time())).encode('utf-8')).hexdigest()[:16]
     
@@ -65,8 +67,12 @@ def create_job(request):
         with open("jobs/"+logHash+"/app.log", "w+", encoding="utf-8") as f:
             f.write(raw_log)
 
-        
-        subprocess.Popen(["./runisodiff.sh", logHash])
+
+        randomSeed = "123456"
+        if request.POST["random_seed"] != "":
+            randomSeed = request.POST["random_seed"]
+            
+        subprocess.Popen(["./runisodiff.sh", logHash, randomSeed])
 
     return redirect('/status/'+logHash)
 
@@ -79,6 +85,8 @@ def update_state(request, key):
     
     if request.method == "POST":
         job.state = request.body.decode("UTF-8")
+        print("===== Set =====")
+        print(json.dumps(json.loads(job.state), indent=4))
         job.save()
 
     return JsonResponse(res)
@@ -91,5 +99,8 @@ def get_state(request, key):
     
     if request.method == "GET":
         res = job.state
+        print("===== Get =====")
+        print(json.dumps(json.loads(job.state), indent=4))
 
+    
     return res

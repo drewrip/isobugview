@@ -1,13 +1,67 @@
-<h1>Submit Log</h1>
+<!doctype html>
 
-<form action="/createJob" name="createJobForm" method="post" id="createJobForm" enctype="multipart/form-data">
-  {% csrf_token %}
+<html lang="en">
+	<head>
+		{% load static %}
+		<!-- Required meta tags -->
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <label for="logInput">Choose an SQL log to analyze:</label>
-  <input type="file" id="logInput" name="sql_log">
+		<!-- Bootstrap CSS -->
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
-  <label for="schemaInput">Choose an SQL log to analyze:</label>
-  <input type="file" id="schemaInput" name="sql_schema">
-  
-  <input type="submit" value="Process">
-</form>
+
+		<!-- Feather icons CSS -->
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+
+		<title>IsoDiff: Submit</title>
+	</head>
+	<body>
+		<!-- Boostrap JS and Popper plugin-->
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+		<div class="container">
+
+			<div class="row justify-content-center">
+				
+				<h1 class="m-4 text-center">IsoDiff</h1>
+
+				<form action="/createJob" name="createJobForm" method="post" id="createJobForm" enctype="multipart/form-data" class="row gy-1 gx-3 justify-content-center">
+					{% csrf_token %}
+
+
+					<div class="col-md-6 no-gutters">
+
+						<div class="row cform-row">
+							<label for="logInput" class="form-label">SQL Log</label>
+							<input type="file" id="logInput" name="sql_log" class="form-control">
+						</div>
+						
+						<div class="row cform-row">
+							<label for="schemaInput" class="form-label">Schema File</label>
+							<input type="file" id="schemaInput" name="sql_schema" class="form-control">
+						</div>
+
+						
+						<div class="row cform-row">
+							<label for="seedInput" class="form-label">Random Seed (-r)</label>
+							<input type="number" id="seedInput" name="random_seed" class="form-control" placeholder="specify seed (optional)">
+						</div>
+						
+						<div class="row cform-row">
+							<button type="submit" class="btn btn-primary form-control">submit</button>
+						</div>
+
+					</div>
+				</form>
+			</div>
+		</div>
+	</body>
+
+
+</html>
+<style>
+ .cform-row {
+	 padding: 1rem;
+ }
+</style>
