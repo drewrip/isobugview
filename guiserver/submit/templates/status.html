@@ -56,9 +56,30 @@
 						<h1 class="h2" contentEditable="true" id="session_title">IsoDiff Analysis</h1>
 
 						<div>
-							<a class="bi bi-info-circle m-2" title="info" style="font-size: 1.5rem"></a>
+							<a id="info_button" role="button" class="bi bi-info-circle m-2" data-bs-toggle="modal" data-bs-target="#info_modal"></a>
 							<a class="bi bi-arrow-repeat m-2" title="save & rerun" style="font-size: 1.5rem"></a>
 						</div>
+
+
+						<!-- Modal -->
+						<div id="info_modal" class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+							<div class="modal-dialog modal-dialog-scrollable">
+								<div class="modal-content">
+									<div class="modal-header">
+										<h5 class="modal-title" id="staticBackdropLabel">Experiment Info</h5>
+										<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+									</div>
+									<div class="modal-body">
+										<pre id="info_body">...</pre>
+									</div>
+									<div class="modal-footer">
+										<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						
 					</div>
 					<div class="row" style="width: 100%">
 						<div id="graph_area" class="col-auto">
@@ -88,11 +109,15 @@
 <script src="https://d3js.org/d3.v4.js"></script>
 <script src="{% static '/parser.js'%}"></script>
 <script>
+ 
+ 
  let job_id = "{{job.key}}";
  let session_name = "IsoDiff Analysis";
  
  let current_state = {% autoescape off %}{{job.state}}{% endautoescape %};
  let incoming_json = {% autoescape off %}{{job.result}}{% endautoescape %};
+
+ document.getElementById("info_body").innerHTML = JSON.stringify(incoming_json.ExperimentReport, null, 2);
 
  let SQLJSON = incoming_json.SQL_Examples;
  
@@ -364,7 +389,7 @@
 					   let first_column_name = object_info.Columns[0];
 					   let stmt_with_highlight_src = SQLJSON[d.source.sql].example.replace(new RegExp("([^A-Za-z0-9_-])("+first_column_name+")([^A-Za-z0-9_-])", "gi"), "$1<mark>$2</mark>$3");
 					   
-					   detail_box += "<b>source</b>: " + stmt_with_highlight_src + "<br><br>";
+					   detail_box += "<b>source</b>: <pre>" + stmt_with_highlight_src + "</pre><br><br>";
 					   
 					   object_info = incoming_json.OperationList[d.target.index].Object;
 					   table_name = object_info.Table;
@@ -372,7 +397,7 @@
 					   let stmt_with_highlight_dest = SQLJSON[d.target.sql].example.replace(new RegExp("([^A-Za-z0-9_-])("+first_column_name+")([^A-Za-z0-9_-])", "gi"), "$1<mark>$2</mark>$3");
 					   
 					   
-					   detail_box += "<b>destination</b>: " + stmt_with_highlight_dest + "<br><br>";
+					   detail_box += "<b>destination</b>: <pre>" + stmt_with_highlight_dest + "</pre><br><br>";
 					   
 					   document.getElementById("sql_area").innerHTML = detail_box;
 				   });
@@ -408,7 +433,7 @@
 						document.getElementById("sql_area").style.visibility = "visible";
 						let statement_list = txn_sql_map.get(d.label);
 						
-						let detail_box = "<b>Statements for " + d.label + "</b>: <br><br>";
+						let detail_box = "<b>Statements for " + d.label + "</b>: <br><br><pre>";
 
 						let target_idx = d.sql;
 						for(let i = 0; i < statement_list.length; i++){
@@ -424,7 +449,7 @@
 							}
 						}
 						
-						document.getElementById("sql_area").innerHTML = detail_box;
+						document.getElementById("sql_area").innerHTML = detail_box + "</pre>";
 
 					});
 

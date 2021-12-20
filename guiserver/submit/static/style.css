@@ -95,3 +95,8 @@ li i {
 mark {
 	background-color: #ffd500;
 }
+
+
+pre {
+	white-space: pre-wrap;
+}
