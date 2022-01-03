@@ -96,6 +96,8 @@
 								<li class="nav-item"><a id="remove_button" class="bi bi-x-lg" title="remove"></a></li>
 							</ul>
 						</nav>
+
+
 					</div>
 					<div id="sql_area" style="visibility: hidden;">
 					</div>
@@ -288,7 +290,7 @@
 		document.getElementById("sql_area").innerHTML = detail_box;
 		});
 	  */
-     var link = svg.selectAll("line")
+     var link = svg.selectAll(".hover-shadow")
 				   .data(g.links)
 				   .enter()
 				   .append("line")
@@ -308,6 +310,7 @@
 				   .attr("id", function(d){
 					   return "l"+d.source.index+"_"+d.target.index;
 				   })
+				   .attr("class", "hover-shadow")
 				   .attr("stroke-width", 3)
 				   .attr("stroke", function(d){
 					   if(red_edges.has(d.source.index+"-"+d.target.index)){
@@ -378,6 +381,9 @@
 					   
 					   // Unhide toolbar
 					   document.getElementById("toolbar").style.visibility = "visible";
+
+					   // Unhide legend
+					   document.getElementById("legend").style.visibility = "visible";
 
 					   document.getElementById("remove_button").onclick = function(){deleteEdge(d)};
 
@@ -747,3 +753,9 @@ function drawCycle(index){
  // Save state every 5 seconds
  window.setInterval(updateState, 5000);
 </script>
+<style>
+
+ .hover-shadow:hover {
+	 filter: drop-shadow(0px 0px 3px rgba(0, 0, 0, 0.4));
+ }
+</style>
