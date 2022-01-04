@@ -43,6 +43,7 @@
 
 				<main class="col offset-3">
 					<div class="d-flex justify-content-around align-items-center pt-3 pb-2 mb-3 border-bottom">
+						<!-- Disabling change list
 						<div class="dropdown">
 							<a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
 								changes
@@ -52,12 +53,18 @@
 								<li><a class="dropdown-item" href="#">up to date</a></li>
 							</ul>
 						</div>
+						-->
+
+						<!-- Temporary dummy div to make title center correctly -->
+						<div></div>
 						
-						<h1 class="h2" contentEditable="true" id="session_title">IsoDiff Analysis</h1>
+						<h1 class="h2" contentEditable="true" id="session_title" spellcheck="false">IsoDiff Analysis</h1>
 
 						<div>
 							<a id="info_button" role="button" class="bi bi-info-circle m-2" data-bs-toggle="modal" data-bs-target="#info_modal"></a>
+							<!-- Disabling save and rerun
 							<a class="bi bi-arrow-repeat m-2" title="save & rerun" style="font-size: 1.5rem"></a>
+							-->
 						</div>
 
 
@@ -90,12 +97,21 @@
 							{% endif %}
 							
 						</div>
+						<!-- Disabling delete and edit buttons
 						<nav id="toolbar" class="navbar col-auto" style="visibility: hidden; font-size: 1.5rem">
 							<ul class="navbar-nav">
 								<li class="nav-item"><a class="bi bi-pencil" title="correlate"></a></li>
 								<li class="nav-item"><a id="remove_button" class="bi bi-x-lg" title="remove"></a></li>
 							</ul>
 						</nav>
+						-->
+
+						<div id="legend" style="visibility: hidden;">
+
+							<svg>
+								<text>legend</text>
+							</svg>
+						</div>
 
 
 					</div>
@@ -187,7 +203,7 @@
      let g = getGraphLayout(adj_list, edge_attrs);
      var svg = d3.select("#graph_area")
 				 .append("svg")
-				 .attr("height", "60vh")
+				 .attr("height", "75vh")
 				 .attr("viewBox", "0 0 " + ((node_width * g.nodes.length) + 150) + " " + g.txns.length * 150)
 				 .lower();
 
@@ -380,12 +396,11 @@
 					   document.getElementById("sql_area").style.visibility = "visible";
 					   
 					   // Unhide toolbar
-					   document.getElementById("toolbar").style.visibility = "visible";
+					   //document.getElementById("toolbar").style.visibility = "visible";
 
 					   // Unhide legend
-					   document.getElementById("legend").style.visibility = "visible";
+					   //document.getElementById("legend").style.visibility = "visible";
 
-					   document.getElementById("remove_button").onclick = function(){deleteEdge(d)};
 
 					   let detail_box = "";
 					   
@@ -563,7 +578,7 @@
 	 red_edges.add(src_num+"-"+dst_num);
  }
 
-function drawCycle(index){
+ function drawCycle(index){
 	 updateState();
 	 visualize(DeltaCycles[index]);
  }
@@ -751,11 +766,22 @@ function drawCycle(index){
  }
  
  // Save state every 5 seconds
- window.setInterval(updateState, 5000);
+ window.setInterval(updateState, 1000);
 </script>
 <style>
 
  .hover-shadow:hover {
 	 filter: drop-shadow(0px 0px 3px rgba(0, 0, 0, 0.4));
+ }
+
+ /* Hide scrollbar for Chrome, Safari and Opera */
+ body::-webkit-scrollbar {
+	 display: none;
+ }
+
+ /* Hide scrollbar for IE, Edge and Firefox */
+ body {
+	 -ms-overflow-style: none;  /* IE and Edge */
+	 scrollbar-width: none;  /* Firefox */
  }
 </style>

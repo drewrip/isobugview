@@ -60,7 +60,7 @@
 
 						<div class="row cform-row">
 							<label for="iInput" class="form-label">Isolation Level (-i)</label>
-							<select id="iInput" class="form-select" aria-label=".form-select-sm">
+							<select id="iInput" class="form-select" aria-label=".form-select-sm" name="isolation_level">
 								<option value="rc" selected>Read Committed</option>
 								<option value="si">Snapshot</option>
 							</select>
@@ -68,7 +68,7 @@
 
 						<div class="row cform-row">
 							<label for="sInput" class="form-label">Search Strategy (-s)</label>
-							<select id="sInput" class="form-select" aria-label=".form-select-sm">
+							<select id="sInput" class="form-select" aria-label=".form-select-sm" name="search_strategy">
 								<option value="b" selected>b</option>
 								<option value="n">n</option>
 							</select>
@@ -77,6 +77,11 @@
 						<div class="row cform-row">
 							<label for="jInput" class="form-label">Time Limit on Search (-j)</label>
 							<input type="number" id="jInput" name="time_limit" class="form-control" placeholder="time limitation on recursive search">
+						</div>
+
+						<div class="row cform-row">
+							<label for="cInput" class="form-label">Max Number of Cycles Found (-c)</label>
+							<input type="number" id="cInput" name="num_cycle_limit" class="form-control" placeholder="maximum cycles found and displayed">
 						</div>
 						
 						<div class="row cform-row">
