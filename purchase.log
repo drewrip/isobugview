@@ -1,0 +1,13 @@
+2020-02-25T21:36:22.395181Z	    8 Quit	
+2020-02-25T21:36:30.484752Z	    9 Connect	drewr@localhost on purchase using SSL/TLS
+2020-02-25T21:36:30.485225Z	    9 Query	set autocommit=0
+2020-02-25T21:36:30.485225Z	    9 Query	begin
+2020-02-25T21:36:30.497392Z	    9 Execute	SELECT total FROM orders WHERE id = 1
+2020-02-25T21:36:30.499767Z	    9 Execute	UPDATE orders SET total = 100 + 5 WHERE id = 1
+2020-02-25T21:36:30.655917Z	    9 Query	commit
+2020-02-25T21:36:30.485225Z	    9 Query	begin
+2020-02-25T21:36:30.597392Z	    9 Execute	SELECT total FROM orders WHERE id = 1
+2020-02-25T21:36:30.599767Z	    9 Execute	UPDATE orders SET total = 100 + 6 WHERE id = 1
+2020-02-25T21:36:30.655917Z	    9 Query	commit
+2020-02-25T21:36:40.492508Z	    9 Close stmt    
+2020-02-25T21:36:40.492522Z	    9 Quit	

@@ -58,7 +58,7 @@
 						<!-- Temporary dummy div to make title center correctly -->
 						<div></div>
 						
-						<h1 class="h2" contentEditable="true" id="session_title" spellcheck="false">IsoDiff Analysis</h1>
+						<h1 class="h2" contentEditable="true" id="session_title" spellcheck="false">IsoBugView Analysis</h1>
 
 						<div>
 							<a id="info_button" role="button" class="bi bi-info-circle m-2" data-bs-toggle="modal" data-bs-target="#info_modal"></a>
@@ -88,8 +88,8 @@
 
 						
 					</div>
-					<div class="row" style="width: 100%">
-						<div id="graph_area" class="col-auto">
+					<div id="graph_container" class="row">
+						<div id="graph_area">
 
 							<!-- Content to be displayed while IsoDiff is running -->
 							{% if job.status != "DONE" %}
@@ -106,12 +106,14 @@
 						</nav>
 						-->
 
+						<!-- Disabling legend
 						<div id="legend" style="visibility: hidden;">
 
 							<svg>
 								<text>legend</text>
 							</svg>
 						</div>
+						-->
 
 
 					</div>
@@ -153,7 +155,6 @@
 	 txn_sql_map.set("(" + tid.txn_major + "," + tid.txn_minor + ")", index_example_list);
  }
 
- let major_id_to_letter_map = new Map();
  let all_major_ids = new Set();
 
  for(let i = 0; i < txn_sql_list.length; i++){
@@ -164,7 +165,6 @@
  let all_major_ids_list = Array.from(all_major_ids);
  
 
- let changes = [];
  let red_edges = new Set();
 
  
@@ -197,14 +197,15 @@
 		 edge_attrs.set(e.src+","+e.dst, attrs);
 	 }
 
-	 let y_axis_graph_padding = 50;
+	 let y_axis_graph_padding = 60;
 	 
      let adj_list = genGraph(log);
      let g = getGraphLayout(adj_list, edge_attrs);
      var svg = d3.select("#graph_area")
 				 .append("svg")
-				 .attr("height", "75vh")
+				 .attr("height", "60vh")
 				 .attr("viewBox", "0 0 " + ((node_width * g.nodes.length) + 150) + " " + g.txns.length * 150)
+				 .attr("id", "graph")
 				 .lower();
 
      width = +svg.attr("width"),
@@ -271,7 +272,7 @@
 						   .attr("y", function(d){
 							   return d.y;
 						   })
-						   .attr("width", y_axis_graph_padding)
+						   .attr("width", y_axis_graph_padding+20)
 						   .attr("height", "100%")
 						   .append("xhtml:div")
 						   .append("div")
@@ -410,7 +411,7 @@
 					   let first_column_name = object_info.Columns[0];
 					   let stmt_with_highlight_src = SQLJSON[d.source.sql].example.replace(new RegExp("([^A-Za-z0-9_-])("+first_column_name+")([^A-Za-z0-9_-])", "gi"), "$1<mark>$2</mark>$3");
 					   
-					   detail_box += "<b>source</b>: <pre>" + stmt_with_highlight_src + "</pre><br><br>";
+					   detail_box += "<br><b>source</b>: <pre>" + stmt_with_highlight_src + "</pre><br>";
 					   
 					   object_info = incoming_json.OperationList[d.target.index].Object;
 					   table_name = object_info.Table;
@@ -418,7 +419,7 @@
 					   let stmt_with_highlight_dest = SQLJSON[d.target.sql].example.replace(new RegExp("([^A-Za-z0-9_-])("+first_column_name+")([^A-Za-z0-9_-])", "gi"), "$1<mark>$2</mark>$3");
 					   
 					   
-					   detail_box += "<b>destination</b>: <pre>" + stmt_with_highlight_dest + "</pre><br><br>";
+					   detail_box += "<b>destination</b>: <pre>" + stmt_with_highlight_dest + "</pre>";
 					   
 					   document.getElementById("sql_area").innerHTML = detail_box;
 				   });
@@ -449,12 +450,47 @@
 					.attr("fill", "#FFFFFF")
 					.attr("fill-width", 5)
 					.on("click", function(d, i){
+						// Needed to ensure edges return to original color
+						d3.selectAll("line")
+						 .attr("stroke", function(d){
+							 if(red_edges.has(d.source.index+"-"+d.target.index)){
+								 return "red";
+							 }
+							 
+							 if(d.attrs.includes("original")){
+								 return "black";
+							 } else if(d.attrs.includes("correlated")){
+								 return "orange";
+							 }
+						 })
+						 .attr("marker-end", function(d){
+							 if(red_edges.has(d.source.index+"-"+d.target.index)){
+								 return "url(#arrow-red)";
+							 }
+							 
+							 if(d.attrs.includes("original")){
+								 return "url(#arrow-black)";
+							 } else if(d.attrs.includes("correlated")){
+								 return "url(#arrow-orange)";
+							 }
+						 });
+
+						// Needed to ensure all nodes return to original color
+						d3.selectAll("rect").attr("stroke", "black");
+
+						d3.select(this).attr("stroke", "gray");
 
 
 						document.getElementById("sql_area").style.visibility = "visible";
 						let statement_list = txn_sql_map.get(d.label);
+
+						let for_label = d.label;
+
+						if(current_state.hasOwnProperty("txn_names") && current_state.txn_names.hasOwnProperty(for_label)){
+							for_label = current_state.txn_names[for_label];
+						}
 						
-						let detail_box = "<b>Statements for " + d.label + "</b>: <br><br><pre>";
+						let detail_box = "<br><b>Statements for " + for_label + "</b>: <br><br><pre>";
 
 						let target_idx = d.sql;
 						for(let i = 0; i < statement_list.length; i++){
@@ -783,5 +819,10 @@
  body {
 	 -ms-overflow-style: none;  /* IE and Edge */
 	 scrollbar-width: none;  /* Firefox */
+ }
+
+ #graph_area {
+	 overflow-x: auto;
+	 width: 75vw;
  }
 </style>
