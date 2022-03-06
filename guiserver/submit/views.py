@@ -56,7 +56,7 @@ def create_job(request):
         logHash = salthash(raw_log)
         
         newJob = Job(key=logHash, finished_file="jobs/"+logHash+"/finished.json", log=raw_log, schema=raw_schema, state="{}")
-        
+   
         newJob.save()
 
         os.mkdir("jobs/"+logHash)
@@ -102,7 +102,21 @@ def create_job(request):
 
         if request.POST["num_cycle_limit"] != "":
             numCycleLimitC = request.POST["num_cycle_limit"]
-            
+
+        settings = {
+            "workerThreadsP": workerThreadsP,
+            "txnLevelCyclesK": txnLevelCyclesK,
+            "opLevelCyclesN": opLevelCyclesN,
+            "isolationLevelI": isolationLevelI,
+            "searchStrategyS": searchStrategyS,
+            "randomSeedR": randomSeedR,
+            "timeLimitJ": timeLimitJ,
+            "numCycleLimitC": numCycleLimitC
+        }
+        
+        with open("jobs/"+logHash+"/settings.json", "w+", encoding="utf-8") as f:
+            json.dump(settings, f, indent=4)
+        
         subprocess.Popen(["./runisodiff.sh", logHash, workerThreadsP, txnLevelCyclesK, opLevelCyclesN, isolationLevelI, randomSeedR, timeLimitJ, searchStrategyS, numCycleLimitC])
 
     return redirect('/status/'+logHash)
@@ -135,3 +149,31 @@ def get_state(request, key):
 
     
     return res
+
+def recheck(request, key):
+
+    job = Job.objects.get(key=key)
+
+    settings = {}
+    with open("jobs/"+key+"/settings.json", "r", encoding="utf-8") as f:
+        settings = json.load(f)
+
+    if os.path.exists("jobs/"+key+"/finished.json"):
+        os.remove("jobs/"+key+"/finished.json")
+
+    jsonChanges = json.loads(request.body.decode("UTF-8"))
+
+    conf = {}
+    with open("jobs/"+key+"/split/pglast_app.json", "r", encoding="utf-8") as f:
+        conf = json.load(f)
+        
+    
+    conf["feedbacks"] = jsonChanges["changes"]
+
+    os.remove("jobs/"+key+"/split/pglast_app.json")
+
+    with open("jobs/"+key+"/split/pglast_app.json", "w+", encoding="utf-8") as f:
+        json.dump(conf, f, indent=4)
+    
+    subprocess.Popen(["./runrecheck.sh", key, settings["workerThreadsP"], settings["txnLevelCyclesK"], settings["opLevelCyclesN"], settings["isolationLevelI"], settings["randomSeedR"], settings["timeLimitJ"], settings["searchStrategyS"], settings["numCycleLimitC"]])
+    return redirect('/status/'+key)

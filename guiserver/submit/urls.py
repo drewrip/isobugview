@@ -8,4 +8,5 @@ urlpatterns = [
     path("createJob", views.create_job, name="create_job"),
     path("update/<str:key>", views.update_state, name="update_state"),
     path("get/<str:key>", views.get_state, name="get_state"),
+    path("recheck/<str:key>", views.recheck, name="recheck"),
 ]
