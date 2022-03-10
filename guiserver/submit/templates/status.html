@@ -101,6 +101,21 @@
 
 						
 					</div>
+					<div id="legend" style="visibility: hidden;">
+						<svg viewBox="0 0 400 10">
+
+							<line x1="50" y1="5" x2="75" y2="5" stroke="black"></line>
+							<text x="85" y="6.75" font-size="5px">Standard</text>
+
+							<line x1="130" y1="5" x2="155" y2="5" stroke="orange"></line>
+							<text x="165" y="6.75" font-size="5px">Correlated</text>
+
+							<line x1="215" y1="5" x2="240" y2="5" stroke="black" stroke-dasharray="2"></line>
+							<text x="250" y="6.75" font-size="5px">Shadow</text>
+														
+						</svg>
+						
+					</div>
 					<div id="graph_container" class="row">
 						<div id="graph_area">
 
@@ -209,6 +224,9 @@
  
  function visualize(log){
 
+	 document.getElementById("legend").style.visibility = "visible";
+
+	 
 	 // Ensure the edits made with past graphs are saved
 	 updateState();
 	 
@@ -309,7 +327,9 @@
 							   return d.x;
 						   })
 						   .attr("y", function(d){
-							   return d.y;
+							   // Because the position of the text is in reference to the baseline
+							   // subtract 10 here to put the middle of text in line with the horizontal
+							   return d.y - 10;
 						   })
 						   .attr("width", y_axis_graph_padding+20)
 						   .attr("height", "100%")
@@ -571,9 +591,13 @@
 							if(stmt.index == target_idx){
 								let object_info = incoming_json.OperationList[d.index].Object;
 								let table_name = object_info.Table;
-								let first_column_name = object_info.Columns[0];
-								stmt_with_highlight = stmt.statement.replace(new RegExp("([^A-Za-z0-9_-])("+first_column_name+")([^A-Za-z0-9_-])", "gi"), "$1<mark>$2</mark>$3");
-								detail_box += "<b>" + stmt.index + "</b><b>: " + stmt_with_highlight + "</b><br><br>";
+								let col_list_regex = object_info.Columns.join("|");
+								if(object_info.Columns.length > 0){
+									stmt_with_highlight = stmt.statement.replace(new RegExp("([^A-Za-z0-9_-])("+col_list_regex+")([^A-Za-z0-9_-])", "gi"), "$1<mark>$2</mark>$3");
+									detail_box += "<b>" + stmt.index + "</b><b>: " + stmt_with_highlight + "</b><br><br>";
+								} else {
+									detail_box += "<b>" + stmt.index + "</b><b>: " + stmt.statement + "</b><br><br>";
+								}
 							} else {
 								detail_box += "<b>" + stmt.index + "</b>: " + stmt.statement + "<br><br>";
 							}
@@ -587,22 +611,29 @@
 						   .text(function(d) {
 							   let object_info = incoming_json.OperationList[d.index].Object;
 							   let table_name = object_info.Table;
-							   let first_column_name = object_info.Columns[0];
+							   let cols = object_info.Columns;
+							   let first_column_name = cols[0];
 							   let object_label = first_column_name;
 							   let cutoff = 8;
 							   if(object_label.length >= cutoff){
 								   object_label = object_label.substring(0, cutoff) + "...";
 							   }
-							   return d.type + "(" + object_label + ")";
+							   if(cols.length > 1){
+								   return d.type + "(" + object_label + ", ...)";
+							   } else {
+								   return d.type + "(" + object_label + ")";
+							   }
+							   
 						   })
-						   .attr('x', function(d){
+						   .attr("x", function(d){
 							   return y_axis_graph_padding + d.x + node_width/2;
 						   })
-						   .attr('y', function(d){
+						   .attr("y", function(d){
 							   return d.y + node_height/2;
 						   })
-						   .attr('dominant-baseline', 'middle')
-						   .attr('text-anchor', 'middle');
+						   .attr("font-size", ".85em")
+						   .attr("dominant-baseline", "middle")
+						   .attr("text-anchor", "middle");
 	 
 
      node.append("title")
@@ -905,9 +936,9 @@
 		 body: JSON.stringify(payload) // body data type must match "Content-Type" header
 	 });
 
-	 return function(){
-		 window.location.reload();
-	 };
+	 console.log("attempting to reload");
+	 window.location.reload();
+	 
  }
 </script>
 <style>
