@@ -423,7 +423,7 @@
 				   .on("contextmenu", d3.contextMenu(toolbarmenu))
 				   .on("click", function(d, i){ 
 					   // This is needed to ensure that the edges go back to their original color
-					   d3.selectAll("line")
+					   d3.selectAll(".hover-shadow")
 						 .attr("stroke", function(d){
 							 if(red_edges.has(d.source.index+"-"+d.target.index)){
 								 return "red";
@@ -544,7 +544,7 @@
 					.attr("fill-width", 5)
 					.on("click", function(d, i){
 						// Needed to ensure edges return to original color
-						d3.selectAll("line")
+						d3.selectAll(".hover-shadow")
 						  .attr("stroke", function(d){
 							  if(red_edges.has(d.source.index+"-"+d.target.index)){
 								  return "red";

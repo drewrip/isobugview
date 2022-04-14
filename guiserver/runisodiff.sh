@@ -11,15 +11,27 @@ mkdir jobs/${1}/server_logs
 cp ../db-isolation/checker jobs/${1}/.
 cd jobs/${1}
 
-ln ../../../db-isolation/sql_process/pglast_sqlparser.py .
-ln ../../../db-isolation/sql_process/log_parser.py .
+ln -s ../../../db-isolation/sql_process/pglast_sqlparser.py .
+ln -s ../../../db-isolation/sql_process/log_parser.py .
 
 echo "Starting Analysis"
+
+# temporary fix for app name problem
+
+mv app.log pglast_tpcc.log
+mv app_db_info.csv tpcc_db_info.csv
+
 # Parse SQL log against schema
-python3 pglast_sqlparser.py app.log app_db_info.csv . >> server_logs/sql_parser.log 2>&1
+python3 pglast_sqlparser.py pglast_tpcc.log tpcc_db_info.csv . >> server_logs/sql_parser.log 2>&1
+
+# part 2 of temporary fix for app name problem
+
+mv pglast_tpcc.log app.log
+mv tpcc_db_info.csv app_db_info.csv
+mv pglast_tpcc.txt pglast_app.txt
 
 # Generate configs
-python3 log_parser.py pglast_app.txt app_db_info.csv app.log >> server_logs/log_parser.log 2>&1
+python3 log_parser.py -l pglast_app.txt -x app_db_info.csv >> server_logs/log_parser.log 2>&1
 
 mv app_db_info.csv conf/schema/app_db_info.csv
 
@@ -27,6 +39,6 @@ mv app_db_info.csv conf/schema/app_db_info.csv
 
 echo "Finished Parsing"
 
-./checker -f split/pglast_app.json -p ${2} -k ${3} -n ${4} -u ex -i ${5} -r ${6} -m n -j ${7} -g row -s ${8} -c ${9} -o running.json >> server_logs/checker.log 2>&1
+./checker -f conf/pglast_app.json -p ${2} -k ${3} -n ${4} -u ex -i ${5} -r ${6} -m n -j ${7} -g row -s ${8} -c ${9} -o running.json >> server_logs/checker.log 2>&1
 
 mv running.json finished.json

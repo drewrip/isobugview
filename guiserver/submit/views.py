@@ -164,15 +164,15 @@ def recheck(request, key):
     jsonChanges = json.loads(request.body.decode("UTF-8"))
 
     conf = {}
-    with open("jobs/"+key+"/split/pglast_app.json", "r", encoding="utf-8") as f:
+    with open("jobs/"+key+"/conf/pglast_app.json", "r", encoding="utf-8") as f:
         conf = json.load(f)
         
     
     conf["feedbacks"] = jsonChanges["changes"]
 
-    os.remove("jobs/"+key+"/split/pglast_app.json")
+    os.remove("jobs/"+key+"/conf/pglast_app.json")
 
-    with open("jobs/"+key+"/split/pglast_app.json", "w+", encoding="utf-8") as f:
+    with open("jobs/"+key+"/conf/pglast_app.json", "w+", encoding="utf-8") as f:
         json.dump(conf, f, indent=4)
     
     subprocess.Popen(["./runrecheck.sh", key, settings["workerThreadsP"], settings["txnLevelCyclesK"], settings["opLevelCyclesN"], settings["isolationLevelI"], settings["randomSeedR"], settings["timeLimitJ"], settings["searchStrategyS"], settings["numCycleLimitC"]])
