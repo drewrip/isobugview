@@ -210,6 +210,7 @@
  
 
  let red_edges = new Set();
+ let red_txns = new Set(); 
 
  let changes = [];
 
@@ -358,6 +359,11 @@
 								   return current_state.txn_names[d.txn];
 							   } else {
 								   return d.txn;
+							   }
+						   })
+		                   .style("color", function(d){
+							   if(red_txns.has(d.txn)){
+								   return "red";
 							   }
 						   });
 	 /*
@@ -737,12 +743,17 @@
 	 console.log("Deleting transaction:");
 	 console.log(d);
 
+
+	 let changes_dropdown = document.getElementById("change_list");
 	 let pair = d.txn.substring(1, d.txn.length-1).split(",");
 	 let major = pair[0];
 	 let minor = pair[1];
 	 console.log(major);
 	 console.log(minor);
 
+	 d3.select("#txn"+major+"_"+minor).style("color", "red");
+	 red_txns.add("("+major+","+minor+")", true);
+	 
 	 let nodes_in_txn = new Set();
 
 	 let node_list = incoming_json.TransactionSqlMap;
@@ -761,6 +772,7 @@
 		 }
 	 }
 
+	 let original_changes_len = changes.length;
 	 // Find all edges incident on those operations and add them to delete list
 	 for(let i = 0; i < DeltaCycles.length; i++){
 		 let delta_cycle = DeltaCycles[i];
@@ -781,10 +793,19 @@
 		 }
 	 }
 
+	 let txn_name = "("+major+","+minor+")";
+	 if(current_state.hasOwnProperty("txn_names") && current_state.txn_names.hasOwnProperty(txn_name)){
+		 txn_name = current_state.txn_names[txn_name];
+	 }
+	 if(original_changes_len == 0){
+		 changes_dropdown.innerHTML = `<li><a class="dropdown-item" href="#">remove `+txn_name+`</a></li>`;
+	 } else {
+		 changes_dropdown.insertAdjacentHTML("beforeend", `<li><a class="dropdown-item" href="#">remove `+txn_name+`</a></li>`);
+	 }
 	 
  }
  
- function deleteTransaction_OLD(d){
+ function deleteTransaction_by_nodes(d){
 	 console.log("Deleting transaction:");
 	 console.log(d);
 
