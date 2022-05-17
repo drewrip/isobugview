@@ -167,7 +167,7 @@ def recheck(request, key):
     with open("jobs/"+key+"/conf/pglast_app.json", "r", encoding="utf-8") as f:
         conf = json.load(f)
         
-    
+    print(jsonChanges["changes"])
     conf["feedbacks"] = jsonChanges["changes"]
 
     os.remove("jobs/"+key+"/conf/pglast_app.json")

@@ -213,14 +213,23 @@
 
  let changes = [];
 
- let toolbarmenu = [
+ let edgemenu = [
 	 {
-		 title: "delete",
+		 title: "delete edge",
 		 action: function(data, event) {
 			 deleteEdge(data);
 		 }
 	 }
  ]
+
+  let transactionmenu = [
+	 {
+		 title: "delete transaction",
+		 action: function(data, event) {
+			 deleteTransaction(data);
+		 }
+	 }
+  ]
  
  function visualize(log){
 
@@ -335,6 +344,7 @@
 						   .attr("height", "100%")
 						   .append("xhtml:div")
 						   .append("div")
+ 						   .on("contextmenu", d3.contextMenu(transactionmenu))
 						   .attr("contentEditable", true)
 						   .on("input", function(d){
 							   updateState();
@@ -420,7 +430,7 @@
 						   return "url(#arrow-orange)";
 					   }
 				   })
-				   .on("contextmenu", d3.contextMenu(toolbarmenu))
+				   .on("contextmenu", d3.contextMenu(edgemenu))
 				   .on("click", function(d, i){ 
 					   // This is needed to ensure that the edges go back to their original color
 					   d3.selectAll(".hover-shadow")
@@ -715,11 +725,102 @@
 	 
 	 changes.push({
 		 "type": "delete",
+		 "object": "edge",
 		 "src": src_num,
 		 "dst": dst_num
 	 });
 
 	 red_edges.add(src_num+"-"+dst_num);
+ }
+
+ function deleteTransaction(d){
+	 console.log("Deleting transaction:");
+	 console.log(d);
+
+	 let pair = d.txn.substring(1, d.txn.length-1).split(",");
+	 let major = pair[0];
+	 let minor = pair[1];
+	 console.log(major);
+	 console.log(minor);
+
+	 let nodes_in_txn = new Set();
+
+	 let node_list = incoming_json.TransactionSqlMap;
+
+	 let involved_ops = []
+
+	 // Create list of all operations involved with the transaction to delete
+	 for(let i = 0; i < DeltaCycles.length; i++){
+		 let delta_cycle = DeltaCycles[i];
+		 let nodes = delta_cycle.OpDepGraph.OpNodes;
+		 for(let j = 0; j < nodes.length; j++){
+			 let tid = txn_sql_list[nodes[j].txn_index].tid;
+			 if(tid.txn_major == major && tid.txn_minor == minor){
+				 involved_ops.push(nodes[j].index);
+			 }
+		 }
+	 }
+
+	 // Find all edges incident on those operations and add them to delete list
+	 for(let i = 0; i < DeltaCycles.length; i++){
+		 let delta_cycle = DeltaCycles[i];
+		 let edges = delta_cycle.OpDepGraph.Edges;
+		 for(let j = 0; j < edges.length; j++){
+			 let e = edges[j];
+			 for(let k = 0; k < involved_ops.length; k++){
+				 let op = involved_ops[k];
+				 if(e.dst == op || e.src == op){
+					 changes.push({
+						 "type": "delete",
+						 "object": "edge",
+						 "src": e.src,
+						 "dst": e.dst
+					 });
+				 }
+			 }
+		 }
+	 }
+
+	 
+ }
+ 
+ function deleteTransaction_OLD(d){
+	 console.log("Deleting transaction:");
+	 console.log(d);
+
+	 let pair = d.txn.substring(1, d.txn.length-1).split(",");
+	 let major = pair[0];
+	 let minor = pair[1];
+	 console.log(major);
+	 console.log(minor);
+
+	 let nodes_in_txn = new Set();
+
+	 let node_list = incoming_json.TransactionSqlMap;
+
+	 for(let i = 0; i < DeltaCycles.length; i++){
+		 let delta_cycle = DeltaCycles[i];
+		 let nodes = delta_cycle.OpDepGraph.OpNodes;
+		 for(let j = 0; j < nodes.length; j++){
+			 let tid = txn_sql_list[nodes[j].txn_index].tid;
+			 if(tid.txn_major == major && tid.txn_minor == minor){
+				 nodes_in_txn.add(nodes[j].txn_index);
+			 }
+		 }
+	 }
+
+	 console.log(nodes_in_txn);
+
+	 let nodes_to_delete = [...nodes_in_txn];
+	 for(let i = 0; i < nodes_to_delete.length; i++){
+		 changes.push({
+			 "type": "delete",
+			 "object": "node",
+			 "index": nodes_to_delete[i]
+		 });
+	 }
+
+	 
  }
 
  function drawCycle(index){
@@ -917,10 +1018,15 @@
 
 	 for(let i = 0; i < changes.length; i++){
 		 if(changes[i].type == "delete"){
-			 let conflict_idx = EdgeConflictMap.get(changes[i].src+"-"+changes[i].dst);
-			 payload.changes.push("9#Hide@Edge|"+conflict_idx);
+			 if(changes[i].object == "edge"){
+				 let conflict_idx = EdgeConflictMap.get(changes[i].src+"-"+changes[i].dst);
+				 payload.changes.push("9#Hide@Edge|"+conflict_idx);
+			 } else if (changes[i].object == "node"){
+				 payload.changes.push("9#Hide@Node|"+changes[i].index);
+			 }
 		 }
 	 }
+	 
 	 const response = await fetch("/recheck/" + job_id, {
 		 method: "POST", // *GET, POST, PUT, DELETE, etc.
 		 mode: "cors", // no-cors, *cors, same-origin
